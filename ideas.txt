@@ -1,0 +1,1 @@
+Crypto - sub coins delay reaction to btc/eth swings

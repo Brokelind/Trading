@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/
+trader-venv/
+env.py
+*.sqlite
+*.log
+*.csv
+*.html
+.DS_Store
+cd
