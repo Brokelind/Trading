@@ -246,13 +246,15 @@ class TradingModelSystem:
             return pd.DataFrame(columns=["Date", "Signal", "PortfolioValue"])
 
     def calculate_metrics(self, results):
-        """Calculate performance metrics with error handling"""
+        """Calculate comprehensive performance metrics including prediction accuracy"""
         metrics = {}
+        
         for strategy, data in results.items():
             try:
                 if len(data) == 0:
                     continue
                     
+                # Basic performance metrics
                 returns = data['PortfolioValue'].pct_change()
                 cum_return = (data['PortfolioValue'].iloc[-1] / 10000 - 1) * 100
                 
@@ -261,21 +263,47 @@ class TradingModelSystem:
                 max_drawdown = drawdown.min() * 100
                 
                 volatility = returns.std() * np.sqrt(252) * 100
+                sharpe_ratio = returns.mean() / returns.std() * np.sqrt(252) if returns.std() > 0 else 0
                 
+                # Trade metrics
                 if 'Signal' in data.columns:
                     trades = data[data['Signal'].isin(['BUY', 'SELL'])]
                     trade_returns = trades['PortfolioValue'].pct_change()
                     win_rate = (trade_returns > 0).mean() * 100 if len(trade_returns) > 0 else np.nan
+                    profit_factor = -trade_returns[trade_returns > 0].sum() / trade_returns[trade_returns < 0].sum() if len(trade_returns[trade_returns < 0]) > 0 else np.inf
                 else:
                     win_rate = np.nan
+                    profit_factor = np.nan
+                
+                # Prediction accuracy metrics (if available)
+                pred_accuracy = {}
+                if all(col in data.columns for col in ['TruePrice', 'PredictedPrice']):
+                    errors = data['PredictedPrice'] - data['TruePrice']
+                    pred_accuracy = {
+                        'MAE (%)': (errors.abs() / data['TruePrice']).mean() * 100,
+                        'RMSE (%)': np.sqrt((errors**2).mean()) / data['TruePrice'].mean() * 100,
+                        'Direction Accuracy (%)': (np.sign(data['PredictedPrice'].diff()) == np.sign(data['TruePrice'].diff())).mean() * 100,
+                        'R-squared': max(0, 1 - (errors**2).sum() / ((data['TruePrice'] - data['TruePrice'].mean())**2).sum())
+                    }
                 
                 metrics[strategy] = {
+                    # Performance Metrics
                     'Return (%)': cum_return,
                     'Max Drawdown (%)': max_drawdown,
                     'Volatility (%)': volatility,
+                    'Sharpe Ratio': sharpe_ratio,
                     'Win Rate (%)': win_rate,
-                    'Final Value ($)': data['PortfolioValue'].iloc[-1]
+                    'Profit Factor': profit_factor,
+                    'Final Value ($)': data['PortfolioValue'].iloc[-1],
+                    
+                    # Prediction Accuracy Metrics
+                    **pred_accuracy,
+                    
+                    # Activity Metrics
+                    'Trade Count': len(trades) if 'Signal' in data.columns else 0,
+                    'Hold Period (days)': len(data) / (len(trades)/2) if len(trades) > 0 else len(data)
                 }
+                
             except Exception as e:
                 print(f"Error calculating metrics for {strategy}: {str(e)}")
                 continue

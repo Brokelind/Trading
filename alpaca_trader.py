@@ -5,6 +5,7 @@ from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce, OrderClass
 from alpaca.trading.requests import MarketOrderRequest, LimitOrderRequest, StopLossRequest
 import env
+import yfinance as yf
 
 # --------------------
 # Setup Logging
@@ -145,8 +146,16 @@ def make_trade(
         # Create Order
         # ------------------------
         # Get latest market price
-        last_quote = client.get_latest_quote(ticker)
-        last_price = float(last_quote.ask_price or last_quote.bid_price)
+        # Create Ticker object
+        stock = yf.Ticker(ticker)
+        # Fetch last price (from live price or last close)
+        last_price = stock.fast_info.get("last_price")
+        if last_price is None:
+            # fallback: previous close
+            last_price = stock.history(period="1d")["Close"].iloc[-1]
+
+        #last_quote = client.get_latest_quote(ticker)
+        #last_price = float(last_quote.ask_price or last_quote.bid_price)
 
         if last_price == 0:
             log.error(f"Cannot trade {ticker}: no valid quote price.")

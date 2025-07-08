@@ -26,15 +26,68 @@ class TradingExecutor:
         df = pd.read_csv(data_file, index_col=0, parse_dates=True)
         return len(df) >= 100  # Minimum data points required
 
+    def select_best_model(self, metrics_df, predictions, buy_hold_return):
+        """
+        Enhanced model selection considering both performance and prediction accuracy
+        """
+        # Filter out underperforming strategies
+        viable_strategies = metrics_df[metrics_df["Return (%)"] > buy_hold_return]
+        
+        if viable_strategies.empty:
+            print(f"No strategies outperform Buy & Hold")
+            return None, None
+        
+        # Calculate composite score
+        def calculate_composite_score(row):
+            weights = {
+                'Return (%)': 0.4,
+                'Sharpe Ratio': 0.3,
+                'Direction Accuracy (%)': 0.2,
+                'Max Drawdown (%)': -0.1
+            }
+            
+            score = 0
+            for metric, weight in weights.items():
+                if metric in row:
+                    if metric == 'Max Drawdown (%)':
+                        normalized = 1 - (row[metric] / 100)
+                    else:
+                        if metric == 'Direction Accuracy (%)':
+                            normalized = row[metric] / 100
+                        else:
+                            col_min = metrics_df[metric].min()
+                            col_max = metrics_df[metric].max()
+                            normalized = (row[metric] - col_min) / (col_max - col_min) if col_max != col_min else 0.5
+                    
+                    score += normalized * weight
+            
+            return score
+        
+        # Apply minimum accuracy threshold if available
+        if 'Direction Accuracy (%)' in viable_strategies.columns:
+            accurate_strategies = viable_strategies[viable_strategies['Direction Accuracy (%)'] >= 55]
+            viable_strategies = accurate_strategies if not accurate_strategies.empty else viable_strategies
+        
+        # Calculate and select best strategy
+        viable_strategies['Composite Score'] = viable_strategies.apply(calculate_composite_score, axis=1)
+        best_strategy = viable_strategies['Composite Score'].idxmax()
+        best_metrics = viable_strategies.loc[best_strategy].to_dict()
+        
+        print(f"\nSelected Strategy: {best_strategy}")
+        print(f"- Return: {best_metrics.get('Return (%)', 'N/A'):.1f}%")
+        print(f"- Sharpe: {best_metrics.get('Sharpe Ratio', 'N/A'):.2f}")
+        print(f"- Accuracy: {best_metrics.get('Direction Accuracy (%)', 'N/A'):.1f}%")
+        
+        return best_strategy, best_metrics
+
     def execute_strategy(self, ticker):
         """Full pipeline for a single ticker"""
         try:
-            # 1. Data Collection - ensure we have required columns
+            # 1. Data Collection
             if self.should_process_ticker(ticker):
                 print(f"Fetching data for {ticker}")
                 api_call.get_data(ticker)
             
-            # Verify data has at least adj_close
             data_path = f"data/{ticker}_data.csv"
             if not os.path.exists(data_path):
                 print(f"No data file found for {ticker}")
@@ -48,38 +101,31 @@ class TradingExecutor:
             # 2. Analysis and Prediction
             results, metrics, predictions = self.analyzer.run_analysis(ticker)
             
-            # 3. Strategy Selection
             if metrics is None:
                 print(f"No metrics generated for {ticker}")
                 return
                 
-            metrics_df = metrics.copy()
-            buy_hold_return = metrics_df.loc["Buy & Hold", "Return (%)"]
+            # 3. Enhanced Strategy Selection
+            buy_hold_return = metrics.loc["Buy & Hold", "Return (%)"]
+            best_strategy, strategy_metrics = self.select_best_model(
+                metrics, 
+                predictions,
+                buy_hold_return
+            )
             
-            # Filter out underperforming strategies
-            viable_strategies = metrics_df[metrics_df["Return (%)"] > buy_hold_return]
-            if viable_strategies.empty:
-                print(f"No strategies outperform Buy & Hold for {ticker}")
-                return
-            
-            # Select best strategy
-            best_strategy = viable_strategies["Return (%)"].idxmax()
-            strategy_prediction = predictions.get(best_strategy, {})
-            
-            if not strategy_prediction or self.current_trades >= self.max_trades_per_day:
+            if not best_strategy or self.current_trades >= self.max_trades_per_day:
                 return
             
             # 4. Trade Execution
+            strategy_prediction = predictions.get(best_strategy, {})
             signal = strategy_prediction.get("signal", "HOLD")
+            
             if signal in ["BUY", "SELL"]:
                 pct_diff = strategy_prediction.get("pct_diff", 0)
                 last_price = df['adj_close'].iloc[-1]
                 
-                # Position sizing based on strategy confidence
-                strategy_return = metrics_df.loc[best_strategy, "Return (%)"]
-                best_return = metrics_df["Return (%)"].max()
-                confidence = min(strategy_return / best_return, 1.0)
-                
+                # Position sizing based on composite score
+                confidence = min(strategy_metrics['Composite Score'], 1.0)
                 
                 qty = alpaca_trader.qty_to_trade(
                     ticker,
@@ -94,8 +140,8 @@ class TradingExecutor:
                         ticker,
                         signal,
                         qty,
-                        time_in_force=TimeInForce.GTC,      
-                        stop_loss_pct=0.03                 
+                        time_in_force=TimeInForce.GTC,
+                        stop_loss_pct=0.03
                     )
                     self.current_trades += 1
                     print(f"Executed {signal} for {ticker} (Qty: {qty})")
