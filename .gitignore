@@ -2,6 +2,7 @@
 __pycache__/
 trader-venv/
 saved_models/
+saved_imgs/
 env.py
 *.sqlite
 *.log
