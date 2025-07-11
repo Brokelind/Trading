@@ -14,7 +14,7 @@ class TradingExecutor:
             "AAPL", "MSFT", "AMZN", "GOOG", "TSLA",  # Core tech
             "JPM", "BAC", "XOM", "CVX"  # Financials/energy
         ]
-        self.max_trades_per_day = 5
+        self.max_trades_per_day = 50
         self.current_trades = 0
 
     def should_process_ticker(self, ticker):
