@@ -52,7 +52,7 @@ python-dateutil==2.9.0.post0
 pytz==2025.2
 requests==2.32.4
 rich==14.0.0
-scikit-learn==1.7.0
+scikit-learn
 scipy==1.15.3
 six==1.17.0
 soupsieve==2.7
