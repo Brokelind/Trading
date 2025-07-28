@@ -157,5 +157,8 @@ class TradingExecutor:
         print(f"Trading complete. Executed {self.current_trades} trades today.")
 
 if __name__ == "__main__":
+
+    print("Running script...")
+    print("API_KEY:", os.environ.get("API_KEY")[:4], "***")
     trader = TradingExecutor()
     trader.run_daily_trading()
