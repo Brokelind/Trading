@@ -1,9 +1,14 @@
+name: Run main.py daily
+
+on:
+  schedule:
+    - cron: "0 7 * * *"      # Run every day at 07:00 UTC
+  workflow_dispatch:         # Allow manual trigger
+
 jobs:
   run-python:
     runs-on: ubuntu-latest
-    env:
-      API_KEY: ${{ secrets.API_KEY }}
-      API_SECRET: ${{ secrets.API_SECRET }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
