@@ -20,7 +20,7 @@ h5py==3.14.0
 idna==3.10
 joblib==1.5.1
 keras==3.10.0
-kiwisolver==1.4.8
+kiwisolver
 libclang==18.1.1
 Markdown==3.8.2
 markdown-it-py==3.0.0
