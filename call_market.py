@@ -4,7 +4,6 @@ import env
 import yfinance as yf
 import os
 
-API_KEY = env.key
 
 def get_data(symbol, save_folder="data"):
     # Download max period data with auto_adjust True

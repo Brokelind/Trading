@@ -4,9 +4,13 @@ import time
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce, OrderClass
 from alpaca.trading.requests import MarketOrderRequest, LimitOrderRequest, StopLossRequest
-import env
+import os
 import yfinance as yf
+if os.path.exists("env.py"):
+    import env  # only for local use
 
+ALPACA_API_KEY = os.environ.get("ALPACA_API_KEY") or getattr(env, "ALPACA_API_KEY", None)
+ALPACA_SECRET_KEY = os.environ.get("ALPACA_SECRET_KEY") or getattr(env, "ALPACA_SECRET_KEY", None)
 # --------------------
 # Setup Logging
 # --------------------
@@ -19,7 +23,7 @@ log = logging.getLogger(__name__)
 # --------------------
 # Initialize Client
 # --------------------
-client = TradingClient(env.ALPACA_API_KEY, env.ALPACA_SECRET_KEY, paper=True)
+client = TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=True)
 
 # --------------------
 # Utility Functions

@@ -3,7 +3,7 @@ import pandas as pd
 from tqdm import tqdm
 from analysis import TradingModelSystem
 import alpaca_trader
-import api_call
+import call_market
 from alpaca.trading.enums import TimeInForce  
 
 class TradingExecutor:
@@ -86,7 +86,7 @@ class TradingExecutor:
             # 1. Data Collection
             if self.should_process_ticker(ticker):
                 print(f"Fetching data for {ticker}")
-                api_call.get_data(ticker)
+                call_market.get_data(ticker)
             
             data_path = f"data/{ticker}_data.csv"
             if not os.path.exists(data_path):
