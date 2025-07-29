@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import pandas as pd
-import pandas_ta as ta
 import joblib
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
