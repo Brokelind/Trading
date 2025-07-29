@@ -33,7 +33,7 @@ multitasking==0.0.11
 namex==0.1.0
 narwhals==1.45.0
 pandas_ta==0.3.14b0
-numpy==1.24.4
+numpy
 opt_einsum==3.4.0
 optree==0.16.0
 packaging==25.0
