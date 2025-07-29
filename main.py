@@ -159,6 +159,5 @@ class TradingExecutor:
 if __name__ == "__main__":
 
     print("Running script...")
-    print("API_KEY:", os.environ.get("API_KEY")[:4], "***")
     trader = TradingExecutor()
     trader.run_daily_trading()
