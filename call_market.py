@@ -1,6 +1,5 @@
 import pandas as pd
 import requests
-import env
 import yfinance as yf
 import os
 
