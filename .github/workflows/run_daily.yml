@@ -9,6 +9,10 @@ jobs:
   run-python:
     runs-on: ubuntu-latest
 
+    env:  # ✅ Make your GitHub Secrets available to Python
+      ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+      ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
