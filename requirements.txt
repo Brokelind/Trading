@@ -1,6 +1,6 @@
 absl-py==2.3.0
-alpaca-py==0.30.0         # Compatible with Pydantic v1
-annotated-types==0.5.0
+alpaca-py==0.41.0
+annotated-types==0.7.0
 astunparse==1.6.3
 beautifulsoup4==4.13.4
 certifi==2025.6.15
@@ -31,17 +31,18 @@ msgpack==1.0.7
 multitasking==0.0.11
 namex==0.1.0
 narwhals==1.45.0
-numpy==1.24.3               # TensorFlow 2.13.0 requires <=1.24.3
+numpy==1.24.3
 opt-einsum==3.3.0
-optree==0.10.0
+optree==0.16.0
 packaging==23.2
 peewee==3.17.1
 pillow==9.5.0
 platformdirs==3.10.0
 plotly==5.18.0
-protobuf==3.20.3            # Required by TensorFlow 2.13.0
+protobuf==3.20.3
 pycparser==2.21
-pydantic==1.10.15           # Compatible with Alpaca 0.30.0
+pydantic==2.11.7
+pydantic_core==2.33.2
 Pygments==2.17.2
 pyparsing==3.0.9
 python-dateutil==2.8.2
@@ -60,7 +61,7 @@ tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.3.0
 threadpoolctl==3.1.0
 tqdm==4.66.1
-typing-extensions==4.5.0     # Required by TensorFlow 2.13.0
+typing-extensions==4.5.0
 tzdata==2023.3
 urllib3==1.26.16
 websockets==10.4
