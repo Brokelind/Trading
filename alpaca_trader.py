@@ -6,9 +6,13 @@ from alpaca.trading.enums import OrderSide, TimeInForce, OrderClass
 from alpaca.trading.requests import MarketOrderRequest, LimitOrderRequest, StopLossRequest
 import os
 import yfinance as yf
-if os.path.exists("env.py"):
-    import env  # only for local use
 
+# only for local use
+try:
+    import env
+except ImportError:
+    env = None
+    
 ALPACA_API_KEY = os.environ.get("ALPACA_API_KEY") or getattr(env, "ALPACA_API_KEY", None)
 ALPACA_SECRET_KEY = os.environ.get("ALPACA_SECRET_KEY") or getattr(env, "ALPACA_SECRET_KEY", None)
 # --------------------
