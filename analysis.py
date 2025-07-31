@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import pandas_ta as ta
 import joblib
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
@@ -23,7 +24,7 @@ class TradingModelSystem:
             'data_dir': 'data',
             'model_dir': 'saved_models',
             'window_size': 20,
-            'prediction_threshold': 1.0,
+            'prediction_threshold': 0.5,
             'initial_capital': 10000,
             'rsi_buy': 30,
             'rsi_sell': 70

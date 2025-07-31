@@ -77,7 +77,8 @@ class TradingExecutor:
         print(f"- Return: {best_metrics.get('Return (%)', 'N/A'):.1f}%")
         print(f"- Sharpe: {best_metrics.get('Sharpe Ratio', 'N/A'):.2f}")
         print(f"- Accuracy: {best_metrics.get('Direction Accuracy (%)', 'N/A'):.1f}%")
-        
+        print(f"- Mean absolute error: {best_metrics.get('MAE (%)', 'N/A'):.2f}%")
+
         return best_strategy, best_metrics
 
     def execute_strategy(self, ticker):
@@ -118,8 +119,10 @@ class TradingExecutor:
             
             # 4. Trade Execution
             strategy_prediction = predictions.get(best_strategy, {})
-            signal = strategy_prediction.get("signal", "HOLD")
             
+            signal = strategy_prediction.get("signal", "HOLD")
+            print(f"Strategy signal for {ticker}: {signal}")
+
             if signal in ["BUY", "SELL"]:
                 pct_diff = strategy_prediction.get("pct_diff", 0)
                 last_price = df['adj_close'].iloc[-1]

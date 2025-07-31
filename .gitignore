@@ -1,8 +1,8 @@
 *.pyc
 __pycache__/
 trader-venv/
+.venv/
 saved_models/
-saved_imgs/
 env.py
 *.sqlite
 *.log
