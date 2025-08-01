@@ -1,1 +1,2 @@
 Crypto - sub coins delay reaction to btc/eth swings
+stock news nltk/ LLM compound analysis and signal decision weight
