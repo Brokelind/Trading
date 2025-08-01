@@ -24,7 +24,7 @@ class TradingModelSystem:
             'data_dir': 'data',
             'model_dir': 'saved_models',
             'window_size': 20,
-            'prediction_threshold': 0.5,
+            'prediction_threshold': 0.3,
             'initial_capital': 10000,
             'rsi_buy': 30,
             'rsi_sell': 70

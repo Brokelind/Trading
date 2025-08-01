@@ -5,6 +5,7 @@ from analysis import TradingModelSystem
 import alpaca_trader
 import call_market
 from alpaca.trading.enums import TimeInForce  
+from news_sentiment import analyze_news_sentiment
 
 class TradingExecutor:
     def __init__(self):
@@ -40,9 +41,9 @@ class TradingExecutor:
         # Calculate composite score
         def calculate_composite_score(row):
             weights = {
-                'Return (%)': 0.4,
-                'Sharpe Ratio': 0.3,
-                'Direction Accuracy (%)': 0.2,
+                'Return (%)': 0.1,
+                'Sharpe Ratio': 0.4,
+                'Direction Accuracy (%)': 0.4,
                 'Max Drawdown (%)': -0.1
             }
             
@@ -120,16 +121,36 @@ class TradingExecutor:
             # 4. Trade Execution
             strategy_prediction = predictions.get(best_strategy, {})
             
+            # involve news sentiment analysis
+            sentiment_analysis = analyze_news_sentiment(ticker)
+            if sentiment_analysis is None:
+                print(f"No sentiment analysis data for {ticker}")
+                return
+            sentiment_score, sentiment_confidence = sentiment_analysis.get("score", 0), sentiment_analysis.get("confidence", 0)
+
             signal = strategy_prediction.get("signal", "HOLD")
             print(f"Strategy signal for {ticker}: {signal}")
 
             if signal in ["BUY", "SELL"]:
                 pct_diff = strategy_prediction.get("pct_diff", 0)
                 last_price = df['adj_close'].iloc[-1]
+
+                # adjust composite score based on sentiment
+                if sentiment_score > 0.3 and sentiment_confidence > 0.5 and signal == "BUY":
+                    strategy_metrics['Composite Score'] = min(strategy_metrics['Composite Score'] + sentiment_score, 1.0)
+                elif sentiment_score < -0.3 and sentiment_confidence > 0.5 and signal == "SELL":
+                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] - sentiment_score, 0.0)
+                elif sentiment_score < 0 and signal == "BUY":
+                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] + sentiment_score*sentiment_confidence, 0.0)
+                elif sentiment_score > 0 and signal == "SELL":
+                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] - sentiment_score*sentiment_confidence, 0)
+                
+
                 
                 # Position sizing based on composite score
                 confidence = min(strategy_metrics['Composite Score'], 1.0)
-                
+                print(f"Position confidence for {ticker}: {confidence:.2f}")
+
                 qty = alpaca_trader.qty_to_trade(
                     ticker,
                     signal,
@@ -147,7 +168,7 @@ class TradingExecutor:
                         stop_loss_pct=0.03
                     )
                     self.current_trades += 1
-                    print(f"Executed {signal} for {ticker} (Qty: {qty})")
+                    #print(f"Executed {signal} for {ticker} (Qty: {qty})")
 
         except Exception as e:
             print(f"Error processing {ticker}: {str(e)}")
@@ -157,7 +178,7 @@ class TradingExecutor:
         print("Starting daily trading process...")
         for ticker in tqdm(self.ticker_list, desc="Processing Tickers"):
             self.execute_strategy(ticker)
-        print(f"Trading complete. Executed {self.current_trades} trades today.")
+        print(f"Trading complete.")
 
 if __name__ == "__main__":
 
