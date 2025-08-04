@@ -312,7 +312,7 @@ class TradingModelSystem:
         return pd.DataFrame(metrics).T
 
     def predict_tomorrow(self, ticker: str) -> Dict[str, Dict[str, Union[float, str]]]:
-        """Fixed prediction without verbose for non-Keras models"""
+        
         try:
             df = self.prepare_data(ticker)
             if df is None:
