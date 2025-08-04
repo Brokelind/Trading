@@ -74,8 +74,9 @@ class TradingExecutor:
         best_strategy = viable_strategies['Composite Score'].idxmax()
         best_metrics = viable_strategies.loc[best_strategy].to_dict()
         
+        performance_vs_buy_hold = best_metrics.get('Return (%)', 0) * 100 / buy_hold_return if buy_hold_return else 0
         print(f"\nSelected Strategy: {best_strategy}")
-        print(f"- Return: {best_metrics.get('Return (%)', 'N/A'):.1f}%")
+        print(f"- Performance vs Buy & Hold : {performance_vs_buy_hold:.1f}%")
         print(f"- Sharpe: {best_metrics.get('Sharpe Ratio', 'N/A'):.2f}")
         print(f"- Accuracy: {best_metrics.get('Direction Accuracy (%)', 'N/A'):.1f}%")
         print(f"- Mean absolute error: {best_metrics.get('MAE (%)', 'N/A'):.2f}%")

@@ -80,6 +80,20 @@ def qty_to_trade(
 
     return max(qty, 0)
 
+def get_latest_price_from_csv(ticker, folder="data"):
+    path = os.path.join(folder, f"{ticker}_data.csv")
+    if not os.path.exists(path):
+        log.error(f"Data file not found for {ticker} at {path}")
+        return None
+    try:
+        df = pd.read_csv(path, parse_dates=["Date"], index_col="Date")
+        latest_price = df["adj_close"].dropna().iloc[-1]
+        return float(latest_price)
+    except Exception as e:
+        log.error(f"Failed to read latest price from {path}: {e}")
+        return None
+
+
 # --------------------
 # Main Trading Function
 # --------------------
@@ -153,21 +167,14 @@ def make_trade(
         # ------------------------
         # Create Order
         # ------------------------
-        # Get latest market price
-        # Create Ticker object
-        stock = yf.Ticker(ticker)
-        # Fetch last price (from live price or last close)
-        last_price = stock.fast_info.get("last_price")
-        if last_price is None:
-            # fallback: previous close
-            last_price = stock.history(period="1d")["Close"].iloc[-1]
-
-        #last_quote = client.get_latest_quote(ticker)
-        #last_price = float(last_quote.ask_price or last_quote.bid_price)
-
-        if last_price == 0:
-            log.error(f"Cannot trade {ticker}: no valid quote price.")
+        # ------------------------
+        # Get latest market price from local data
+        # ------------------------
+        last_price = get_latest_price_from_csv(ticker)
+        if last_price is None or last_price <= 0:
+            log.error(f"Cannot trade {ticker}: no valid price in saved data.")
             return
+
 
         # Compute limit price (e.g. 0.2% slippage)
         limit_price = round(

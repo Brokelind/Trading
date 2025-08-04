@@ -166,7 +166,7 @@ class TradingModelSystem:
 
     def walk_forward_backtest(self, df: pd.DataFrame, model_type: str, 
                             ticker: str) -> pd.DataFrame:
-        """Backtesting that returns DataFrame matching main.py expectations"""
+        
         try:
             window_size = self.config['window_size']
             threshold = self.config['prediction_threshold']
@@ -483,10 +483,12 @@ class TradingModelSystem:
                     row=1, col=1,
                     secondary_y=False
                 )
-                
+
                 # Add signals for all strategies
                 for strategy, data in results.items():
                     if 'Signal' in data.columns and 'TruePrice' in data.columns:
+                        group = strategy  # Legend group name
+                        
                         # Buy signals
                         buy_signals = data[data['Signal'] == 'BUY']
                         if not buy_signals.empty:
@@ -502,15 +504,16 @@ class TradingModelSystem:
                                         color=colors.get(strategy, '#17BECF'),
                                         line=dict(width=1, color='DarkSlateGrey')
                                     ),
-                                    showlegend=False
+                                    legendgroup=group,
+                                    showlegend=True,
+                                    visible='legendonly'
                                 ),
                                 row=1, col=1,
                                 secondary_y=False
                             )
-                        
+
                         # Sell signals
                         sell_signals = data[data['Signal'] == 'SELL']
-                        
                         if not sell_signals.empty:
                             fig.add_trace(
                                 go.Scatter(
@@ -524,11 +527,28 @@ class TradingModelSystem:
                                         color=colors.get(strategy, '#17BECF'),
                                         line=dict(width=1, color='DarkSlateGrey')
                                     ),
-                                    showlegend=False
+                                    legendgroup=group,
+                                    showlegend=True,
+                                    visible='legendonly'
                                 ),
                                 row=1, col=1,
                                 secondary_y=False
                             )
+
+                        # Portfolio line (needed for legend toggle to work cleanly)
+                        fig.add_trace(
+                            go.Scatter(
+                                x=data['Date'],
+                                y=data['PortfolioValue'],
+                                name=strategy,
+                                line=dict(color=colors.get(strategy, '#7F7F7F')),
+                                opacity=0.8,
+                                legendgroup=group,
+                                showlegend=True  # this anchors the group in the legend
+                            ),
+                            row=2, col=1
+                        )
+
 
             # 2. Portfolio Values (Middle Panel)
             for strategy, data in results.items():
