@@ -107,3 +107,7 @@ wrapt==1.14.1
 xgboost==2.0.3
 yfinance==0.2.36
 zipp==3.23.0
+praw==7.8.1
+prawcore==2.4.0
+update-checker==0.18.0
+websocket-client==1.8.0
