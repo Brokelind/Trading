@@ -10,3 +10,4 @@ env.py
 *.html
 .DS_Store
 cd
+results/

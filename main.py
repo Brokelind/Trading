@@ -6,15 +6,47 @@ import alpaca_trader
 import call_market
 from alpaca.trading.enums import TimeInForce  
 from news_sentiment import analyze_news_sentiment
+import json
+from distribute_results import*
 
 class TradingExecutor:
     def __init__(self):
         self.analyzer = TradingModelSystem()
         self.ticker_list = [
-            "SPY", "QQQ",  # ETFs first
-            "AAPL", "MSFT", "AMZN", "GOOG", "TSLA",  # Core tech
-            "JPM", "BAC", "XOM", "CVX"  # Financials/energy
+            # ETFs
+            "SPY", "QQQ", "DIA", "VTI", "IWM",
+
+            # Mega-cap Tech
+            "AAPL", "MSFT", "AMZN", "GOOG", "TSLA", "META", "NVDA",
+
+            # Mid/High-growth Tech
+            "CRM", "ADBE", "INTU", "SNOW", "PLTR", "UBER",
+
+            # AI/Chip Stocks
+            "AMD", "AVGO", "TSM", "QCOM", "SMCI", "ARM",
+
+            # Financials
+            "JPM", "BAC", "GS", "MS", "WFC",
+
+            # Energy
+            "XOM", "CVX", "SLB", "COP", "PSX",
+
+            # Healthcare
+            "UNH", "JNJ", "PFE", "LLY", "MRK", "CVS",
+
+            # Consumer Discretionary
+            "HD", "LOW", "NKE", "SBUX", "MCD", "CMG", "COST",
+
+            # Industrials
+            "BA", "GE", "CAT", "DE", "LMT", "HON",
+
+            # Utilities
+            "NEE", "DUK", "SO", "D", "EXC",
+
+            # Materials
+            "LIN", "FCX", "NEM", "APD", "DD"
         ]
+
         self.max_trades_per_day = 50
         self.current_trades = 0
 
@@ -42,8 +74,9 @@ class TradingExecutor:
         def calculate_composite_score(row):
             weights = {
                 'Return (%)': 0.1,
-                'Sharpe Ratio': 0.4,
-                'Direction Accuracy (%)': 0.4,
+                'Sharpe Ratio': 0.3,
+                'Direction Accuracy (%)': 0.6
+                ,
                 'Max Drawdown (%)': -0.1
             }
             
@@ -171,6 +204,22 @@ class TradingExecutor:
                     self.current_trades += 1
                     #print(f"Executed {signal} for {ticker} (Qty: {qty})")
 
+                result_summary = {
+                    "ticker": ticker,
+                    "signal": signal,
+                    "confidence": confidence,
+                    "strategy": best_strategy,
+                    "sentiment_score": sentiment_score,
+                    "sentiment_confidence": sentiment_confidence,
+                    "model performance vs Buy & Hold": strategy_metrics.get("Return (%)") * 100 / buy_hold_return,    
+                    "accuracy": strategy_metrics.get("Direction Accuracy (%)"),
+                    "predicted diff": strategy_prediction.get("pct_diff", 0)
+                }
+                os.makedirs("results", exist_ok=True)
+                with open(f"results/{ticker}_summary.json", "w") as f:
+                    json.dump(result_summary, f)
+
+
         except Exception as e:
             print(f"Error processing {ticker}: {str(e)}")
 
@@ -180,6 +229,14 @@ class TradingExecutor:
         for ticker in tqdm(self.ticker_list, desc="Processing Tickers"):
             self.execute_strategy(ticker)
         print(f"Trading complete.")
+
+        print("📈 Compiling signal summary...")
+        summaries = load_results()
+        email_body = compose_email_body(summaries)
+        if email_body:
+            send_email("Daily Trading Summary - Strong Signals", email_body)
+        else:
+            print("📭 No strong signals to report today.")
 
 if __name__ == "__main__":
 
