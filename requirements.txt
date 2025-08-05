@@ -111,3 +111,7 @@ praw==7.8.1
 prawcore==2.4.0
 update-checker==0.18.0
 websocket-client==1.8.0
+ecdsa==0.19.1
+python-http-client==3.3.7
+sendgrid==6.12.4
+tensorflow-intel==2.14.0
