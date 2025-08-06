@@ -14,9 +14,9 @@ except ImportError:
 STRONG_SIGNAL_THRESHOLD = 0.65
 RESULTS_DIR = "results"
 
-EMAIL_SENDER = os.getenv("EMAIL_SENDER") or getattr(env, "EMAIL_SENDER", None)
-EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER") or getattr(env, "EMAIL_RECEIVER", None)
-GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD") or getattr(env, "GMAIL_APP_PASSWORD", None)
+EMAIL_SENDER = os.environ.get("EMAIL_SENDER") or getattr(env, "EMAIL_SENDER", None)
+EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER") or getattr(env, "EMAIL_RECEIVER", None)
+GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD") or getattr(env, "GMAIL_APP_PASSWORD", None)
 
 
 def load_results():
