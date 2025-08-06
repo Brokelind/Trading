@@ -16,6 +16,9 @@ jobs:
       REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
       REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
       REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
 
     steps:
       - name: Checkout repo
