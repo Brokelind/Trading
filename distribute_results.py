@@ -38,11 +38,15 @@ def load_results():
                 preds = data.get("predictions", {})
                 pct_diff = 0
                 if chosen_model and chosen_model in preds:
-                    pct_diff = preds[chosen_model].get("pct_diff", 0)
+                    if chosen_model == "Ensemble":
+                        pct_diff = preds[chosen_model].get("pct_diff_weighted", 0)
+                    else:
+                        pct_diff = preds[chosen_model].get("pct_diff", 0)
+
 
                 sentiment_conf = data.get("sentiment", {}).get("confidence", 0)
 
-                if abs(pct_diff) >= 0.03 and sentiment_conf >= 0.4:
+                if abs(pct_diff) >= 0.01 and sentiment_conf >= 0.4:
                     summaries.append(data)
 
     return summaries
