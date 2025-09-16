@@ -1,0 +1,86 @@
+{
+  "ticker": "JPM",
+  "timestamp": "2025-09-16T07:34:31.774963",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 293.81764307041425,
+      "predicted_return": 0.0030987097416073084,
+      "pct_diff": 0.3098709741607401,
+      "signal": "BUY",
+      "last_price": 292.91
+    },
+    "Dense NN": {
+      "predicted_price": 293.1437053083716,
+      "predicted_return": 0.0007978741195984185,
+      "pct_diff": 0.07978741195983563,
+      "signal": "HOLD",
+      "last_price": 292.91
+    },
+    "Random Forest": {
+      "predicted_price": 293.14666502350764,
+      "predicted_return": 0.0008079786402226188,
+      "pct_diff": 0.08079786402226355,
+      "signal": "HOLD",
+      "last_price": 292.91,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012979863188573923,
+          "upper": 0.014586099832558654,
+          "width": 0.027565963021132577
+        },
+        "95%": {
+          "lower": -0.026361578963225402,
+          "upper": 0.027967815607210133,
+          "width": 0.054329394570435535
+        }
+      },
+      "std_dev": 0.01385979410820272
+    },
+    "XGBoost": {
+      "predicted_price": 293.1618285791658,
+      "predicted_return": 0.0008597472915425897,
+      "pct_diff": 0.08597472915426595,
+      "signal": "HOLD",
+      "last_price": 292.91,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011801377600123899,
+          "upper": 0.013452853388218002,
+          "width": 0.0252542309883419
+        },
+        "95%": {
+          "lower": -0.024060878236263916,
+          "upper": 0.02571235402435802,
+          "width": 0.049773232260621934
+        }
+      },
+      "std_dev": 0.012697486447002812
+    },
+    "Ensemble": {
+      "mean_prediction": 293.3174604953648,
+      "median_prediction": 293.15424680133674,
+      "weighted_prediction": 293.2356070054227,
+      "pct_diff_mean": 0.13910774482427146,
+      "pct_diff_median": 0.08338629658827446,
+      "pct_diff_weighted": 0.1111628163677179,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.2888623633916483
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.1111628163677179,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "JPM",
+    "signal": "HOLD",
+    "confidence": 0.56,
+    "score": 0.072
+  },
+  "position_size_factor": 0.0022232563273543583,
+  "metrics_path": null,
+  "model_metrics": {}
+}

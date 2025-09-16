@@ -1,0 +1,86 @@
+{
+  "ticker": "NKE",
+  "timestamp": "2025-09-16T07:35:26.709541",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 73.90879249487772,
+      "predicted_return": -0.0032529670279473066,
+      "pct_diff": -0.3252967027947268,
+      "signal": "SELL",
+      "last_price": 74.15
+    },
+    "Dense NN": {
+      "predicted_price": 74.5519169155974,
+      "predicted_return": 0.0054203225299716,
+      "pct_diff": 0.5420322529971637,
+      "signal": "BUY",
+      "last_price": 74.15
+    },
+    "Random Forest": {
+      "predicted_price": 74.11952056061955,
+      "predicted_return": -0.0004110511042543101,
+      "pct_diff": -0.04110511042543095,
+      "signal": "HOLD",
+      "last_price": 74.15,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014291519258942521,
+          "upper": 0.014693025344952102,
+          "width": 0.028984544603894623
+        },
+        "95%": {
+          "lower": -0.028361876149782257,
+          "upper": 0.028763382235791835,
+          "width": 0.05712525838557409
+        }
+      },
+      "std_dev": 0.014573037779308917
+    },
+    "XGBoost": {
+      "predicted_price": 74.1717802371437,
+      "predicted_return": 0.00029373212601058185,
+      "pct_diff": 0.02937321260106202,
+      "signal": "HOLD",
+      "last_price": 74.15,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014580860443588774,
+          "upper": 0.014947141579527836,
+          "width": 0.02952800202311661
+        },
+        "95%": {
+          "lower": -0.028915035170724634,
+          "upper": 0.029281316306663696,
+          "width": 0.05819635147738833
+        }
+      },
+      "std_dev": 0.014846280833840247
+    },
+    "Ensemble": {
+      "mean_prediction": 74.18800255205959,
+      "median_prediction": 74.14565039888163,
+      "weighted_prediction": 74.20285950505209,
+      "pct_diff_mean": 0.05125091309451221,
+      "pct_diff_median": -0.005865948912174884,
+      "pct_diff_weighted": 0.0712872623763769,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.2320263275328153
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.0712872623763769,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "NKE",
+    "signal": "BUY",
+    "confidence": 0.54,
+    "score": 0.503
+  },
+  "position_size_factor": 0.0014257452475275384,
+  "metrics_path": null,
+  "model_metrics": {}
+}

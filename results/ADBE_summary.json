@@ -1,0 +1,86 @@
+{
+  "ticker": "ADBE",
+  "timestamp": "2025-09-16T07:33:56.267151",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 358.7123915592683,
+      "predicted_return": 0.0001460758358007297,
+      "pct_diff": 0.014607583580076139,
+      "signal": "HOLD",
+      "last_price": 358.66
+    },
+    "Dense NN": {
+      "predicted_price": 360.1029875987396,
+      "predicted_return": 0.004023274406790733,
+      "pct_diff": 0.4023274406790809,
+      "signal": "BUY",
+      "last_price": 358.66
+    },
+    "Random Forest": {
+      "predicted_price": 359.2855008030911,
+      "predicted_return": 0.0017439937631492646,
+      "pct_diff": 0.17439937631491825,
+      "signal": "HOLD",
+      "last_price": 358.66,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012695183443194034,
+          "upper": 0.017964731767358622,
+          "width": 0.030659915210552658
+        },
+        "95%": {
+          "lower": -0.027578837996020622,
+          "upper": 0.03284838632018521,
+          "width": 0.060427224316205834
+        }
+      },
+      "std_dev": 0.015415391505366444
+    },
+    "XGBoost": {
+      "predicted_price": 359.0085267510463,
+      "predicted_return": 0.0009717469220049679,
+      "pct_diff": 0.09717469220049045,
+      "signal": "HOLD",
+      "last_price": 358.66,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014169411674380898,
+          "upper": 0.017322542784974575,
+          "width": 0.03149195445935547
+        },
+        "95%": {
+          "lower": -0.029456974218098217,
+          "upper": 0.032610105328691893,
+          "width": 0.06206707954679011
+        }
+      },
+      "std_dev": 0.015833729608392633
+    },
+    "Ensemble": {
+      "mean_prediction": 359.2773516780363,
+      "median_prediction": 359.1470137770687,
+      "weighted_prediction": 359.28030662718993,
+      "pct_diff_mean": 0.1721272731936375,
+      "pct_diff_median": 0.13578703425770436,
+      "pct_diff_weighted": 0.1729511590893617,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.5179739035328595
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.1729511590893617,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "ADBE",
+    "signal": "HOLD",
+    "confidence": 0.39,
+    "score": -0.072
+  },
+  "position_size_factor": 0.003459023181787234,
+  "metrics_path": null,
+  "model_metrics": {}
+}

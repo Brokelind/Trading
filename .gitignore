@@ -2,7 +2,6 @@
 __pycache__/
 trader-venv/
 .venv/
-saved_models/
 env.py
 *.sqlite
 *.log
@@ -10,5 +9,5 @@ env.py
 *.html
 .DS_Store
 cd
-results/
 test.py
+dockerfile

@@ -1,0 +1,86 @@
+{
+  "ticker": "CMG",
+  "timestamp": "2025-09-16T07:35:35.973865",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 39.47332000869792,
+      "predicted_return": -0.004455989692360163,
+      "pct_diff": -0.4455989692360163,
+      "signal": "SELL",
+      "last_price": 39.65
+    },
+    "Dense NN": {
+      "predicted_price": 39.67903852174931,
+      "predicted_return": 0.0007323712925426662,
+      "pct_diff": 0.07323712925425946,
+      "signal": "HOLD",
+      "last_price": 39.65
+    },
+    "Random Forest": {
+      "predicted_price": 40.15988876460515,
+      "predicted_return": 0.012859741856372113,
+      "pct_diff": 1.285974185637203,
+      "signal": "BUY",
+      "last_price": 39.65,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.013317001583040989,
+          "upper": 0.021611475378648635,
+          "width": 0.034928476961689624
+        },
+        "95%": {
+          "lower": -0.030272801414321072,
+          "upper": 0.03856727520992872,
+          "width": 0.06884007662424979
+        }
+      },
+      "std_dev": 0.017561566734708274
+    },
+    "XGBoost": {
+      "predicted_price": 39.6683809371767,
+      "predicted_return": 0.0004635797522496432,
+      "pct_diff": 0.046357975224971495,
+      "signal": "HOLD",
+      "last_price": 39.65,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01540655029593073,
+          "upper": 0.01703810905227475,
+          "width": 0.03244465934820548
+        },
+        "95%": {
+          "lower": -0.03115659717331483,
+          "upper": 0.03278815592965885,
+          "width": 0.06394475310297368
+        }
+      },
+      "std_dev": 0.016312736766430847
+    },
+    "Ensemble": {
+      "mean_prediction": 39.745157058057266,
+      "median_prediction": 39.673709729463006,
+      "weighted_prediction": 39.78957510090278,
+      "pct_diff_mean": 0.2399925802200954,
+      "pct_diff_median": 0.05979755223961547,
+      "pct_diff_weighted": 0.35201790896035795,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "BUY",
+      "model_count": 4,
+      "std_dev": 0.2530632348848256
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "BUY",
+  "pct_diff": 0.35201790896035795,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "CMG",
+    "signal": "SELL",
+    "confidence": 0.08,
+    "score": -0.466
+  },
+  "position_size_factor": 0.019790934815106468,
+  "metrics_path": null,
+  "model_metrics": {}
+}

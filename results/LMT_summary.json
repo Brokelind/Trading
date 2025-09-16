@@ -1,0 +1,86 @@
+{
+  "ticker": "LMT",
+  "timestamp": "2025-09-16T07:35:52.647728",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 459.2925464388513,
+      "predicted_return": 0.0003976093721576035,
+      "pct_diff": 0.03976093721575688,
+      "signal": "HOLD",
+      "last_price": 459.11
+    },
+    "Dense NN": {
+      "predicted_price": 459.0946833938724,
+      "predicted_return": -3.336151712574065e-05,
+      "pct_diff": -0.0033361517125770363,
+      "signal": "HOLD",
+      "last_price": 459.11
+    },
+    "Random Forest": {
+      "predicted_price": 457.95379344764626,
+      "predicted_return": -0.002518364993909499,
+      "pct_diff": -0.25183649939094144,
+      "signal": "SELL",
+      "last_price": 459.11,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011281070726341975,
+          "upper": 0.008478149892118673,
+          "width": 0.019759220618460648
+        },
+        "95%": {
+          "lower": -0.020873054653845986,
+          "upper": 0.018070133819622684,
+          "width": 0.03894318847346867
+        }
+      },
+      "std_dev": 0.009934669407358394
+    },
+    "XGBoost": {
+      "predicted_price": 458.72080131207593,
+      "predicted_return": -0.0008477242663502693,
+      "pct_diff": -0.08477242663502842,
+      "signal": "HOLD",
+      "last_price": 459.11,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.010435854602584217,
+          "upper": 0.009493862738346282,
+          "width": 0.0199297173409305
+        },
+        "95%": {
+          "lower": -0.020110605044679142,
+          "upper": 0.019168613180441208,
+          "width": 0.03927921822512035
+        }
+      },
+      "std_dev": 0.010020392857968262
+    },
+    "Ensemble": {
+      "mean_prediction": 458.76545614811147,
+      "median_prediction": 458.9077423529742,
+      "weighted_prediction": 458.6464509261717,
+      "pct_diff_mean": -0.0750460351306975,
+      "pct_diff_median": -0.044054289173796536,
+      "pct_diff_weighted": -0.10096688676532632,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.511616347386236
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": -0.10096688676532632,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "LMT",
+    "signal": "HOLD",
+    "confidence": 0.53,
+    "score": -0.205
+  },
+  "position_size_factor": 0.0020193377353065266,
+  "metrics_path": null,
+  "model_metrics": {}
+}

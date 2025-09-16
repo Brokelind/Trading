@@ -1,0 +1,86 @@
+{
+  "ticker": "INTU",
+  "timestamp": "2025-09-16T07:33:59.166140",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 672.4693449544906,
+      "predicted_return": 0.0011751800775527954,
+      "pct_diff": 0.11751800775527277,
+      "signal": "HOLD",
+      "last_price": 671.68
+    },
+    "Dense NN": {
+      "predicted_price": 674.1768163701892,
+      "predicted_return": 0.0037172706797719,
+      "pct_diff": 0.37172706797719274,
+      "signal": "BUY",
+      "last_price": 671.68
+    },
+    "Random Forest": {
+      "predicted_price": 671.8333038179707,
+      "predicted_return": 0.00022823936691679174,
+      "pct_diff": 0.022823936691684903,
+      "signal": "HOLD",
+      "last_price": 671.68,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01341265163477948,
+          "upper": 0.016508892240278072,
+          "width": 0.029921543875057553
+        },
+        "95%": {
+          "lower": -0.027937868670289127,
+          "upper": 0.031034109275787723,
+          "width": 0.05897197794607685
+        }
+      },
+      "std_dev": 0.015044148364776163
+    },
+    "XGBoost": {
+      "predicted_price": 672.4164138216524,
+      "predicted_return": 0.001096375985071063,
+      "pct_diff": 0.10963759850710021,
+      "signal": "HOLD",
+      "last_price": 671.68,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014595449368027973,
+          "upper": 0.017096307293070483,
+          "width": 0.031691756661098455
+        },
+        "95%": {
+          "lower": -0.029980004578855246,
+          "upper": 0.032480862503897756,
+          "width": 0.062460867082753
+        }
+      },
+      "std_dev": 0.015934187458401368
+    },
+    "Ensemble": {
+      "mean_prediction": 672.7239697410757,
+      "median_prediction": 672.4428793880716,
+      "weighted_prediction": 672.6197069931284,
+      "pct_diff_mean": 0.1554266527328169,
+      "pct_diff_median": 0.11357780313119496,
+      "pct_diff_weighted": 0.13990397110654257,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.8751390660664601
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.13990397110654257,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "INTU",
+    "signal": "BUY",
+    "confidence": 0.55,
+    "score": 0.315
+  },
+  "position_size_factor": 0.0027980794221308513,
+  "metrics_path": null,
+  "model_metrics": {}
+}

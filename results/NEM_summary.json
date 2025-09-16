@@ -1,0 +1,86 @@
+{
+  "ticker": "NEM",
+  "timestamp": "2025-09-16T07:36:19.051808",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 76.1108117634058,
+      "predicted_return": 0.0025133267045021057,
+      "pct_diff": 0.25133267045021657,
+      "signal": "BUY",
+      "last_price": 75.92
+    },
+    "Dense NN": {
+      "predicted_price": 76.34630010902882,
+      "predicted_return": 0.005615122616291046,
+      "pct_diff": 0.5615122616291038,
+      "signal": "BUY",
+      "last_price": 75.92
+    },
+    "Random Forest": {
+      "predicted_price": 75.94397427590907,
+      "predicted_return": 0.00031578340238500865,
+      "pct_diff": 0.03157834023849956,
+      "signal": "HOLD",
+      "last_price": 75.92,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.018272797089708137,
+          "upper": 0.01604210787421262,
+          "width": 0.034314904963920756
+        },
+        "95%": {
+          "lower": -0.03493074242284739,
+          "upper": 0.03270005320735187,
+          "width": 0.06763079563019926
+        }
+      },
+      "std_dev": 0.017253071016524374
+    },
+    "XGBoost": {
+      "predicted_price": 75.9538296063873,
+      "predicted_return": 0.000445595447672531,
+      "pct_diff": 0.04455954476725534,
+      "signal": "HOLD",
+      "last_price": 75.92,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01709215527072372,
+          "upper": 0.018457040634451527,
+          "width": 0.035549195905175246
+        },
+        "95%": {
+          "lower": -0.03434927903802224,
+          "upper": 0.03571416440175005,
+          "width": 0.07006344343977229
+        }
+      },
+      "std_dev": 0.017873655840725595
+    },
+    "Ensemble": {
+      "mean_prediction": 76.08872893868275,
+      "median_prediction": 76.03232068489655,
+      "weighted_prediction": 76.05234259267544,
+      "pct_diff_mean": 0.22224570427126883,
+      "pct_diff_median": 0.1479461076087266,
+      "pct_diff_weighted": 0.1743184835029537,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.1627746150277059
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.1743184835029537,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "NEM",
+    "signal": "HOLD",
+    "confidence": 0.48,
+    "score": -0.248
+  },
+  "position_size_factor": 0.0034863696700590738,
+  "metrics_path": null,
+  "model_metrics": {}
+}

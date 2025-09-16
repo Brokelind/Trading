@@ -1,0 +1,86 @@
+{
+  "ticker": "MRK",
+  "timestamp": "2025-09-16T07:35:14.802909",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 84.01825698360626,
+      "predicted_return": -0.0008531694184057415,
+      "pct_diff": -0.08531694184057481,
+      "signal": "HOLD",
+      "last_price": 84.09
+    },
+    "Dense NN": {
+      "predicted_price": 84.30806488610571,
+      "predicted_return": 0.002593232085928321,
+      "pct_diff": 0.25932320859282665,
+      "signal": "BUY",
+      "last_price": 84.09
+    },
+    "Random Forest": {
+      "predicted_price": 84.1439488495384,
+      "predicted_return": 0.0006415608221953257,
+      "pct_diff": 0.06415608221952743,
+      "signal": "HOLD",
+      "last_price": 84.09,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.010641999280400811,
+          "upper": 0.010853124234765333,
+          "width": 0.021495123515166144
+        },
+        "95%": {
+          "lower": -0.021076665872693242,
+          "upper": 0.021287790827057767,
+          "width": 0.04236445669975101
+        }
+      },
+      "std_dev": 0.01080745795175739
+    },
+    "XGBoost": {
+      "predicted_price": 84.05713848641521,
+      "predicted_return": -0.0003907897917088121,
+      "pct_diff": -0.039078979170877826,
+      "signal": "HOLD",
+      "last_price": 84.09,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.010437757979464285,
+          "upper": 0.009914103701096527,
+          "width": 0.02035186168056081
+        },
+        "95%": {
+          "lower": -0.020317435619802933,
+          "upper": 0.019793781341435175,
+          "width": 0.04011121696123811
+        }
+      },
+      "std_dev": 0.010232641333624054
+    },
+    "Ensemble": {
+      "mean_prediction": 84.1318523014164,
+      "median_prediction": 84.10054366797681,
+      "weighted_prediction": 84.12987432107721,
+      "pct_diff_mean": 0.049770842450229585,
+      "pct_diff_median": 0.0125385515243248,
+      "pct_diff_weighted": 0.04741862418504791,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.11144870104646037
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.04741862418504791,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "MRK",
+    "signal": "SELL",
+    "confidence": 0.55,
+    "score": -0.49
+  },
+  "position_size_factor": 0.0009483724837009583,
+  "metrics_path": null,
+  "model_metrics": {}
+}

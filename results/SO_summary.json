@@ -1,0 +1,86 @@
+{
+  "ticker": "SO",
+  "timestamp": "2025-09-16T07:36:05.732526",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 91.11606233931728,
+      "predicted_return": -0.0010299052810296416,
+      "pct_diff": -0.10299052810296293,
+      "signal": "HOLD",
+      "last_price": 91.21
+    },
+    "Dense NN": {
+      "predicted_price": 91.12295370016305,
+      "predicted_return": -0.0009543503983877599,
+      "pct_diff": -0.09543503983876978,
+      "signal": "HOLD",
+      "last_price": 91.21
+    },
+    "Random Forest": {
+      "predicted_price": 90.986952518246,
+      "predicted_return": -0.0024454279328363394,
+      "pct_diff": -0.24454279328362488,
+      "signal": "HOLD",
+      "last_price": 91.21,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011886549748517005,
+          "upper": 0.007783591691552121,
+          "width": 0.019670141440069126
+        },
+        "95%": {
+          "lower": -0.021435290773686673,
+          "upper": 0.017332332716721792,
+          "width": 0.038767623490408465
+        }
+      },
+      "std_dev": 0.009889881598897362
+    },
+    "XGBoost": {
+      "predicted_price": 91.14529202747333,
+      "predicted_return": -0.0007094394532032311,
+      "pct_diff": -0.07094394532031813,
+      "signal": "HOLD",
+      "last_price": 91.21,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.010453573388949866,
+          "upper": 0.00972832112616756,
+          "width": 0.020181894515117427
+        },
+        "95%": {
+          "lower": -0.020250741584679488,
+          "upper": 0.019525489321897183,
+          "width": 0.03977623090657667
+        }
+      },
+      "std_dev": 0.010147184137138873
+    },
+    "Ensemble": {
+      "mean_prediction": 91.09281514629991,
+      "median_prediction": 91.11950801974017,
+      "weighted_prediction": 91.09080214140621,
+      "pct_diff_mean": -0.12847807663642283,
+      "pct_diff_median": -0.09921278397086634,
+      "pct_diff_weighted": -0.13068507684878738,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.06206747032125287
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": -0.13068507684878738,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "SO",
+    "signal": "BUY",
+    "confidence": 0.16,
+    "score": 0.72
+  },
+  "position_size_factor": 0.013723521305506903,
+  "metrics_path": null,
+  "model_metrics": {}
+}

@@ -1,0 +1,86 @@
+{
+  "ticker": "NVDA",
+  "timestamp": "2025-09-16T07:33:50.237314",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 168.799273293179,
+      "predicted_return": 0.002906976966187358,
+      "pct_diff": 0.2906976966187371,
+      "signal": "BUY",
+      "last_price": 168.31
+    },
+    "Dense NN": {
+      "predicted_price": 168.30908757412098,
+      "predicted_return": -5.421103196567856e-06,
+      "pct_diff": -0.0005421103196615138,
+      "signal": "HOLD",
+      "last_price": 168.31
+    },
+    "Random Forest": {
+      "predicted_price": 168.72274590072618,
+      "predicted_return": 0.0024522957680836845,
+      "pct_diff": 0.24522957680837687,
+      "signal": "HOLD",
+      "last_price": 168.31,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.023135367028553212,
+          "upper": 0.030287649212434944,
+          "width": 0.05342301624098816
+        },
+        "95%": {
+          "lower": -0.049069219534030505,
+          "upper": 0.05622150171791223,
+          "width": 0.10529072125194273
+        }
+      },
+      "std_dev": 0.026860371436021914
+    },
+    "XGBoost": {
+      "predicted_price": 168.6482914508623,
+      "predicted_return": 0.0020099307876080275,
+      "pct_diff": 0.20099307876079867,
+      "signal": "HOLD",
+      "last_price": 168.31,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.02381589496150139,
+          "upper": 0.029080527365351945,
+          "width": 0.052896422326853335
+        },
+        "95%": {
+          "lower": -0.049494115908516115,
+          "upper": 0.05475874831236667,
+          "width": 0.10425286422088278
+        }
+      },
+      "std_dev": 0.02659560712421659
+    },
+    "Ensemble": {
+      "mean_prediction": 168.61984955472212,
+      "median_prediction": 168.68551867579424,
+      "weighted_prediction": 168.61821258804105,
+      "pct_diff_mean": 0.18409456046706701,
+      "pct_diff_median": 0.22311132778458775,
+      "pct_diff_weighted": 0.18312197019846976,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.18719140337233853
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.18312197019846976,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "NVDA",
+    "signal": "HOLD",
+    "confidence": 0.49,
+    "score": -0.225
+  },
+  "position_size_factor": 0.0036624394039693957,
+  "metrics_path": null,
+  "model_metrics": {}
+}

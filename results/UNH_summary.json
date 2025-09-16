@@ -1,0 +1,86 @@
+{
+  "ticker": "UNH",
+  "timestamp": "2025-09-16T07:35:01.670094",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 315.04767760346994,
+      "predicted_return": -0.0010853939456865191,
+      "pct_diff": -0.10853939456864543,
+      "signal": "HOLD",
+      "last_price": 315.39
+    },
+    "Dense NN": {
+      "predicted_price": 315.37588004121045,
+      "predicted_return": -4.4769836677005515e-05,
+      "pct_diff": -0.004476983667692621,
+      "signal": "HOLD",
+      "last_price": 315.39
+    },
+    "Random Forest": {
+      "predicted_price": 315.8009423701317,
+      "predicted_return": 0.0013029657570996665,
+      "pct_diff": 0.13029657570997585,
+      "signal": "HOLD",
+      "last_price": 315.39,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012115539113558334,
+          "upper": 0.013145110101623943,
+          "width": 0.025260649215182278
+        },
+        "95%": {
+          "lower": -0.02437815543578156,
+          "upper": 0.025407726423847168,
+          "width": 0.049785881859628726
+        }
+      },
+      "std_dev": 0.012700713444821796
+    },
+    "XGBoost": {
+      "predicted_price": 311.87470340975557,
+      "predicted_return": -0.011145872063934803,
+      "pct_diff": -1.114587206393487,
+      "signal": "SELL",
+      "last_price": 315.39,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011245649398919224,
+          "upper": 0.012641751065533637,
+          "width": 0.02388740046445286
+        },
+        "95%": {
+          "lower": -0.02284163113064878,
+          "upper": 0.024237732797263194,
+          "width": 0.047079363927911975
+        }
+      },
+      "std_dev": 0.012010262509736911
+    },
+    "Ensemble": {
+      "mean_prediction": 314.5248008561419,
+      "median_prediction": 315.2117788223402,
+      "weighted_prediction": 314.14589001229933,
+      "pct_diff_mean": -0.2743267522299668,
+      "pct_diff_median": -0.056508189118169024,
+      "pct_diff_weighted": -0.3944671637339972,
+      "signal_mean": "SELL",
+      "signal_median": "HOLD",
+      "signal_weighted": "SELL",
+      "model_count": 4,
+      "std_dev": 1.553165277041112
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "SELL",
+  "pct_diff": -0.3944671637339972,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "UNH",
+    "signal": "HOLD",
+    "confidence": 0.51,
+    "score": -0.039
+  },
+  "position_size_factor": 0.007889343274679944,
+  "metrics_path": null,
+  "model_metrics": {}
+}

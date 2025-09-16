@@ -1,0 +1,86 @@
+{
+  "ticker": "GE",
+  "timestamp": "2025-09-16T07:35:45.242671",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 276.2919647770818,
+      "predicted_return": 0.0008765251841396093,
+      "pct_diff": 0.08765251841396916,
+      "signal": "HOLD",
+      "last_price": 276.05
+    },
+    "Dense NN": {
+      "predicted_price": 289.71831587441267,
+      "predicted_return": 0.049513913691043854,
+      "pct_diff": 4.951391369104385,
+      "signal": "BUY",
+      "last_price": 276.05
+    },
+    "Random Forest": {
+      "predicted_price": 275.76021692806927,
+      "predicted_return": -0.0010497484945869535,
+      "pct_diff": -0.1049748494587003,
+      "signal": "HOLD",
+      "last_price": 276.05,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.019940816481770603,
+          "upper": 0.01971791743796293,
+          "width": 0.039658733919733534
+        },
+        "95%": {
+          "lower": -0.03919288849861101,
+          "upper": 0.03896998945480333,
+          "width": 0.07816287795341434
+        }
+      },
+      "std_dev": 0.019939876081895676
+    },
+    "XGBoost": {
+      "predicted_price": 276.79079079681543,
+      "predicted_return": 0.0026835384778678417,
+      "pct_diff": 0.26835384778678417,
+      "signal": "BUY",
+      "last_price": 276.05,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.016785161170343735,
+          "upper": 0.017236800523175725,
+          "width": 0.03402196169351946
+        },
+        "95%": {
+          "lower": -0.03330089911607549,
+          "upper": 0.03375253846890748,
+          "width": 0.06705343758498297
+        }
+      },
+      "std_dev": 0.01710578309445784
+    },
+    "Ensemble": {
+      "mean_prediction": 279.64032209409476,
+      "median_prediction": 276.5413777869486,
+      "weighted_prediction": 279.12108789046385,
+      "pct_diff_mean": 1.3006057214615994,
+      "pct_diff_median": 0.17800318310037666,
+      "pct_diff_weighted": 1.1125114618597511,
+      "signal_mean": "BUY",
+      "signal_median": "HOLD",
+      "signal_weighted": "BUY",
+      "model_count": 4,
+      "std_dev": 5.829933534614974
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "BUY",
+  "pct_diff": 1.1125114618597511,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "GE",
+    "signal": "HOLD",
+    "confidence": 0.42,
+    "score": -0.074
+  },
+  "position_size_factor": 0.022250229237195024,
+  "metrics_path": null,
+  "model_metrics": {}
+}

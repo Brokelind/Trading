@@ -1,0 +1,86 @@
+{
+  "ticker": "GS",
+  "timestamp": "2025-09-16T07:34:37.975860",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 741.9522890799046,
+      "predicted_return": 0.00013788377691525966,
+      "pct_diff": 0.013788377691529031,
+      "signal": "HOLD",
+      "last_price": 741.85
+    },
+    "Dense NN": {
+      "predicted_price": 741.4584922017239,
+      "predicted_return": -0.0005277452291920781,
+      "pct_diff": -0.05277452291921088,
+      "signal": "HOLD",
+      "last_price": 741.85
+    },
+    "Random Forest": {
+      "predicted_price": 680.7891020270529,
+      "predicted_return": -0.08230895460395932,
+      "pct_diff": -8.230895460395923,
+      "signal": "SELL",
+      "last_price": 741.85,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.08153916287143993,
+          "upper": -0.04925041370576065,
+          "width": 0.03228874916567928
+        },
+        "95%": {
+          "lower": -0.09721352417428633,
+          "upper": -0.03357605240291426,
+          "width": 0.06363747177137206
+        }
+      },
+      "std_dev": 0.016234347231208413
+    },
+    "XGBoost": {
+      "predicted_price": 742.5197526342353,
+      "predicted_return": 0.0009028140921145678,
+      "pct_diff": 0.0902814092114629,
+      "signal": "HOLD",
+      "last_price": 741.85,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014092248911855084,
+          "upper": 0.015695138532554075,
+          "width": 0.029787387444409157
+        },
+        "95%": {
+          "lower": -0.028552340588860033,
+          "upper": 0.03015523020955902,
+          "width": 0.058707570798419054
+        }
+      },
+      "std_dev": 0.014976696322355126
+    },
+    "Ensemble": {
+      "mean_prediction": 726.6799089857292,
+      "median_prediction": 741.7053906408142,
+      "weighted_prediction": 724.2229506727424,
+      "pct_diff_mean": -2.044900049103031,
+      "pct_diff_median": -0.019493072613840923,
+      "pct_diff_weighted": -2.3760934592245904,
+      "signal_mean": "SELL",
+      "signal_median": "HOLD",
+      "signal_weighted": "SELL",
+      "model_count": 4,
+      "std_dev": 26.497730684629666
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "SELL",
+  "pct_diff": -2.3760934592245904,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "GS",
+    "signal": "HOLD",
+    "confidence": 0.47,
+    "score": -0.106
+  },
+  "position_size_factor": 0.047521869184491805,
+  "metrics_path": null,
+  "model_metrics": {}
+}

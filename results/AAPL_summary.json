@@ -1,0 +1,86 @@
+{
+  "ticker": "AAPL",
+  "timestamp": "2025-09-16T07:33:21.882126",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 239.89306681657735,
+      "predicted_return": 0.0008472060435451567,
+      "pct_diff": 0.08472060435451946,
+      "signal": "HOLD",
+      "last_price": 239.69
+    },
+    "Dense NN": {
+      "predicted_price": 239.85827510170407,
+      "predicted_return": 0.0007020530756562948,
+      "pct_diff": 0.07020530756563423,
+      "signal": "HOLD",
+      "last_price": 239.69
+    },
+    "Random Forest": {
+      "predicted_price": 239.9707088696178,
+      "predicted_return": 0.0011711330035370944,
+      "pct_diff": 0.11711330035370565,
+      "signal": "HOLD",
+      "last_price": 239.69,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.016973460802350033,
+          "upper": 0.01876552643143981,
+          "width": 0.03573898723378984
+        },
+        "95%": {
+          "lower": -0.034322717524120964,
+          "upper": 0.03611478315321074,
+          "width": 0.0704375006773317
+        }
+      },
+      "std_dev": 0.017969080358857033
+    },
+    "XGBoost": {
+      "predicted_price": 239.88836594088002,
+      "predicted_return": 0.0008275937288999557,
+      "pct_diff": 0.08275937288999273,
+      "signal": "HOLD",
+      "last_price": 239.69,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01323180065515771,
+          "upper": 0.01563553094889357,
+          "width": 0.02886733160405128
+        },
+        "95%": {
+          "lower": -0.02724525726474134,
+          "upper": 0.0296489875584772,
+          "width": 0.05689424482321854
+        }
+      },
+      "std_dev": 0.014514104665185963
+    },
+    "Ensemble": {
+      "mean_prediction": 239.9026041821948,
+      "median_prediction": 239.89071637872868,
+      "weighted_prediction": 239.90670131306237,
+      "pct_diff_mean": 0.08869964629096301,
+      "pct_diff_median": 0.0837399886222561,
+      "pct_diff_weighted": 0.09040899205739619,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.04152410349663385
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.09040899205739619,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "AAPL",
+    "signal": "HOLD",
+    "confidence": 0.51,
+    "score": 0.097
+  },
+  "position_size_factor": 0.009776977712152468,
+  "metrics_path": null,
+  "model_metrics": {}
+}
