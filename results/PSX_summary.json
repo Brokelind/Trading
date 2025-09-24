@@ -1,0 +1,86 @@
+{
+  "ticker": "PSX",
+  "timestamp": "2025-09-16T07:34:58.157810",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 130.43536922953442,
+      "predicted_return": 0.0017308135284110904,
+      "pct_diff": 0.17308135284110904,
+      "signal": "HOLD",
+      "last_price": 130.21
+    },
+    "Dense NN": {
+      "predicted_price": 129.61156574475115,
+      "predicted_return": -0.004595916252583265,
+      "pct_diff": -0.4595916252583221,
+      "signal": "SELL",
+      "last_price": 130.21
+    },
+    "Random Forest": {
+      "predicted_price": 130.29039036012304,
+      "predicted_return": 0.0006173900631519813,
+      "pct_diff": 0.06173900631520861,
+      "signal": "HOLD",
+      "last_price": 130.21,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.015706087081581308,
+          "upper": 0.017399338755043226,
+          "width": 0.033105425836624534
+        },
+        "95%": {
+          "lower": -0.0317768987127547,
+          "upper": 0.03347015038621662,
+          "width": 0.06524704909897132
+        }
+      },
+      "std_dev": 0.016644961237459392
+    },
+    "XGBoost": {
+      "predicted_price": 130.26820973991417,
+      "predicted_return": 0.00044704508036375046,
+      "pct_diff": 0.0447045080363733,
+      "signal": "HOLD",
+      "last_price": 130.21,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.015698727343397233,
+          "upper": 0.017399275682101045,
+          "width": 0.03309800302549828
+        },
+        "95%": {
+          "lower": -0.031765935619641056,
+          "upper": 0.03346648395834487,
+          "width": 0.06523241957798592
+        }
+      },
+      "std_dev": 0.016641229148221838
+    },
+    "Ensemble": {
+      "mean_prediction": 130.1513837685807,
+      "median_prediction": 130.2793000500186,
+      "weighted_prediction": 130.158773191352,
+      "pct_diff_mean": -0.04501668951640234,
+      "pct_diff_median": 0.05322175717579095,
+      "pct_diff_weighted": -0.0393416854680981,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.31820684348178574
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": -0.0393416854680981,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "PSX",
+    "signal": "SELL",
+    "confidence": 0.43,
+    "score": -0.661
+  },
+  "position_size_factor": 0.0007868337093619621,
+  "metrics_path": null,
+  "model_metrics": {}
+}

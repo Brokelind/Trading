@@ -18,11 +18,6 @@ REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID") or getattr(env, "REDDIT_CL
 REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET") or getattr(env, "REDDIT_CLIENT_SECRET", None)
 REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT") or getattr(env, "REDDIT_USER_AGENT", None)
 
-print(f"Using FINNHUB_API_KEY: {FINNHUB_API_KEY}")
-print(f"Using REDDIT_CLIENT_ID: {REDDIT_CLIENT_ID }")
-print(f"Using REDDIT_USER_AGENT: {REDDIT_USER_AGENT}")
-print(f"Using REDDIT_CLIENT_SECRET: {REDDIT_CLIENT_SECRET}")
-
 reddit = praw.Reddit(
     client_id=REDDIT_CLIENT_ID,
     client_secret=REDDIT_CLIENT_SECRET,
@@ -97,7 +92,7 @@ def score_finbert(text):
     return probs[1].item() - probs[0].item()  # positive - negative
 
 def normalize_label_score(label):
-    print(label)
+    #print(label)
     return {"LABEL_0": -1.0, "LABEL_1": 1.0, "NEGATIVE": -1.0, "NEUTRAL": 0.0, "POSITIVE": 1.0}.get(label, 0.0)
 
 def aggregate_scores(scores):
@@ -142,7 +137,7 @@ def analyze_news_sentiment(ticker, lookback_days=1):
 
         final_score, confidence = aggregate_scores(scores)
 
-        print(f"[{ticker}] Headline: {headline}\n  VADER: {vader_score:.3f}, FinBERT(SST-2): {finbert_score:.3f}, SST-2: {sst_score:.3f}\n  Final Score: {final_score:.3f}, Confidence: {confidence:.2f}\n")
+        #print(f"[{ticker}] Headline: {headline}\n  VADER: {vader_score:.3f}, FinBERT(SST-2): {finbert_score:.3f}, SST-2: {sst_score:.3f}\n  Final Score: {final_score:.3f}, Confidence: {confidence:.2f}\n")
         aggregated_scores.append((final_score, confidence))
 
     if not aggregated_scores:

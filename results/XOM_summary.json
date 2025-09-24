@@ -1,0 +1,86 @@
+{
+  "ticker": "XOM",
+  "timestamp": "2025-09-16T07:34:47.893294",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 109.98185321727651,
+      "predicted_return": 0.0012003023875877261,
+      "pct_diff": 0.12003023875877522,
+      "signal": "HOLD",
+      "last_price": 109.85
+    },
+    "Dense NN": {
+      "predicted_price": 109.87767795728723,
+      "predicted_return": 0.000251961377216503,
+      "pct_diff": 0.02519613772165548,
+      "signal": "HOLD",
+      "last_price": 109.85
+    },
+    "Random Forest": {
+      "predicted_price": 109.88695852130336,
+      "predicted_return": 0.0003364453464119775,
+      "pct_diff": 0.03364453464120313,
+      "signal": "HOLD",
+      "last_price": 109.85,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.013578045561007812,
+          "upper": 0.015087761287657186,
+          "width": 0.028665806848664998
+        },
+        "95%": {
+          "lower": -0.02749367330112412,
+          "upper": 0.029003389027773493,
+          "width": 0.05649706232889761
+        }
+      },
+      "std_dev": 0.014412780738457245
+    },
+    "XGBoost": {
+      "predicted_price": 109.8886214536309,
+      "predicted_return": 0.00035158355603925884,
+      "pct_diff": 0.035158355603923296,
+      "signal": "HOLD",
+      "last_price": 109.85,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.013857391303811077,
+          "upper": 0.014810445708628599,
+          "width": 0.028667837012439676
+        },
+        "95%": {
+          "lower": -0.027774004573603524,
+          "upper": 0.028727058978421045,
+          "width": 0.05650106355202457
+        }
+      },
+      "std_dev": 0.014413801477399011
+    },
+    "Ensemble": {
+      "mean_prediction": 109.9087777873745,
+      "median_prediction": 109.88778998746713,
+      "weighted_prediction": 109.89751050708614,
+      "pct_diff_mean": 0.05350731668139251,
+      "pct_diff_median": 0.03440144512256321,
+      "pct_diff_weighted": 0.04325034782534781,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.042395683886118946
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.04325034782534781,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "XOM",
+    "signal": "HOLD",
+    "confidence": 0.4,
+    "score": -0.182
+  },
+  "position_size_factor": 0.0008650069565069563,
+  "metrics_path": null,
+  "model_metrics": {}
+}

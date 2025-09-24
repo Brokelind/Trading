@@ -1,0 +1,86 @@
+{
+  "ticker": "MSFT",
+  "timestamp": "2025-09-16T07:33:26.424639",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 496.3036805356387,
+      "predicted_return": 0.0026336980517953634,
+      "pct_diff": 0.26336980517953634,
+      "signal": "BUY",
+      "last_price": 495.0
+    },
+    "Dense NN": {
+      "predicted_price": 495.4979207186261,
+      "predicted_return": 0.0010059004416689277,
+      "pct_diff": 0.10059004416689277,
+      "signal": "HOLD",
+      "last_price": 495.0
+    },
+    "Random Forest": {
+      "predicted_price": 495.6746617783156,
+      "predicted_return": 0.0013629530875062749,
+      "pct_diff": 0.1362953087506311,
+      "signal": "HOLD",
+      "last_price": 495.0,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.024361173570464374,
+          "upper": 0.02656530315680237,
+          "width": 0.050926476727266745
+        },
+        "95%": {
+          "lower": -0.04908309735909635,
+          "upper": 0.05128722694543434,
+          "width": 0.10037032430453069
+        }
+      },
+      "std_dev": 0.025605145068031607
+    },
+    "XGBoost": {
+      "predicted_price": 495.5340869387146,
+      "predicted_return": 0.0010789635125547647,
+      "pct_diff": 0.10789635125547647,
+      "signal": "HOLD",
+      "last_price": 495.0,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012354323936221484,
+          "upper": 0.014425377191570882,
+          "width": 0.026779701127792366
+        },
+        "95%": {
+          "lower": -0.02535435403665755,
+          "upper": 0.02742540729200695,
+          "width": 0.0527797613286645
+        }
+      },
+      "std_dev": 0.01346447224157804
+    },
+    "Ensemble": {
+      "mean_prediction": 495.75258749282375,
+      "median_prediction": 495.6043743585151,
+      "weighted_prediction": 495.6637525040286,
+      "pct_diff_mean": 0.1520378773381313,
+      "pct_diff_median": 0.12209583000304804,
+      "pct_diff_weighted": 0.13409141495527147,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.32495138745929236
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.13409141495527147,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "MSFT",
+    "signal": "HOLD",
+    "confidence": 0.48,
+    "score": 0.029
+  },
+  "position_size_factor": 0.0026818282991054295,
+  "metrics_path": null,
+  "model_metrics": {}
+}

@@ -1,18 +1,36 @@
+# main.py
 import os
-import pandas as pd
+import json
+import argparse
 from tqdm import tqdm
-from analysis import TradingModelSystem
+from datetime import datetime
+from tradingmodelsystem import TradingModelSystem #from tradingmodelsystem import TradingModelSystem  
+from news_sentiment import analyze_news_sentiment
 import alpaca_trader
 import call_market
-from alpaca.trading.enums import TimeInForce  
-from news_sentiment import analyze_news_sentiment
-import json
-from distribute_results import*
+from distribute_results import *  
+from alpaca.trading.enums import TimeInForce
+from visualize_results import visualize_results, visualize_predictions_chart, visualize_backtest_chart, visualize_comprehensive
 
+# only for local use
+try:
+    import env
+except ImportError:
+    env = None
+
+
+SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI", "false").lower() in ("1", "true", "yes") or getattr(env, "SKIP_TRAINING_ON_CI", False)
+
+
+
+# config
+RESULTS_DIR = "results"
+os.makedirs(RESULTS_DIR, exist_ok=True)
+
+# Only retrain on CI if explicit flag is false
 class TradingExecutor:
-    def __init__(self):
-        self.analyzer = TradingModelSystem()
-        self.ticker_list = [
+    def __init__(self, tickers=None):
+        self.ticker_list = tickers or [
             # ETFs
             "SPY", "QQQ", "DIA", "VTI", "IWM",
 
@@ -49,197 +67,249 @@ class TradingExecutor:
 
         self.max_trades_per_day = 50
         self.current_trades = 0
+        # Initialize with custom configuration
+        self.model_system = TradingModelSystem({
+            "window_size": 30,
+            "prediction_threshold_pct": 0.25,
+            "enable_uncertainty": True,
+            "min_data_points": 200
+        })
 
-    def should_process_ticker(self, ticker):
-        """Check if we have sufficient data for analysis"""
-        data_file = f"data/{ticker}_data.csv"
-        if not os.path.exists(data_file):
-            return True
-        
-        df = pd.read_csv(data_file, index_col=0, parse_dates=True)
-        return len(df) >= 100  # Minimum data points required
+    def execute_strategy(self, ticker: str):
+        print(f"\n=== Processing {ticker} === {datetime.utcnow().isoformat()}")
+        # ensure we have data
+        data_path = f"data/{ticker}_data.csv"
+        if not os.path.exists(data_path):
+            print(f"No data for {ticker}, fetching...")
+            call_market.get_data(ticker)
 
-    def select_best_model(self, metrics_df, predictions, buy_hold_return):
-        """
-        Enhanced model selection considering both performance and prediction accuracy
-        """
-        # Filter out underperforming strategies
-        viable_strategies = metrics_df[metrics_df["Return (%)"] > buy_hold_return]
-        
-        if viable_strategies.empty:
-            print(f"No strategies outperform Buy & Hold")
-            return None, None
-        
-        # Calculate composite score
-        def calculate_composite_score(row):
-            weights = {
-                'Return (%)': 0.1,
-                'Sharpe Ratio': 0.3,
-                'Direction Accuracy (%)': 0.6
-                ,
-                'Max Drawdown (%)': -0.1
-            }
-            
-            score = 0
-            for metric, weight in weights.items():
-                if metric in row:
-                    if metric == 'Max Drawdown (%)':
-                        normalized = 1 - (row[metric] / 100)
-                    else:
-                        if metric == 'Direction Accuracy (%)':
-                            normalized = row[metric] / 100
-                        else:
-                            col_min = metrics_df[metric].min()
-                            col_max = metrics_df[metric].max()
-                            normalized = (row[metric] - col_min) / (col_max - col_min) if col_max != col_min else 0.5
-                    
-                    score += normalized * weight
-            
-            return score
-        
-        # Apply minimum accuracy threshold if available
-        if 'Direction Accuracy (%)' in viable_strategies.columns:
-            accurate_strategies = viable_strategies[viable_strategies['Direction Accuracy (%)'] >= 55]
-            viable_strategies = accurate_strategies if not accurate_strategies.empty else viable_strategies
-        
-        # Calculate and select best strategy
-        viable_strategies['Composite Score'] = viable_strategies.apply(calculate_composite_score, axis=1)
-        best_strategy = viable_strategies['Composite Score'].idxmax()
-        best_metrics = viable_strategies.loc[best_strategy].to_dict()
-        
-        performance_vs_buy_hold = best_metrics.get('Return (%)', 0) * 100 / buy_hold_return if buy_hold_return else 0
-        print(f"\nSelected Strategy: {best_strategy}")
-        print(f"- Performance vs Buy & Hold : {performance_vs_buy_hold:.1f}%")
-        print(f"- Sharpe: {best_metrics.get('Sharpe Ratio', 'N/A'):.2f}")
-        print(f"- Accuracy: {best_metrics.get('Direction Accuracy (%)', 'N/A'):.1f}%")
-        print(f"- Mean absolute error: {best_metrics.get('MAE (%)', 'N/A'):.2f}%")
-
-        return best_strategy, best_metrics
-
-    def execute_strategy(self, ticker):
-        """Full pipeline for a single ticker"""
+        # ensure models trained (or load existing). Respect SKIP on CI.
         try:
-            # 1. Data Collection
-            if self.should_process_ticker(ticker):
-                print(f"Fetching data for {ticker}")
-                call_market.get_data(ticker)
-            
-            data_path = f"data/{ticker}_data.csv"
-            if not os.path.exists(data_path):
-                print(f"No data file found for {ticker}")
-                return
-                
-            df = pd.read_csv(data_path, index_col=0, parse_dates=True)
-            if 'adj_close' not in df.columns:
-                print(f"No adj_close column in data for {ticker}")
-                return
-            
-            # 2. Analysis and Prediction
-            results, metrics, predictions = self.analyzer.run_analysis(ticker)
-            
-            if metrics is None:
-                print(f"No metrics generated for {ticker}")
-                return
-                
-            # 3. Enhanced Strategy Selection
-            buy_hold_return = metrics.loc["Buy & Hold", "Return (%)"]
-            best_strategy, strategy_metrics = self.select_best_model(
-                metrics, 
-                predictions,
-                buy_hold_return
-            )
-            
-            if not best_strategy or self.current_trades >= self.max_trades_per_day:
-                return
-            
-            # 4. Trade Execution
-            strategy_prediction = predictions.get(best_strategy, {})
-            
-            # involve news sentiment analysis
-            sentiment_analysis = analyze_news_sentiment(ticker)
-            if sentiment_analysis is None:
-                print(f"No sentiment analysis data for {ticker}")
-                return
-            sentiment_score, sentiment_confidence = sentiment_analysis.get("score", 0), sentiment_analysis.get("confidence", 0)
-
-            signal = strategy_prediction.get("signal", "HOLD")
-            print(f"Strategy signal for {ticker}: {signal}")
-
-            if signal in ["BUY", "SELL"]:
-                pct_diff = strategy_prediction.get("pct_diff", 0)
-                last_price = df['adj_close'].iloc[-1]
-
-                # adjust composite score based on sentiment
-                if sentiment_score > 0.3 and sentiment_confidence > 0.5 and signal == "BUY":
-                    strategy_metrics['Composite Score'] = min(strategy_metrics['Composite Score'] + sentiment_score, 1.0)
-                elif sentiment_score < -0.3 and sentiment_confidence > 0.5 and signal == "SELL":
-                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] - sentiment_score, 0.0)
-                elif sentiment_score < 0 and signal == "BUY":
-                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] + sentiment_score*sentiment_confidence, 0.0)
-                elif sentiment_score > 0 and signal == "SELL":
-                    strategy_metrics['Composite Score'] = max(strategy_metrics['Composite Score'] - sentiment_score*sentiment_confidence, 0)
-                
-
-                
-                # Position sizing based on composite score
-                confidence = min(strategy_metrics['Composite Score'], 1.0)
-                print(f"Position confidence for {ticker}: {confidence:.2f}")
-
-                qty = alpaca_trader.qty_to_trade(
-                    ticker,
-                    signal,
-                    confidence,
-                    last_price=last_price,
-                    predicted_diff=pct_diff
-                )
-                
-                if qty > 0:
-                    alpaca_trader.make_trade(
-                        ticker,
-                        signal,
-                        qty,
-                        time_in_force=TimeInForce.GTC,
-                        stop_loss_pct=0.03
-                    )
-                    self.current_trades += 1
-                    #print(f"Executed {signal} for {ticker} (Qty: {qty})")
-
-                result_summary = {
-                    "ticker": ticker,
-                    "signal": signal,
-                    "confidence": confidence,
-                    "strategy": best_strategy,
-                    "sentiment_score": sentiment_score,
-                    "sentiment_confidence": sentiment_confidence,
-                    "model performance vs Buy & Hold": strategy_metrics.get("Return (%)") * 100 / buy_hold_return,    
-                    "accuracy": strategy_metrics.get("Direction Accuracy (%)"),
-                    "predicted diff": strategy_prediction.get("pct_diff", 0)
-                }
-                os.makedirs("results", exist_ok=True)
-                with open(f"results/{ticker}_summary.json", "w") as f:
-                    json.dump(result_summary, f)
-
-
+            if SKIP_TRAINING_ON_CI:
+                print("SKIP_TRAINING_ON_CI set - will NOT retrain; attempt to load existing models.")
+                meta = self.model_system.load_meta(ticker)
+                if not meta:
+                    print("No trained models found; skipping this ticker on CI.")
+                    return
+                metrics = None
+            else:
+                res = self.model_system.ensure_trained(ticker, force=False)
+                if "error" in res:
+                    print("Training failed or insufficient data:", res["error"])
+                    return
+                metrics = res.get("metrics", {})
         except Exception as e:
-            print(f"Error processing {ticker}: {str(e)}")
+            print("Training/ensure failed for", ticker, e)
+            return
+
+        # get predictions (from saved models)
+        preds = self.model_system.predict_tomorrow(ticker)
+        if not preds:
+            print("No predictions available for", ticker)
+            return
+
+        # get sentiment
+        sentiment = analyze_news_sentiment(ticker) or {}
+        sentiment_score = sentiment.get("score", 0)
+        sentiment_conf = sentiment.get("confidence", 0)
+
+        # Enhanced model selection logic
+        best_model = None
+        best_score = None
+        
+        if metrics:
+            # Use the best model identified by the system if metrics are available
+            best_model = metrics.get('best_model', None)
+            
+            # Fallback to our own selection if not available
+            if not best_model:
+                for model in metrics["MAE (%)"].keys():
+                    mae = metrics["MAE (%)"][model]
+                    accuracy = metrics["Direction Accuracy (%)"][model]
+                    sharpe = metrics.get("Sharpe Ratio", {}).get(model, 0)
+                    
+                    # More sophisticated scoring incorporating multiple metrics
+                    score = (accuracy * 0.4) - (mae * 0.3) + (sharpe * 0.3)
+                    
+                    if best_score is None or score > best_score:
+                        best_score = score
+                        best_model = model
+        else:
+            # If no metrics available (CI mode), use the ensemble prediction
+            best_model = "Ensemble" if "Ensemble" in preds else next(iter(preds.keys()), None)
+
+        print(f"Selected model: {best_model}")
+
+        if not best_model:
+            print("No suitable model found")
+            return
+
+        model_pred = preds[best_model]
+        
+        # Handle both old and new prediction formats
+        if "signal" in model_pred:
+            # Old format
+            signal = model_pred.get("signal", "HOLD")
+            pct_diff = model_pred.get("pct_diff", 0)
+        else:
+            # New ensemble format
+            signal = model_pred.get("signal_weighted", "HOLD")
+            pct_diff = model_pred.get("pct_diff_weighted", 0)
+
+        last_price = None
+        try:
+            import pandas as pd
+            df = pd.read_csv(data_path, index_col=0, parse_dates=True)
+            last_price = float(df["adj_close"].iloc[-1])
+        except Exception:
+            pass
+
+        # Enhanced sentiment integration
+        sentiment_weight = min(sentiment_conf * 2, 1.0)  # Scale confidence to 0-1 range
+        sentiment_effect = sentiment_score * sentiment_weight
+        
+        # Adjust signal based on sentiment
+        if signal == "BUY" and sentiment_effect < -0.3:
+            print(f"Model says BUY but negative sentiment (score: {sentiment_score:.2f}, conf: {sentiment_conf:.2f}) -> downgrade to HOLD")
+            signal = "HOLD"
+        elif signal == "SELL" and sentiment_effect > 0.3:
+            print(f"Model says SELL but positive sentiment (score: {sentiment_score:.2f}, conf: {sentiment_conf:.2f}) -> downgrade to HOLD")
+            signal = "HOLD"
+        elif signal == "HOLD":
+            # Consider upgrading to trade if sentiment strongly confirms
+            if abs(pct_diff) > 1.5 and ((pct_diff > 0 and sentiment_effect > 0.4) or (pct_diff < 0 and sentiment_effect < -0.4)):
+                new_signal = "BUY" if pct_diff > 0 else "SELL"
+                print(f"Upgrading HOLD to {new_signal} due to strong signal ({pct_diff:.2f}%) and confirming sentiment ({sentiment_effect:.2f})")
+                signal = new_signal
+
+        # Position sizing with volatility adjustment
+        perf_index = min(max(abs(pct_diff) / 5.0, 0.0), 1.0)
+        
+        # Incorporate model confidence if available
+        if "std_dev" in model_pred:
+            confidence = 1.0 - min(model_pred["std_dev"] / abs(pct_diff), 1.0) if pct_diff != 0 else 0.0
+            perf_index *= max(confidence, 0.1)  # Don't go below 10% of original size
+            
+        qty = alpaca_trader.qty_to_trade(
+            ticker, 
+            signal, 
+            perf_index, 
+            last_price or 0.0, 
+            predicted_diff=pct_diff
+        )
+        
+        print(f"Final decision: {signal} ({pct_diff:.2f}%), sentiment effect: {sentiment_effect:.2f}, qty: {qty}")
+
+        # Execute trade if conditions met
+        if qty > 0 and signal in ("BUY", "SELL") and self.current_trades < self.max_trades_per_day:
+            try:
+                # Use tighter stop-loss for more volatile predictions
+                stop_loss_pct = 0.05 if abs(pct_diff) > 3 else 0.03
+                alpaca_trader.make_trade(
+                    ticker, 
+                    signal, 
+                    qty, 
+                    time_in_force=TimeInForce.GTC, 
+                    stop_loss_pct=stop_loss_pct
+                )
+                self.current_trades += 1
+            except Exception as e:
+                print("Trade attempt failed:", e)
+
+        # Save comprehensive results
+        out = {
+            "ticker": ticker,
+            "timestamp": datetime.utcnow().isoformat(),
+            "predictions": preds,
+            "chosen_model": best_model,
+            "signal": signal,
+            "pct_diff": pct_diff,
+            "qty": qty,
+            "sentiment": sentiment,
+            "position_size_factor": perf_index,
+            "metrics_path": None
+        }
+
+        try:
+            meta = self.model_system.load_meta(ticker)
+            out["metrics_path"] = meta.get("metrics_file")
+            out["model_metrics"] = meta.get("metrics", {})
+        except Exception:
+            pass
+
+        # Write JSON result
+        fname = os.path.join(RESULTS_DIR, f"{ticker}_summary.json")
+        with open(fname, "w") as f:
+            json.dump(out, f, indent=2, default=str)
+        print("Wrote result:", fname)
 
     def run_daily_trading(self):
-        """Main execution loop"""
-        print("Starting daily trading process...")
-        for ticker in tqdm(self.ticker_list, desc="Processing Tickers"):
-            self.execute_strategy(ticker)
-        print(f"Trading complete.")
-
-        print("📈 Compiling signal summary...")
+        print("Starting daily trading run")
+        for t in tqdm(self.ticker_list, desc="Processing Tickers"):
+            try:
+                self.execute_strategy(t)
+                if self.current_trades >= self.max_trades_per_day:
+                    print(f"Reached maximum trades per day ({self.max_trades_per_day})")
+                    break
+            except Exception as e:
+                print("Error executing", t, e)
+        
+    def post_results(self):
+        # 1. Load strong signals summaries
         summaries = load_results()
-        email_body = compose_email_body(summaries)
-        if email_body:
-            send_email("Daily Trading Summary - Strong Signals", email_body)
+        
+
+        if not summaries:
+            print("No strong signals to report today.")
+            
+            strong_tickers = self.ticker_list   # fallback to full list
         else:
-            print("📭 No strong signals to report today.")
+            strong_tickers = [s["ticker"] for s in summaries]
+
+        print(f"📈 Compiling signal summary for {len(strong_tickers)} tickers... {strong_tickers}")
+
+        # 3. Generate visualization images for those tickers
+        backtest_paths = visualize_backtest_chart(strong_tickers)
+        prediction_paths = visualize_predictions_chart(strong_tickers)
+        comprehensive_paths = visualize_comprehensive(strong_tickers)
+        
+        # Combine all images paths
+        all_images = []
+        if backtest_paths:
+            all_images.extend(backtest_paths if isinstance(backtest_paths, list) else [backtest_paths])
+        if prediction_paths:
+            all_images.extend(prediction_paths if isinstance(prediction_paths, list) else [prediction_paths])
+
+        # 4. Compose enhanced email with model performance metrics
+        html_body = compose_html_email(
+            summaries,
+            image_cids=[f"chart{i}" for i in range(len(all_images))],
+            #include_model_metrics=True  # Add this parameter to your email composition function
+        )
+
+        # 5. Send email with inline images attached
+        send_email(
+            "Daily Trading Summary - Strong Signals",
+            html_body,
+            inline_images=all_images
+        )
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run trading executor")
+    parser.add_argument(
+        "--debug_ticker",
+        type=str,
+        help="Run trading only on this ticker (for debugging)"
+    )
+    args = parser.parse_args()
 
+    if args.debug_ticker:
+        tickers = [args.debug_ticker.upper()]
+        print(f"Debug mode enabled for ticker: {tickers}")
+    else:
+        tickers = None  # default to full list
+
+    trader = TradingExecutor(tickers=tickers)
     print("Running script...")
-    trader = TradingExecutor()
     trader.run_daily_trading()
+    trader.post_results()

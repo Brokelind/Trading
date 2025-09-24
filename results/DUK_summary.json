@@ -1,0 +1,86 @@
+{
+  "ticker": "DUK",
+  "timestamp": "2025-09-16T07:36:02.083980",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 120.25444948676507,
+      "predicted_return": -0.0010429515969008207,
+      "pct_diff": -0.10429515969008728,
+      "signal": "HOLD",
+      "last_price": 120.38
+    },
+    "Dense NN": {
+      "predicted_price": 119.58495935728773,
+      "predicted_return": -0.006604424677789211,
+      "pct_diff": -0.6604424677789217,
+      "signal": "SELL",
+      "last_price": 120.38
+    },
+    "Random Forest": {
+      "predicted_price": 120.12905360502369,
+      "predicted_return": -0.002084618665694492,
+      "pct_diff": -0.20846186656945523,
+      "signal": "HOLD",
+      "last_price": 120.38,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011221133567609703,
+          "upper": 0.007522863073668253,
+          "width": 0.018743996641277957
+        },
+        "95%": {
+          "lower": -0.02032028368046138,
+          "upper": 0.016622013186519926,
+          "width": 0.036942296866981306
+        }
+      },
+      "std_dev": 0.009424228495619672
+    },
+    "XGBoost": {
+      "predicted_price": 120.37326713448455,
+      "predicted_return": -5.593010064330883e-05,
+      "pct_diff": -0.005593010064334189,
+      "signal": "HOLD",
+      "last_price": 120.38,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.00953642245751755,
+          "upper": 0.009797333524533972,
+          "width": 0.01933375598205152
+        },
+        "95%": {
+          "lower": -0.01892186737050472,
+          "upper": 0.019182778437521142,
+          "width": 0.03810464580802586
+        }
+      },
+      "std_dev": 0.009720751531301199
+    },
+    "Ensemble": {
+      "mean_prediction": 120.08543239589025,
+      "median_prediction": 120.19175154589438,
+      "weighted_prediction": 120.12295519551085,
+      "pct_diff_mean": -0.2446981260257055,
+      "pct_diff_median": -0.15637851312977125,
+      "pct_diff_weighted": -0.21352783227208896,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.301575730954821
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": -0.21352783227208896,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "DUK",
+    "signal": "SELL",
+    "confidence": 0.24,
+    "score": -0.421
+  },
+  "position_size_factor": 0.00427055664544178,
+  "metrics_path": null,
+  "model_metrics": {}
+}

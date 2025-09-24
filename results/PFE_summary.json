@@ -1,0 +1,86 @@
+{
+  "ticker": "PFE",
+  "timestamp": "2025-09-16T07:35:08.286614",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 24.559502358487226,
+      "predicted_return": 0.00038706144550815225,
+      "pct_diff": 0.038706144550815225,
+      "signal": "HOLD",
+      "last_price": 24.55
+    },
+    "Dense NN": {
+      "predicted_price": 24.750271931057796,
+      "predicted_return": 0.008157716132700443,
+      "pct_diff": 0.8157716132700413,
+      "signal": "BUY",
+      "last_price": 24.55
+    },
+    "Random Forest": {
+      "predicted_price": 24.550163597020973,
+      "predicted_return": 6.6638297749390405e-06,
+      "pct_diff": 0.0006663829774823063,
+      "signal": "HOLD",
+      "last_price": 24.55,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011860703898712542,
+          "upper": 0.01159039077089941,
+          "width": 0.02345109466961195
+        },
+        "95%": {
+          "lower": -0.023244883846738097,
+          "upper": 0.02297457071892496,
+          "width": 0.04621945456566306
+        }
+      },
+      "std_dev": 0.011790893845559465
+    },
+    "XGBoost": {
+      "predicted_price": 24.549865251521236,
+      "predicted_return": -5.488736405823147e-06,
+      "pct_diff": -0.0005488736405881032,
+      "signal": "HOLD",
+      "last_price": 24.55,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01219678031035897,
+          "upper": 0.011850381281573443,
+          "width": 0.024047161591932414
+        },
+        "95%": {
+          "lower": -0.02387031703257191,
+          "upper": 0.023523918003786382,
+          "width": 0.04739423503635829
+        }
+      },
+      "std_dev": 0.012090588248099958
+    },
+    "Ensemble": {
+      "mean_prediction": 24.602450784521807,
+      "median_prediction": 24.5548329777541,
+      "weighted_prediction": 24.592908298899523,
+      "pct_diff_mean": 0.2136488167894341,
+      "pct_diff_median": 0.019686263764148764,
+      "pct_diff_weighted": 0.17477922158665024,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.08543249809025208
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.17477922158665024,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "PFE",
+    "signal": "HOLD",
+    "confidence": 0.56,
+    "score": 0.02
+  },
+  "position_size_factor": 0.017869344699279633,
+  "metrics_path": null,
+  "model_metrics": {}
+}

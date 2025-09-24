@@ -1,0 +1,86 @@
+{
+  "ticker": "SNOW",
+  "timestamp": "2025-09-16T07:34:02.256993",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 226.19956495234743,
+      "predicted_return": -0.0014145993627607822,
+      "pct_diff": -0.14145993627608175,
+      "signal": "HOLD",
+      "last_price": 226.52
+    },
+    "Dense NN": {
+      "predicted_price": 229.19982088427992,
+      "predicted_return": 0.01183039415627718,
+      "pct_diff": 1.1830394156277175,
+      "signal": "BUY",
+      "last_price": 226.52
+    },
+    "Random Forest": {
+      "predicted_price": 227.3380716771773,
+      "predicted_return": 0.0036114765900463423,
+      "pct_diff": 0.36114765900463563,
+      "signal": "BUY",
+      "last_price": 226.52,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.028629659609068138,
+          "upper": 0.025207218216833596,
+          "width": 0.053836877825901734
+        },
+        "95%": {
+          "lower": -0.054764418503889224,
+          "upper": 0.051341977111654676,
+          "width": 0.1061063956155439
+        }
+      },
+      "std_dev": 0.0270684554544108
+    },
+    "XGBoost": {
+      "predicted_price": 226.6472873697826,
+      "predicted_return": 0.000561925524380058,
+      "pct_diff": 0.056192552438009316,
+      "signal": "HOLD",
+      "last_price": 226.52,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.030137233502384324,
+          "upper": 0.029886817422149752,
+          "width": 0.06002405092453408
+        },
+        "95%": {
+          "lower": -0.05927551495837968,
+          "upper": 0.05902509887814511,
+          "width": 0.11830061383652479
+        }
+      },
+      "std_dev": 0.030179282570920934
+    },
+    "Ensemble": {
+      "mean_prediction": 227.3461862208968,
+      "median_prediction": 226.99267952347995,
+      "weighted_prediction": 227.3245786394469,
+      "pct_diff_mean": 0.3647299226985702,
+      "pct_diff_median": 0.2086701057213225,
+      "pct_diff_weighted": 0.3551909939285281,
+      "signal_mean": "BUY",
+      "signal_median": "HOLD",
+      "signal_weighted": "BUY",
+      "model_count": 4,
+      "std_dev": 1.1444679166203986
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "BUY",
+  "pct_diff": 0.3551909939285281,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "SNOW",
+    "signal": "HOLD",
+    "confidence": 0.47,
+    "score": 0.287
+  },
+  "position_size_factor": 0.007103819878570563,
+  "metrics_path": null,
+  "model_metrics": {}
+}

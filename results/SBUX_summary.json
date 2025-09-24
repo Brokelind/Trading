@@ -1,0 +1,86 @@
+{
+  "ticker": "SBUX",
+  "timestamp": "2025-09-16T07:35:29.558421",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 84.56066806453747,
+      "predicted_return": 0.004641416948288679,
+      "pct_diff": 0.46414169482887596,
+      "signal": "BUY",
+      "last_price": 84.17
+    },
+    "Dense NN": {
+      "predicted_price": 84.17752431759509,
+      "predicted_return": 8.939429244492203e-05,
+      "pct_diff": 0.0089394292444868,
+      "signal": "HOLD",
+      "last_price": 84.17
+    },
+    "Random Forest": {
+      "predicted_price": 84.21315379309966,
+      "predicted_return": 0.0005126980289848576,
+      "pct_diff": 0.05126980289849425,
+      "signal": "HOLD",
+      "last_price": 84.17,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01161873301810018,
+          "upper": 0.013880963897953368,
+          "width": 0.025499696916053548
+        },
+        "95%": {
+          "lower": -0.023997393477333633,
+          "upper": 0.02625962435718682,
+          "width": 0.050257017834520454
+        }
+      },
+      "std_dev": 0.012820903402037334
+    },
+    "XGBoost": {
+      "predicted_price": 84.20921694375225,
+      "predicted_return": 0.0004659254336729646,
+      "pct_diff": 0.04659254336729376,
+      "signal": "HOLD",
+      "last_price": 84.17,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.011976718446447572,
+          "upper": 0.012745106485880038,
+          "width": 0.02472182493232761
+        },
+        "95%": {
+          "lower": -0.023977766058007072,
+          "upper": 0.02474615409743954,
+          "width": 0.04872392015544661
+        }
+      },
+      "std_dev": 0.012429799868715619
+    },
+    "Ensemble": {
+      "mean_prediction": 84.29014077974612,
+      "median_prediction": 84.21118536842596,
+      "weighted_prediction": 84.2476939511273,
+      "pct_diff_mean": 0.14273586758479614,
+      "pct_diff_median": 0.048931173132893996,
+      "pct_diff_weighted": 0.09230598922098299,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.15679855125993467
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.09230598922098299,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "SBUX",
+    "signal": "SELL",
+    "confidence": 0.41,
+    "score": -0.626
+  },
+  "position_size_factor": 0.0018461197844196597,
+  "metrics_path": null,
+  "model_metrics": {}
+}

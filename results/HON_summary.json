@@ -1,0 +1,86 @@
+{
+  "ticker": "HON",
+  "timestamp": "2025-09-16T07:35:55.651184",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 214.13118592439568,
+      "predicted_return": -0.0003212608571629971,
+      "pct_diff": -0.03212608571629706,
+      "signal": "HOLD",
+      "last_price": 214.2
+    },
+    "Dense NN": {
+      "predicted_price": 214.77489288984796,
+      "predicted_return": 0.002683907048776746,
+      "pct_diff": 0.2683907048776719,
+      "signal": "BUY",
+      "last_price": 214.2
+    },
+    "Random Forest": {
+      "predicted_price": 214.68639994462384,
+      "predicted_return": 0.002270774718131846,
+      "pct_diff": 0.22707747181319105,
+      "signal": "HOLD",
+      "last_price": 214.2,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.008686138015745533,
+          "upper": 0.01226258849900393,
+          "width": 0.020948726514749463
+        },
+        "95%": {
+          "lower": -0.01885555977134959,
+          "upper": 0.02243201025460799,
+          "width": 0.04128757002595758
+        }
+      },
+      "std_dev": 0.01053273691548127
+    },
+    "XGBoost": {
+      "predicted_price": 214.33453842359594,
+      "predicted_return": 0.000628097215667367,
+      "pct_diff": 0.06280972156673935,
+      "signal": "HOLD",
+      "last_price": 214.2,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.008957837638394497,
+          "upper": 0.011740480712564252,
+          "width": 0.02069831835095875
+        },
+        "95%": {
+          "lower": -0.019005700394846923,
+          "upper": 0.021788343469016678,
+          "width": 0.0407940438638636
+        }
+      },
+      "std_dev": 0.010406835070858907
+    },
+    "Ensemble": {
+      "mean_prediction": 214.48175429561587,
+      "median_prediction": 214.5104691841099,
+      "weighted_prediction": 214.50348615196486,
+      "pct_diff_mean": 0.13153795313533295,
+      "pct_diff_median": 0.1449435966899652,
+      "pct_diff_weighted": 0.1416835443346759,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.2609505570797012
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.1416835443346759,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "HON",
+    "signal": "HOLD",
+    "confidence": 0.72,
+    "score": 0.289
+  },
+  "position_size_factor": 0.002833670886693518,
+  "metrics_path": null,
+  "model_metrics": {}
+}

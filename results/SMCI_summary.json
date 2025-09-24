@@ -1,0 +1,86 @@
+{
+  "ticker": "SMCI",
+  "timestamp": "2025-09-16T07:34:25.544558",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 40.359917219354536,
+      "predicted_return": -0.0012393660144880414,
+      "pct_diff": -0.12393660144880203,
+      "signal": "HOLD",
+      "last_price": 40.41
+    },
+    "Dense NN": {
+      "predicted_price": 40.52481265601702,
+      "predicted_return": 0.002841194160282612,
+      "pct_diff": 0.28411941602826685,
+      "signal": "BUY",
+      "last_price": 40.41
+    },
+    "Random Forest": {
+      "predicted_price": 40.42043859424829,
+      "predicted_return": 0.0002583171058720534,
+      "pct_diff": 0.025831710587211277,
+      "signal": "HOLD",
+      "last_price": 40.41,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.01813951743166915,
+          "upper": 0.02668807011593331,
+          "width": 0.04482758754760246
+        },
+        "95%": {
+          "lower": -0.03990077550799503,
+          "upper": 0.04844932819225919,
+          "width": 0.08835010370025422
+        }
+      },
+      "std_dev": 0.022538705914279183
+    },
+    "XGBoost": {
+      "predicted_price": 40.48599459441262,
+      "predicted_return": 0.0018805888248607516,
+      "pct_diff": 0.18805888248606814,
+      "signal": "HOLD",
+      "last_price": 40.41,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.02048097201355288,
+          "upper": 0.023887975138728715,
+          "width": 0.044368947152281596
+        },
+        "95%": {
+          "lower": -0.042019586121001186,
+          "upper": 0.04542658924617702,
+          "width": 0.0874461753671782
+        }
+      },
+      "std_dev": 0.022308107714463756
+    },
+    "Ensemble": {
+      "mean_prediction": 40.44779076600811,
+      "median_prediction": 40.453216594330456,
+      "weighted_prediction": 40.45920151865001,
+      "pct_diff_mean": 0.09351835191317727,
+      "pct_diff_median": 0.10694529653664851,
+      "pct_diff_weighted": 0.12175579967833564,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.06297183010434541
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.12175579967833564,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "SMCI",
+    "signal": "HOLD",
+    "confidence": 0.26,
+    "score": -0.299
+  },
+  "position_size_factor": 0.011756793914798044,
+  "metrics_path": null,
+  "model_metrics": {}
+}

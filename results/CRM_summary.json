@@ -1,0 +1,86 @@
+{
+  "ticker": "CRM",
+  "timestamp": "2025-09-16T07:33:53.259258",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 252.18164951287852,
+      "predicted_return": -0.00035022193333134055,
+      "pct_diff": -0.03502219333313045,
+      "signal": "HOLD",
+      "last_price": 252.27
+    },
+    "Dense NN": {
+      "predicted_price": 253.47367397349794,
+      "predicted_return": 0.004771371837705374,
+      "pct_diff": 0.4771371837705347,
+      "signal": "BUY",
+      "last_price": 252.27
+    },
+    "Random Forest": {
+      "predicted_price": 252.78845299476123,
+      "predicted_return": 0.0020551512060936637,
+      "pct_diff": 0.2055151206093547,
+      "signal": "HOLD",
+      "last_price": 252.27,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014678765240593826,
+          "upper": 0.017116123977797194,
+          "width": 0.03179488921839102
+        },
+        "95%": {
+          "lower": -0.030113385474280788,
+          "upper": 0.032550744211484156,
+          "width": 0.06266412968576494
+        }
+      },
+      "std_dev": 0.01598604111607448
+    },
+    "XGBoost": {
+      "predicted_price": 252.44331928235889,
+      "predicted_return": 0.0006870388169772923,
+      "pct_diff": 0.06870388169773464,
+      "signal": "HOLD",
+      "last_price": 252.27,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.015493481409497915,
+          "upper": 0.016875831865467487,
+          "width": 0.0323693132749654
+        },
+        "95%": {
+          "lower": -0.03120695203028391,
+          "upper": 0.03258930248625348,
+          "width": 0.06379625451653739
+        }
+      },
+      "std_dev": 0.016274853777863807
+    },
+    "Ensemble": {
+      "mean_prediction": 252.72177394087413,
+      "median_prediction": 252.61588613856006,
+      "weighted_prediction": 252.72593178794514,
+      "pct_diff_mean": 0.17908349818611774,
+      "pct_diff_median": 0.13710950115354464,
+      "pct_diff_weighted": 0.18073167159992576,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.4845284176014309
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.18073167159992576,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "CRM",
+    "signal": "SELL",
+    "confidence": 0.35,
+    "score": -0.41
+  },
+  "position_size_factor": 0.0036146334319985154,
+  "metrics_path": null,
+  "model_metrics": {}
+}

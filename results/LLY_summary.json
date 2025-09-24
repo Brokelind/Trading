@@ -1,0 +1,86 @@
+{
+  "ticker": "LLY",
+  "timestamp": "2025-09-16T07:35:11.643352",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 739.0099893990159,
+      "predicted_return": 0.0005009062588214874,
+      "pct_diff": 0.05009062588215306,
+      "signal": "HOLD",
+      "last_price": 738.64
+    },
+    "Dense NN": {
+      "predicted_price": 734.9295874897763,
+      "predicted_return": -0.005023302976042032,
+      "pct_diff": -0.5023302976042057,
+      "signal": "SELL",
+      "last_price": 738.64
+    },
+    "Random Forest": {
+      "predicted_price": 741.1140948012134,
+      "predicted_return": 0.0033495272408932512,
+      "pct_diff": 0.3349527240893221,
+      "signal": "BUY",
+      "last_price": 738.64,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.010299891800282884,
+          "upper": 0.016272390630358707,
+          "width": 0.02657228243064159
+        },
+        "95%": {
+          "lower": -0.023199231855916515,
+          "upper": 0.029171730685992336,
+          "width": 0.05237096254190885
+        }
+      },
+      "std_dev": 0.013360184920489439
+    },
+    "XGBoost": {
+      "predicted_price": 738.9975537109049,
+      "predicted_return": 0.00048407033318653703,
+      "pct_diff": 0.04840703331865062,
+      "signal": "HOLD",
+      "last_price": 738.64,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012203299534086675,
+          "upper": 0.014303478971634597,
+          "width": 0.026506778505721272
+        },
+        "95%": {
+          "lower": -0.025070841139409106,
+          "upper": 0.027171020576957028,
+          "width": 0.052241861716366134
+        }
+      },
+      "std_dev": 0.013327250431243451
+    },
+    "Ensemble": {
+      "mean_prediction": 738.5128063502276,
+      "median_prediction": 739.0037715549604,
+      "weighted_prediction": 738.768939693857,
+      "pct_diff_mean": -0.017219978578519986,
+      "pct_diff_median": 0.04924882960040184,
+      "pct_diff_weighted": 0.017456364921609718,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 2.2410003343826133
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.017456364921609718,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "LLY",
+    "signal": "SELL",
+    "confidence": 0.49,
+    "score": -0.365
+  },
+  "position_size_factor": 0.0003491272984321944,
+  "metrics_path": null,
+  "model_metrics": {}
+}

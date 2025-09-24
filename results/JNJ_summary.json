@@ -1,0 +1,86 @@
+{
+  "ticker": "JNJ",
+  "timestamp": "2025-09-16T07:35:04.685739",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 178.0305111282831,
+      "predicted_return": -0.0005585183389484882,
+      "pct_diff": -0.055851833894844355,
+      "signal": "HOLD",
+      "last_price": 178.13
+    },
+    "Dense NN": {
+      "predicted_price": 177.82867411736632,
+      "predicted_return": -0.0016916065942496061,
+      "pct_diff": -0.16916065942495742,
+      "signal": "HOLD",
+      "last_price": 178.13
+    },
+    "Random Forest": {
+      "predicted_price": 176.37978749041235,
+      "predicted_return": -0.009825478636881154,
+      "pct_diff": -0.982547863688116,
+      "signal": "SELL",
+      "last_price": 178.13,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.014392426474851656,
+          "upper": 0.002733545926985938,
+          "width": 0.017125972401837594
+        },
+        "95%": {
+          "lower": -0.022706117343196296,
+          "upper": 0.01104723679533058,
+          "width": 0.03375335413852688
+        }
+      },
+      "std_dev": 0.008610707748909936
+    },
+    "XGBoost": {
+      "predicted_price": 177.84767173320637,
+      "predicted_return": -0.0015849563060328364,
+      "pct_diff": -0.15849563060328237,
+      "signal": "HOLD",
+      "last_price": 178.13,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.009160272565205426,
+          "upper": 0.007990934674163194,
+          "width": 0.01715120723936862
+        },
+        "95%": {
+          "lower": -0.017486213519759677,
+          "upper": 0.016316875628717444,
+          "width": 0.03380308914847712
+        }
+      },
+      "std_dev": 0.008623395484588384
+    },
+    "Ensemble": {
+      "mean_prediction": 177.52166111731702,
+      "median_prediction": 177.83817292528636,
+      "weighted_prediction": 177.43843591680934,
+      "pct_diff_mean": -0.341513996902808,
+      "pct_diff_median": -0.16382814501411191,
+      "pct_diff_weighted": -0.388235605002333,
+      "signal_mean": "SELL",
+      "signal_median": "HOLD",
+      "signal_weighted": "SELL",
+      "model_count": 4,
+      "std_dev": 0.663954745700418
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "SELL",
+  "pct_diff": -0.388235605002333,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "JNJ",
+    "signal": "SELL",
+    "confidence": 0.46,
+    "score": -0.306
+  },
+  "position_size_factor": 0.00776471210004666,
+  "metrics_path": null,
+  "model_metrics": {}
+}

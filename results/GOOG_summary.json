@@ -1,0 +1,86 @@
+{
+  "ticker": "GOOG",
+  "timestamp": "2025-09-16T07:33:34.862683",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 236.58001821876502,
+      "predicted_return": 0.005995740182697773,
+      "pct_diff": 0.599574018269776,
+      "signal": "BUY",
+      "last_price": 235.17
+    },
+    "Dense NN": {
+      "predicted_price": 235.9044785713451,
+      "predicted_return": 0.0031231814064085484,
+      "pct_diff": 0.3123181406408587,
+      "signal": "BUY",
+      "last_price": 235.17
+    },
+    "Random Forest": {
+      "predicted_price": 246.67910796184486,
+      "predicted_return": 0.04893952443698121,
+      "pct_diff": 4.893952443698123,
+      "signal": "BUY",
+      "last_price": 235.17,
+      "confidence_intervals": {
+        "68%": {
+          "lower": 0.008492523653775244,
+          "upper": 0.04572782162877549,
+          "width": 0.03723529797500025
+        },
+        "95%": {
+          "lower": -0.009583107293851159,
+          "upper": 0.0638034525764019,
+          "width": 0.07338655987025305
+        }
+      },
+      "std_dev": 0.018721405201604948
+    },
+    "XGBoost": {
+      "predicted_price": 235.487366768138,
+      "predicted_return": 0.0013495206367224455,
+      "pct_diff": 0.1349520636722436,
+      "signal": "HOLD",
+      "last_price": 235.17,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.012915844505795278,
+          "upper": 0.015574895253547468,
+          "width": 0.028490739759342746
+        },
+        "95%": {
+          "lower": -0.026746487076737192,
+          "upper": 0.029405537824489382,
+          "width": 0.056152024901226574
+        }
+      },
+      "std_dev": 0.014324759369087031
+    },
+    "Ensemble": {
+      "mean_prediction": 238.66274288002327,
+      "median_prediction": 236.24224839505507,
+      "weighted_prediction": 238.9751043399657,
+      "pct_diff_mean": 1.4851991665702624,
+      "pct_diff_median": 0.45594607945532334,
+      "pct_diff_weighted": 1.6180228515396138,
+      "signal_mean": "BUY",
+      "signal_median": "BUY",
+      "signal_weighted": "BUY",
+      "model_count": 4,
+      "std_dev": 4.644644404798965
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "BUY",
+  "pct_diff": 1.6180228515396138,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "GOOG",
+    "signal": "HOLD",
+    "confidence": 0.5,
+    "score": 0.005
+  },
+  "position_size_factor": 0.03236045703079228,
+  "metrics_path": null,
+  "model_metrics": {}
+}

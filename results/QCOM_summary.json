@@ -1,0 +1,86 @@
+{
+  "ticker": "QCOM",
+  "timestamp": "2025-09-16T07:34:22.607312",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 160.63226293323564,
+      "predicted_return": 0.002447971375659108,
+      "pct_diff": 0.24479713756591862,
+      "signal": "HOLD",
+      "last_price": 160.24
+    },
+    "Dense NN": {
+      "predicted_price": 158.95291073270144,
+      "predicted_return": -0.008032259531319141,
+      "pct_diff": -0.8032259531319077,
+      "signal": "SELL",
+      "last_price": 160.24
+    },
+    "Random Forest": {
+      "predicted_price": 160.30686602846671,
+      "predicted_return": 0.00041728674779527796,
+      "pct_diff": 0.04172867477952167,
+      "signal": "HOLD",
+      "last_price": 160.24,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.015736074201238716,
+          "upper": 0.01855622163474771,
+          "width": 0.034292295835986426
+        },
+        "95%": {
+          "lower": -0.032383044081653975,
+          "upper": 0.03520319151516296,
+          "width": 0.06758623559681694
+        }
+      },
+      "std_dev": 0.017241703452188038
+    },
+    "XGBoost": {
+      "predicted_price": 160.36944793162868,
+      "predicted_return": 0.0008078378159552813,
+      "pct_diff": 0.08078378159552883,
+      "signal": "HOLD",
+      "last_price": 160.24,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.016817543992475505,
+          "upper": 0.01866651488158935,
+          "width": 0.035484058874064854
+        },
+        "95%": {
+          "lower": -0.03404304741565416,
+          "upper": 0.035892018304768,
+          "width": 0.06993506572042216
+        }
+      },
+      "std_dev": 0.017840905820734727
+    },
+    "Ensemble": {
+      "mean_prediction": 160.06537190650812,
+      "median_prediction": 160.3381569800477,
+      "weighted_prediction": 160.08893483529744,
+      "pct_diff_mean": -0.10897908979773466,
+      "pct_diff_median": 0.06125622818752525,
+      "pct_diff_weighted": -0.09427431646441117,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.6537807238297083
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": -0.09427431646441117,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "QCOM",
+    "signal": "HOLD",
+    "confidence": 0.63,
+    "score": 0.182
+  },
+  "position_size_factor": 0.0018854863292882237,
+  "metrics_path": null,
+  "model_metrics": {}
+}

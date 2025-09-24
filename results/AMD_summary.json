@@ -1,0 +1,86 @@
+{
+  "ticker": "AMD",
+  "timestamp": "2025-09-16T07:34:13.220258",
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 151.9602558736992,
+      "predicted_return": 0.0036342109087854624,
+      "pct_diff": 0.36342109087854174,
+      "signal": "BUY",
+      "last_price": 151.41
+    },
+    "Dense NN": {
+      "predicted_price": 152.28405079225078,
+      "predicted_return": 0.005772741511464119,
+      "pct_diff": 0.5772741511464133,
+      "signal": "BUY",
+      "last_price": 151.41
+    },
+    "Random Forest": {
+      "predicted_price": 151.41903400855125,
+      "predicted_return": 5.9665864548244605e-05,
+      "pct_diff": 0.005966586454827086,
+      "signal": "HOLD",
+      "last_price": 151.41,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.028342516997680797,
+          "upper": 0.02799899885702714,
+          "width": 0.05634151585470794
+        },
+        "95%": {
+          "lower": -0.055693135980327345,
+          "upper": 0.05534961783967369,
+          "width": 0.11104275382000103
+        }
+      },
+      "std_dev": 0.028327753646468026
+    },
+    "XGBoost": {
+      "predicted_price": 151.69940535639063,
+      "predicted_return": 0.0019114018650725484,
+      "pct_diff": 0.1911401865072526,
+      "signal": "HOLD",
+      "last_price": 151.41,
+      "confidence_intervals": {
+        "68%": {
+          "lower": -0.028284096353950693,
+          "upper": 0.030498962112965777,
+          "width": 0.05878305846691647
+        },
+        "95%": {
+          "lower": -0.05681994616866459,
+          "upper": 0.059034811927679676,
+          "width": 0.11585475809634427
+        }
+      },
+      "std_dev": 0.029555328314752674
+    },
+    "Ensemble": {
+      "mean_prediction": 151.84068650772298,
+      "median_prediction": 151.8298306150449,
+      "weighted_prediction": 151.7720378270719,
+      "pct_diff_mean": 0.2844505037467681,
+      "pct_diff_median": 0.27728063869288777,
+      "pct_diff_weighted": 0.23911090883818875,
+      "signal_mean": "BUY",
+      "signal_median": "BUY",
+      "signal_weighted": "HOLD",
+      "model_count": 4,
+      "std_dev": 0.31961692533968067
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "HOLD",
+  "pct_diff": 0.23911090883818875,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "AMD",
+    "signal": "SELL",
+    "confidence": 0.47,
+    "score": -0.407
+  },
+  "position_size_factor": 0.004782218176763775,
+  "metrics_path": null,
+  "model_metrics": {}
+}
