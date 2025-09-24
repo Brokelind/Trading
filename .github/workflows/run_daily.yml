@@ -16,6 +16,9 @@ jobs:
       REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
       REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
       SKIP_TRAINING_ON_CI: "True"   # <-- avoid retraining heavy models on CI
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3

@@ -15,9 +15,9 @@ STRONG_SIGNAL_THRESHOLD = 0.65
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-EMAIL_SENDER = os.getenv("EMAIL_SENDER") or getattr(env, "EMAIL_SENDER", None)
-EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER") or getattr(env, "EMAIL_RECEIVER", None)
-GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD") or getattr(env, "GMAIL_APP_PASSWORD", None)
+EMAIL_SENDER = os.environ.get("EMAIL_SENDER") or getattr(env, "EMAIL_SENDER", None)
+EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER") or getattr(env, "EMAIL_RECEIVER", None)
+GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD") or getattr(env, "GMAIL_APP_PASSWORD", None)
 
 def save_result_json(ticker, payload):
     path = os.path.join(RESULTS_DIR, f"{ticker}_summary.json")
