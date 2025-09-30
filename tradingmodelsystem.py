@@ -9,7 +9,7 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 import joblib
-import pandas_ta_classic as ta
+import pandas_ta as ta
 from scipy.stats import norm
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor
 from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
