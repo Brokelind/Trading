@@ -47,7 +47,7 @@ multitasking==0.0.11
 namex==0.1.0
 narwhals==1.45.0
 networkx==3.2.1
-numpy>=1.24,<2.0
+numpy>=1.24,<3
 oauthlib==3.3.1
 opt-einsum==3.3.0
 optree==0.16.0
