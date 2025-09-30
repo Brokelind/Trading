@@ -52,7 +52,6 @@ oauthlib==3.3.1
 opt-einsum==3.3.0
 optree==0.16.0
 packaging==23.2
-pandas==1.5.3
 peewee==3.17.1
 pillow==10.2.0
 platformdirs==4.2.0
@@ -63,8 +62,8 @@ pyasn1_modules==0.4.2
 pycparser==2.21
 pydantic==2.11.7
 pydantic_core==2.33.2
-pandas==1.5.3
-pandas-ta-classic==0.3.14b2
+pandas>=2.0.0
+pandas-ta
 Pygments==2.19.2
 pyparsing==3.1.2
 python-dateutil==2.8.2
