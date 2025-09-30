@@ -64,7 +64,7 @@ pycparser==2.21
 pydantic==2.11.7
 pydantic_core==2.33.2
 pandas==1.5.3
-pandas-ta-classic
+pandas-ta-classic<0.3.15
 Pygments==2.19.2
 pyparsing==3.1.2
 python-dateutil==2.8.2
