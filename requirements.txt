@@ -53,7 +53,6 @@ opt-einsum==3.3.0
 optree==0.16.0
 packaging==23.2
 pandas==1.5.3
-pandas-ta==0.3.14b0
 peewee==3.17.1
 pillow==10.2.0
 platformdirs==4.2.0
