@@ -10,7 +10,7 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 import joblib
-import pandas_ta as ta
+import talib
 from scipy.stats import norm
 
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor
@@ -111,124 +111,127 @@ class TradingModelSystem:
             logger.error(f"Error loading data for {ticker}: {e}")
             return None
 
+
     def _add_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Enhanced technical indicator calculation"""
+        """Using TA-Lib instead of pandas-ta"""
         if df.empty:
             return df
-            
-        # Price-based indicators
-        df['log_ret'] = np.log(df['adj_close'] / df['adj_close'].shift(1))
-        df['volatility'] = df['log_ret'].rolling(21).std() * np.sqrt(252)
-        
-        # Momentum indicators
-        df['RSI_14'] = ta.rsi(df['adj_close'], length=14)
-        df['RSI_7'] = ta.rsi(df['adj_close'], length=7)
-        df['stoch_k'] = ta.stoch(df['high'], df['low'], df['adj_close'])['STOCHk_14_3_3']
-        df['stoch_d'] = ta.stoch(df['high'], df['low'], df['adj_close'])['STOCHd_14_3_3']
-        
         try:
-            # MACD Calculation with more robust handling
-            macd = ta.macd(df['adj_close'], fast=12, slow=26, signal=9)
+            # Price-based indicators
+            df['log_ret'] = np.log(df['adj_close'] / df['adj_close'].shift(1))
+            df['volatility'] = df['log_ret'].rolling(21).std() * np.sqrt(252)
             
-            # Handle different pandas_ta versions and column names
-            macd_cols = {
-                'macd': ['MACD_12_26_9', 'MACD'],
-                'signal': ['MACDs_12_26_9', 'MACD_12_26_9_Signal', 'MACD_signal', 'MACDS_12_26_9'],
-                'hist': ['MACDh_12_26_9', 'MACD_12_26_9_Histogram', 'MACD_hist']
-            }
+            # RSI
+            df['RSI_14'] = talib.RSI(df['adj_close'], timeperiod=14)
+            df['RSI_7'] = talib.RSI(df['adj_close'], timeperiod=7)
             
-            # Find which columns are actually available
-            available_cols = {k: None for k in macd_cols}
-            for col_type, possible_names in macd_cols.items():
-                for name in possible_names:
-                    if name in macd.columns:
-                        available_cols[col_type] = name
-                        break
+            # Stochastic
+            stoch_k, stoch_d = talib.STOCH(df['high'], df['low'], df['adj_close'])
+            df['stoch_k'] = stoch_k
+            df['stoch_d'] = stoch_d
             
-            # Assign available columns
-            if available_cols['macd']:
-                df['MACD'] = macd[available_cols['macd']]
-            if available_cols['signal']:
-                df['MACD_signal'] = macd[available_cols['signal']]
-            if available_cols['hist']:
-                df['MACD_hist'] = macd[available_cols['hist']]
-                
+            # MACD
+            macd, macd_signal, macd_hist = talib.MACD(df['adj_close'])
+            df['MACD'] = macd
+            df['MACD_signal'] = macd_signal
+            df['MACD_hist'] = macd_hist
+            
+            # ADX
+            df['ADX'] = talib.ADX(df['high'], df['low'], df['adj_close'])
+            
+            # ATR
+            df['ATR'] = talib.ATR(df['high'], df['low'], df['adj_close'])
+            
+            # Bollinger Bands
+            upper, middle, lower = talib.BBANDS(df['adj_close'])
+            df['BB_upper'] = upper
+            df['BB_lower'] = lower
+            df['BB_width'] = (upper - lower) / df['adj_close']
+            
+            # OBV
+            if 'volume' in df.columns:
+                df['OBV'] = talib.OBV(df['adj_close'], df['volume'])
+                df['volume_ma10'] = df['volume'].rolling(10).mean()
+                df['volume_ma20'] = df['volume'].rolling(20).mean()
+            
+            # Create lagged features
+            lookback = self.config['feature_lookback']
+            for lag in range(1, lookback + 1):
+                df[f'ret_lag_{lag}'] = df['log_ret'].shift(lag)
+                df[f'vol_lag_{lag}'] = df['volatility'].shift(lag)
+            
+            # Target variables
+            df['target_price'] = df['adj_close'].shift(-1)
+            df['target_return'] = df['target_price'] / df['adj_close'] - 1.0
+            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
+            
+            # Drop any remaining NA values
+            df = df.dropna()
+            
+            return df
+            
         except Exception as e:
-            logger.warning(f"MACD calculation failed: {e}")
-        df['ADX'] = ta.adx(df['high'], df['low'], df['adj_close'])['ADX_14']
-        
-        # Volatility indicators
-        df['ATR'] = ta.atr(df['high'], df['low'], df['adj_close'], length=14)
-        bbands = ta.bbands(df['adj_close'], length=20)
-        df['BB_upper'] = bbands['BBU_20_2.0']
-        df['BB_lower'] = bbands['BBL_20_2.0']
-        df['BB_width'] = (df['BB_upper'] - df['BB_lower']) / df['adj_close']
-        
-        # Volume indicators
-        if 'volume' in df.columns:
-            df['volume_ma10'] = df['volume'].rolling(10).mean()
-            df['volume_ma20'] = df['volume'].rolling(20).mean()
-            df['OBV'] = ta.obv(df['adj_close'], df['volume'])
-        
-        # Create lagged features
-        lookback = self.config['feature_lookback']
-        for lag in range(1, lookback + 1):
-            df[f'ret_lag_{lag}'] = df['log_ret'].shift(lag)
-            df[f'vol_lag_{lag}'] = df['volatility'].shift(lag)
-        
-        # Target variables
-        df['target_price'] = df['adj_close'].shift(-1)
-        df['target_return'] = df['target_price'] / df['adj_close'] - 1.0
-        df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
-        
-        # Drop any remaining NA values
-        df = df.dropna()
-        
-        return df
+            logger.error(f"Error in _add_technical_indicators: {e}")
+            raise
 
     def prepare_features(self, ticker: str) -> Optional[pd.DataFrame]:
         try:
+            print(f"DEBUG: Starting feature preparation for {ticker}")
+            
             # Load raw data
             df = self.load_raw(ticker)
+            print(f"DEBUG: Raw data loaded, shape: {df.shape if df is not None else 'None'}")
+            
             if df is None or len(df) < self.config["min_data_points"]:
                 logger.warning(f"{ticker}: Not enough raw data or failed to load")
                 return None
 
             # Drop initial NA values
             df = df.dropna()
+            print(f"DEBUG: After initial dropna, shape: {df.shape}")
 
             # Add technical indicators
+            print("DEBUG: Adding technical indicators...")
             df = self._add_technical_indicators(df)
+            print(f"DEBUG: After technical indicators, shape: {df.shape}")
+            print(f"DEBUG: Columns: {list(df.columns)}")
             
             # Drop NA values created by technical indicators
             df = df.dropna()
+            print(f"DEBUG: After final dropna, shape: {df.shape}")
 
             # Check if we still have enough data
             if len(df) < self.config["min_data_points"]:
                 logger.warning(f"{ticker}: Only {len(df)} rows after feature engineering (min: {self.config['min_data_points']})")
                 return None
 
-            # Create target variables - FIXED: Use returns instead of prices
-            df['target_return'] = df['adj_close'].pct_change().shift(-1)  # Next day's return
+            # Create target variables
+            df['target_return'] = df['adj_close'].pct_change().shift(-1)
+            print(f"DEBUG: After target creation, shape: {df.shape}")
             
-            # Remove any rows with NaN targets (first and last rows)
+            # Remove any rows with NaN targets
             df = df.dropna(subset=['target_return'])
+            print(f"DEBUG: After target dropna, shape: {df.shape}")
             
-            # Remove extreme outliers in returns (optional but recommended)
+            # Remove extreme outliers
             returns = df['target_return']
             median = returns.median()
-            mad = (returns - median).abs().median()  # Median Absolute Deviation
+            mad = (returns - median).abs().median()
             df = df[(returns >= median - 5*mad) & (returns <= median + 5*mad)]
+            print(f"DEBUG: After outlier removal, shape: {df.shape}")
             
             # Final data check
             if len(df) < self.config["min_data_points"]:
                 logger.warning(f"{ticker}: Only {len(df)} rows after outlier removal")
                 return None
 
+            print(f"DEBUG: Successfully prepared features for {ticker}, final shape: {df.shape}")
             return df
 
         except Exception as e:
             logger.error(f"Error preparing features for {ticker}: {e}")
+            import traceback
+            traceback.print_exc()  # This will show the exact line where it fails
             return None
 
     # ---------- model path & metadata ----------

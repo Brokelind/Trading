@@ -19,8 +19,7 @@ except ImportError:
     env = None
 
 
-SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI", "false").lower() in ("1", "true", "yes") or getattr(env, "SKIP_TRAINING_ON_CI", False)
-
+SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI") or getattr(env, "SKIP_TRAINING_ON_CI", False)
 
 
 # config
@@ -84,6 +83,7 @@ class TradingExecutor:
             call_market.get_data(ticker)
 
         # ensure models trained (or load existing). Respect SKIP on CI.
+        
         try:
             if SKIP_TRAINING_ON_CI:
                 print("SKIP_TRAINING_ON_CI set - will NOT retrain; attempt to load existing models.")
@@ -93,7 +93,7 @@ class TradingExecutor:
                     return
                 metrics = None
             else:
-                res = self.model_system.ensure_trained(ticker, force=False)
+                res = self.model_system.ensure_trained(ticker, force=True)
                 if "error" in res:
                     print("Training failed or insufficient data:", res["error"])
                     return
