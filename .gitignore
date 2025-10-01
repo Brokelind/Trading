@@ -2,6 +2,7 @@
 __pycache__/
 trader-venv/
 .venv/
+.venv64/
 env.py
 *.sqlite
 *.log
