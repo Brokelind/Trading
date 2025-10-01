@@ -104,7 +104,6 @@ torch==2.2.2
 tqdm==4.66.1
 transformers==4.54.1
 typing-extensions==4.12.2
-typing-inspection==0.3.0
 tzdata==2023.4
 update-checker==0.18.0
 urllib3==2.2.1
@@ -119,3 +118,4 @@ yfinance==0.2.36
 zipp==3.23.0
 
 kaleido==0.2.1
+
