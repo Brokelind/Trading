@@ -6,22 +6,18 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, Optional, Tuple, List, Any, Union
 from collections import defaultdict
-
 import numpy as np
 import pandas as pd
 import joblib
 import talib
 from scipy.stats import norm
-
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor
 from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.base import clone
-
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
-
 from tensorflow.keras.models import Sequential, load_model, save_model
 from tensorflow.keras.layers import (LSTM, Dense, Input, Dropout, 
                                     BatchNormalization, Attention)
