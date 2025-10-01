@@ -1,5 +1,4 @@
 absl-py==2.0.0
-alpaca-py==0.17.0
 annotated-types==0.7.0
 appdirs==1.4.4
 astunparse==1.6.3
@@ -121,4 +120,5 @@ kaleido==0.2.1
 
 
 
+alpaca-py
 
