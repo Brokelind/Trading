@@ -47,11 +47,13 @@ multitasking==0.0.11
 namex==0.1.0
 narwhals==1.45.0
 networkx==3.2.1
-numpy>=1.24,<3
+numpy==1.24.3
 oauthlib==3.3.1
 opt-einsum==3.3.0
 optree==0.16.0
 packaging==23.2
+pandas==1.5.3
+pandas-ta==0.3.14b0
 peewee==3.17.1
 pillow==10.2.0
 platformdirs==4.2.0
@@ -62,8 +64,8 @@ pyasn1_modules==0.4.2
 pycparser==2.21
 pydantic==2.11.7
 pydantic_core==2.33.2
-pandas>=2.0.0
-pandas-ta
+pandas==1.5.3
+pandas_ta==0.3.14b0
 Pygments==2.19.2
 pyparsing==3.1.2
 python-dateutil==2.8.2
