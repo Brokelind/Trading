@@ -65,8 +65,6 @@ protobuf==4.25.3
 pyasn1==0.6.1
 pyasn1-modules==0.4.2
 pycparser==2.21
-pydantic==1.10.14
-optree==0.10.0
 typing-extensions==4.5.0
 pygments==2.19.2
 pyparsing==3.1.2
@@ -99,7 +97,6 @@ termcolor==2.4.0
 threadpoolctl==3.3.0
 tokenizers==0.21.4
 tomli==2.2.1
-torch==2.2.2
 tqdm==4.66.1
 transformers==4.54.1
 tzdata==2023.4
@@ -121,4 +118,5 @@ kaleido==0.2.1
 
 
 alpaca-py
+
 
