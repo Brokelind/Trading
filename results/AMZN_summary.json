@@ -1,86 +1,86 @@
 {
   "ticker": "AMZN",
-  "timestamp": "2025-09-16T07:33:30.311823",
+  "timestamp": "2025-10-02T17:12:33.033040",
   "predictions": {
     "LSTM": {
-      "predicted_price": 232.49554604116364,
-      "predicted_return": 0.0007125469855964184,
-      "pct_diff": 0.07125469855964477,
+      "predicted_price": 219.44518440641636,
+      "predicted_return": -0.0005684546777047217,
+      "pct_diff": -0.05684546777047579,
       "signal": "HOLD",
-      "last_price": 232.33
+      "last_price": 219.57
     },
     "Dense NN": {
-      "predicted_price": 232.3995869350119,
-      "predicted_return": 0.0002995176473632455,
-      "pct_diff": 0.029951764736322592,
+      "predicted_price": 219.87103534388706,
+      "predicted_return": 0.0013710221974179149,
+      "pct_diff": 0.1371022197417977,
       "signal": "HOLD",
-      "last_price": 232.33
+      "last_price": 219.57
     },
     "Random Forest": {
-      "predicted_price": 273.486880850892,
-      "predicted_return": 0.17714837021001167,
-      "pct_diff": 17.714837021001166,
-      "signal": "BUY",
-      "last_price": 232.33,
+      "predicted_price": 219.5061331870558,
+      "predicted_return": -0.0002908722181726661,
+      "pct_diff": -0.029087221817271917,
+      "signal": "HOLD",
+      "last_price": 219.57,
       "confidence_intervals": {
         "68%": {
-          "lower": 0.05107006865668752,
-          "upper": 0.15585074386905368,
-          "width": 0.10478067521236617
+          "lower": -0.015541597170714705,
+          "upper": 0.0188698451289675,
+          "width": 0.0344114422996822
         },
         "95%": {
-          "lower": 0.0002049777729392216,
-          "upper": 0.20671583475280197,
-          "width": 0.20651085697986277
+          "lower": -0.0322464059197198,
+          "upper": 0.03557465387797259,
+          "width": 0.06782105979769239
         }
       },
-      "std_dev": 0.05268230911608429
+      "std_dev": 0.017301608685837154
     },
     "XGBoost": {
-      "predicted_price": 234.97557370094583,
-      "predicted_return": 0.011387137696146965,
-      "pct_diff": 1.1387137696146936,
-      "signal": "BUY",
-      "last_price": 232.33,
+      "predicted_price": 219.68045928706937,
+      "predicted_return": 0.0005030709435231984,
+      "pct_diff": 0.050307094352313626,
+      "signal": "HOLD",
+      "last_price": 219.57,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.012458090557200319,
-          "upper": 0.020782623326820737,
-          "width": 0.033240713884021056
+          "lower": -0.01508482606255969,
+          "upper": 0.01743706027151605,
+          "width": 0.03252188633407574
         },
         "95%": {
-          "lower": -0.028594576882799587,
-          "upper": 0.036919109652420005,
-          "width": 0.06551368653521959
+          "lower": -0.030872362273229793,
+          "upper": 0.033224596482186154,
+          "width": 0.06409695875541595
         }
       },
-      "std_dev": 0.01671298224150627
+      "std_dev": 0.01635156545247887
     },
     "Ensemble": {
-      "mean_prediction": 243.33939688200334,
-      "median_prediction": 233.73555987105473,
-      "weighted_prediction": 245.36137091930445,
-      "pct_diff_mean": 4.738689313477954,
-      "pct_diff_median": 0.6049842340871692,
-      "pct_diff_weighted": 5.608991916370867,
-      "signal_mean": "BUY",
-      "signal_median": "BUY",
-      "signal_weighted": "BUY",
+      "mean_prediction": 219.62570305610717,
+      "median_prediction": 219.5932962370626,
+      "weighted_prediction": 219.63990815965414,
+      "pct_diff_mean": 0.025369156126600612,
+      "pct_diff_median": 0.010609936267520853,
+      "pct_diff_weighted": 0.03183866632697888,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 17.436261573177518
+      "std_dev": 0.1658840805560111
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 5.608991916370867,
+  "signal": "HOLD",
+  "pct_diff": 0.03183866632697888,
   "qty": 0,
   "sentiment": {
     "ticker": "AMZN",
     "signal": "HOLD",
-    "confidence": 0.47,
-    "score": 0.15
+    "score": 0.015,
+    "confidence": 0.37
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.0006367733265395777,
   "metrics_path": null,
   "model_metrics": {}
 }

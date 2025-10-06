@@ -1,86 +1,86 @@
 {
   "ticker": "AVGO",
-  "timestamp": "2025-09-16T07:34:16.865853",
+  "timestamp": "2025-10-03T09:46:40.541097",
   "predictions": {
     "LSTM": {
-      "predicted_price": 346.56457642274904,
-      "predicted_return": 0.002645961008965969,
-      "pct_diff": 0.26459610089659036,
-      "signal": "BUY",
-      "last_price": 345.65
+      "predicted_price": 329.68100244444855,
+      "predicted_return": -0.0006941212923265994,
+      "pct_diff": -0.06941212923266131,
+      "signal": "HOLD",
+      "last_price": 329.91
     },
     "Dense NN": {
-      "predicted_price": 347.5072673211805,
-      "predicted_return": 0.005373260006308556,
-      "pct_diff": 0.537326000630849,
-      "signal": "BUY",
-      "last_price": 345.65
+      "predicted_price": 330.73125302147355,
+      "predicted_return": 0.002489324426278472,
+      "pct_diff": 0.2489324426278451,
+      "signal": "HOLD",
+      "last_price": 329.91
     },
     "Random Forest": {
-      "predicted_price": 348.06007925269273,
-      "predicted_return": 0.006972600181376273,
-      "pct_diff": 0.6972600181376403,
+      "predicted_price": 330.81275414589123,
+      "predicted_return": 0.0027363649052506355,
+      "pct_diff": 0.2736364905250548,
       "signal": "BUY",
-      "last_price": 345.65,
+      "last_price": 329.91,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.01853233547256052,
-          "upper": 0.020887732810970273,
-          "width": 0.03942006828353079
+          "lower": -0.01922813793062073,
+          "upper": 0.02048294022487202,
+          "width": 0.03971107815549275
         },
         "95%": {
-          "lower": -0.03766854882317573,
-          "upper": 0.040023946161585486,
-          "width": 0.07769249498476122
+          "lower": -0.03850562011306406,
+          "upper": 0.03976042240731535,
+          "width": 0.07826604252037941
         }
       },
-      "std_dev": 0.01981987822163818
+      "std_dev": 0.019966194057067368
     },
     "XGBoost": {
-      "predicted_price": 346.07222998072973,
-      "predicted_return": 0.0012215535389259458,
-      "pct_diff": 0.12215535389259458,
+      "predicted_price": 330.3052944124374,
+      "predicted_return": 0.0011981886345893145,
+      "pct_diff": 0.11981886345892867,
       "signal": "HOLD",
-      "last_price": 345.65,
+      "last_price": 329.91,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.017453126846995872,
-          "upper": 0.020168784777817052,
-          "width": 0.037621911624812925
+          "lower": -0.01747824083988155,
+          "upper": 0.020093691721303115,
+          "width": 0.037571932561184664
         },
         "95%": {
-          "lower": -0.0357164368527574,
-          "upper": 0.03843209478357858,
-          "width": 0.07414853163633597
+          "lower": -0.035717288837323474,
+          "upper": 0.03833273971874504,
+          "width": 0.07405002855606851
         }
       },
-      "std_dev": 0.018915789326031024
+      "std_dev": 0.018890660527480528
     },
     "Ensemble": {
-      "mean_prediction": 347.051038244338,
-      "median_prediction": 347.0359218719648,
-      "weighted_prediction": 347.0125287695652,
-      "pct_diff_mean": 0.4053343683894104,
-      "pct_diff_median": 0.40096105076371963,
-      "pct_diff_weighted": 0.39419319241002304,
-      "signal_mean": "BUY",
-      "signal_median": "BUY",
-      "signal_weighted": "BUY",
+      "mean_prediction": 330.38257600606266,
+      "median_prediction": 330.5182737169555,
+      "weighted_prediction": 330.4640083822453,
+      "pct_diff_mean": 0.1432439168447875,
+      "pct_diff_median": 0.1843756530433955,
+      "pct_diff_weighted": 0.16792712626027875,
+      "signal_mean": "HOLD",
+      "signal_median": "HOLD",
+      "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.7779812735325929
+      "std_dev": 0.4485551248540654
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.39419319241002304,
+  "pct_diff": 0.16792712626027875,
   "qty": 0,
   "sentiment": {
     "ticker": "AVGO",
-    "signal": "SELL",
-    "confidence": 0.46,
-    "score": -0.385
+    "signal": "HOLD",
+    "score": 0.045,
+    "confidence": 0.44
   },
-  "position_size_factor": 0.007883863848200461,
+  "position_size_factor": 0.0033585425252055756,
   "metrics_path": null,
   "model_metrics": {}
 }

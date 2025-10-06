@@ -11,14 +11,18 @@ def visualize_backtest_chart(tickers):
     if isinstance(tickers, str):
         tickers = [tickers]
 
+    print("Generating Backtest Charts...")
     out_paths = []
+    
+    MODEL_NAMES = ["LSTM", "Dense NN", "Random Forest", "XGBoost"]
+    
     for ticker in tickers:
         metrics_path = os.path.join("saved_models", f"{ticker}_metrics.csv")
         if not os.path.exists(metrics_path):
             print(f"No metrics file for {ticker}")
             continue
+            
         metrics_df = pd.read_csv(metrics_path)
-
         fig = make_subplots(
             rows=2, cols=1,
             shared_xaxes=True,
@@ -27,51 +31,57 @@ def visualize_backtest_chart(tickers):
             subplot_titles=(f"{ticker} Backtest Predictions", "Equity Curve")
         )
 
-        # Plot all models’ predictions
-        for model_name in ["LSTM", "Dense NN", "Random Forest", "XGBoost"]:
+        true_price_added = False
+        plot_data = []
+        
+        for model_name in MODEL_NAMES:
             csv_path = os.path.join("saved_models", f"{ticker}_{model_name}_backtest.csv")
             if not os.path.exists(csv_path):
                 continue
+                
             df = pd.read_csv(csv_path, parse_dates=["Date"]).sort_values("Date")
+            plot_data.append({
+                'model_name': model_name,
+                'df': df,
+                'has_signal': "Signal" in df.columns,
+                'has_portfolio': "PortfolioValue" in df.columns
+            })
 
-            # Actual price as candlesticks (only once)
-            if model_name == "LSTM":
+        for data in plot_data:
+            model_name = data['model_name']
+            df = data['df']
+            
+            if not true_price_added:
                 fig.add_trace(go.Candlestick(
                     x=df['Date'], open=df['TruePrice'], high=df['TruePrice'],
                     low=df['TruePrice'], close=df['TruePrice'], name="True Price"
                 ), row=1, col=1)
+                true_price_added = True
 
-            # Predicted line
             fig.add_trace(go.Scatter(
                 x=df['Date'], y=df['PredictedPrice'], mode="lines",
                 name=f"{model_name} Prediction"
             ), row=1, col=1)
 
-            # Buy/Sell markers
-            if "Signal" in df.columns:
+            if data['has_signal']:
                 buy_df = df[df["Signal"] == "BUY"]
                 sell_df = df[df["Signal"] == "SELL"]
-                fig.add_trace(go.Scatter(
-                    x=buy_df['Date'], y=buy_df['TruePrice'], mode="markers",
-                    marker=dict(symbol="triangle-up", size=8, color="green"),
-                    name=f"{model_name} BUY"
-                ), row=1, col=1)
-                fig.add_trace(go.Scatter(
-                    x=sell_df['Date'], y=sell_df['TruePrice'], mode="markers",
-                    marker=dict(symbol="triangle-down", size=8, color="red"),
-                    name=f"{model_name} SELL"
-                ), row=1, col=1)
-
-            # Equity curve (if present)
-            if "PortfolioValue" in df.columns:
-                fig.add_trace(go.Scatter(
-                    x=df['Date'], y=df['PortfolioValue'], mode="lines",
-                    name=f"{model_name} Equity"
-                ), row=2, col=1)
+                if not buy_df.empty:
+                    fig.add_trace(go.Scatter(
+                        x=buy_df['Date'], y=buy_df['TruePrice'], mode="markers",
+                        marker=dict(symbol="triangle-up", size=8, color="green"),
+                        name=f"{model_name} BUY"
+                    ), row=1, col=1)
+                if not sell_df.empty:
+                    fig.add_trace(go.Scatter(
+                        x=sell_df['Date'], y=sell_df['TruePrice'], mode="markers",
+                        marker=dict(symbol="triangle-down", size=8, color="red"),
+                        name=f"{model_name} SELL"
+                    ), row=1, col=1)
 
         fig.update_layout(template="plotly_dark", hovermode="x unified", xaxis_rangeslider_visible=False)
 
-        # Save interactive HTML with metrics table
+        # Save only HTML (skip PNG to avoid hanging)
         metrics_html = metrics_df.to_html(index=False, classes="table table-dark table-striped")
         out_file = os.path.join(RESULTS_DIR, f"{ticker}_backtest.html")
         fig_html = fig.to_html(full_html=False, include_plotlyjs="cdn")
@@ -82,11 +92,8 @@ def visualize_backtest_chart(tickers):
             f.write("<h2>Metrics</h2>")
             f.write(metrics_html)
 
-        
-        out_pngs= os.path.join(RESULTS_DIR, f"{ticker}_backtest.png")
-        fig.write_image(out_pngs, width=1200, height=800)
-
-        out_paths.append(out_pngs)
+        print(f"Generated HTML for {ticker}")
+        out_paths.append(out_file)  # Return HTML paths instead
 
     return out_paths
 
@@ -94,47 +101,59 @@ def visualize_backtest_chart(tickers):
 def visualize_predictions_chart(tickers=None):
     """
     Generate prediction charts (candlestick + buy/sell signals) for one or multiple tickers.
-    Returns dict {ticker: path_to_png}.
+    Returns dict {ticker: path_to_html}.
     """
+
+    print("Generating Prediction Charts...")
     chart_paths = {}
 
-    for file in os.listdir(RESULTS_DIR):
-        if file.endswith("_history.csv"):
-            ticker = file.replace("_history.csv", "")
+    # Get all relevant files first to avoid directory scanning in loop
+    all_files = os.listdir(RESULTS_DIR)
+    history_files = [f for f in all_files if f.endswith("_history.csv")]
+    
+    if tickers and isinstance(tickers, str):
+        tickers = [tickers]
 
-            # If a list of tickers was provided, skip the rest
-            if tickers and ticker not in tickers:
-                continue
+    for file in history_files:
+        ticker = file.replace("_history.csv", "")
 
-            csv_path = os.path.join(RESULTS_DIR, f"{ticker}_history.csv")
-            if not os.path.exists(csv_path):
-                print(f"No historical data for {ticker}")
-                continue
+        # If a list of tickers was provided, skip the rest
+        if tickers and ticker not in tickers:
+            continue
 
-            # Robust CSV reading
+        csv_path = os.path.join(RESULTS_DIR, f"{ticker}_history.csv")
+        
+        # Robust CSV reading
+        try:
+            df = pd.read_csv(csv_path, parse_dates=["date"])
+        except (ValueError, KeyError):
             try:
-                df = pd.read_csv(csv_path, parse_dates=["date"])
-            except ValueError:
                 df = pd.read_csv(csv_path)
-                date_col = "Date" if "Date" in df.columns else "date"
+                # Find date column
+                date_col = next((col for col in df.columns if 'date' in col.lower()), 'Date')
                 df[date_col] = pd.to_datetime(df[date_col])
                 df.rename(columns={date_col: "date"}, inplace=True)
+            except Exception as e:
+                print(f"Error reading {csv_path}: {e}")
+                continue
 
-            df.sort_values("date", inplace=True)
+        df.sort_values("date", inplace=True)
 
-            fig = go.Figure(go.Candlestick(
-                x=df['date'],
-                open=df['open'],
-                high=df['high'],
-                low=df['low'],
-                close=df['close'],
-                name="Price"
-            ))
+        # Create figure
+        fig = go.Figure(go.Candlestick(
+            x=df['date'],
+            open=df['open'],
+            high=df['high'],
+            low=df['low'],
+            close=df['close'],
+            name="Price"
+        ))
 
-            if "signal" in df.columns:
-                buy_df = df[df["signal"] == "BUY"]
-                sell_df = df[df["signal"] == "SELL"]
+        if "signal" in df.columns:
+            buy_df = df[df["signal"] == "BUY"]
+            sell_df = df[df["signal"] == "SELL"]
 
+            if not buy_df.empty:
                 fig.add_trace(go.Scatter(
                     x=buy_df['date'],
                     y=buy_df['close'],
@@ -142,6 +161,8 @@ def visualize_predictions_chart(tickers=None):
                     marker=dict(symbol="triangle-up", size=12, color="green"),
                     name="BUY Signal"
                 ))
+            
+            if not sell_df.empty:
                 fig.add_trace(go.Scatter(
                     x=sell_df['date'],
                     y=sell_df['close'],
@@ -150,17 +171,23 @@ def visualize_predictions_chart(tickers=None):
                     name="SELL Signal"
                 ))
 
-            fig.update_layout(
-                template="plotly_dark",
-                hovermode="x unified",
-                xaxis_rangeslider_visible=False,
-                title=f"{ticker} Predictions"
-            )
+        fig.update_layout(
+            template="plotly_dark",
+            hovermode="x unified",
+            xaxis_rangeslider_visible=False,
+            title=f"{ticker} Predictions",
+            height=600
+        )
 
-            out_path = os.path.join(RESULTS_DIR, f"{ticker}_predictions.png")
-            fig.write_image(out_path, width=1200, height=800)
+        # Save as HTML instead of PNG to avoid hanging
+        out_path = os.path.join(RESULTS_DIR, f"{ticker}_predictions.html")
+        
+        try:
+            fig.write_html(out_path, include_plotlyjs='cdn')
             chart_paths[ticker] = out_path
             print(f"Prediction chart saved: {out_path}")
+        except Exception as e:
+            print(f"Error saving chart for {ticker}: {e}")
 
     return chart_paths
 

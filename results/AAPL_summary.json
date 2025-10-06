@@ -1,86 +1,86 @@
 {
   "ticker": "AAPL",
-  "timestamp": "2025-09-16T07:33:21.882126",
+  "timestamp": "2025-10-02T15:52:53.914727",
   "predictions": {
     "LSTM": {
-      "predicted_price": 239.89306681657735,
-      "predicted_return": 0.0008472060435451567,
-      "pct_diff": 0.08472060435451946,
+      "predicted_price": 255.21930184006922,
+      "predicted_return": 0.0023143456783145666,
+      "pct_diff": 0.23143456783145175,
       "signal": "HOLD",
-      "last_price": 239.69
+      "last_price": 254.63
     },
     "Dense NN": {
-      "predicted_price": 239.85827510170407,
-      "predicted_return": 0.0007020530756562948,
-      "pct_diff": 0.07020530756563423,
-      "signal": "HOLD",
-      "last_price": 239.69
+      "predicted_price": 255.59364790304795,
+      "predicted_return": 0.003784502623602748,
+      "pct_diff": 0.37845026236027035,
+      "signal": "BUY",
+      "last_price": 254.63
     },
     "Random Forest": {
-      "predicted_price": 239.9707088696178,
-      "predicted_return": 0.0011711330035370944,
-      "pct_diff": 0.11711330035370565,
+      "predicted_price": 254.77568936868172,
+      "predicted_return": 0.0005721610520430379,
+      "pct_diff": 0.05721610520430803,
       "signal": "HOLD",
-      "last_price": 239.69,
+      "last_price": 254.63,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.016973460802350033,
-          "upper": 0.01876552643143981,
-          "width": 0.03573898723378984
+          "lower": -0.015535773560758382,
+          "upper": 0.015149348776254188,
+          "width": 0.03068512233701257
         },
         "95%": {
-          "lower": -0.034322717524120964,
-          "upper": 0.03611478315321074,
-          "width": 0.0704375006773317
+          "lower": -0.03043166474763703,
+          "upper": 0.030045239963132835,
+          "width": 0.060476904710769865
         }
       },
-      "std_dev": 0.017969080358857033
+      "std_dev": 0.015428065308292391
     },
     "XGBoost": {
-      "predicted_price": 239.88836594088002,
-      "predicted_return": 0.0008275937288999557,
-      "pct_diff": 0.08275937288999273,
+      "predicted_price": 254.8176374605816,
+      "predicted_return": 0.0007369024096988142,
+      "pct_diff": 0.07369024096988276,
       "signal": "HOLD",
-      "last_price": 239.69,
+      "last_price": 254.63,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.01323180065515771,
-          "upper": 0.01563553094889357,
-          "width": 0.02886733160405128
+          "lower": -0.013167376335341615,
+          "upper": 0.015434123281020803,
+          "width": 0.02860149961636242
         },
         "95%": {
-          "lower": -0.02724525726474134,
-          "upper": 0.0296489875584772,
-          "width": 0.05689424482321854
+          "lower": -0.02705178655172157,
+          "upper": 0.029318533497400757,
+          "width": 0.056370320049122326
         }
       },
-      "std_dev": 0.014514104665185963
+      "std_dev": 0.014380447930105915
     },
     "Ensemble": {
-      "mean_prediction": 239.9026041821948,
-      "median_prediction": 239.89071637872868,
-      "weighted_prediction": 239.90670131306237,
-      "pct_diff_mean": 0.08869964629096301,
-      "pct_diff_median": 0.0837399886222561,
-      "pct_diff_weighted": 0.09040899205739619,
+      "mean_prediction": 255.10156914309513,
+      "median_prediction": 255.01846965032541,
+      "weighted_prediction": 255.01727949006056,
+      "pct_diff_mean": 0.18519779409148102,
+      "pct_diff_median": 0.15256240440066726,
+      "pct_diff_weighted": 0.15209499668560816,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.04152410349663385
+      "std_dev": 0.3327226027940509
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.09040899205739619,
+  "pct_diff": 0.15209499668560816,
   "qty": 0,
   "sentiment": {
     "ticker": "AAPL",
     "signal": "HOLD",
-    "confidence": 0.51,
-    "score": 0.097
+    "score": -0.084,
+    "confidence": 0.39
   },
-  "position_size_factor": 0.009776977712152468,
+  "position_size_factor": 0.0030418999337121634,
   "metrics_path": null,
   "model_metrics": {}
 }

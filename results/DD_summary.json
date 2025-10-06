@@ -1,86 +1,86 @@
 {
   "ticker": "DD",
-  "timestamp": "2025-09-16T07:36:24.295835",
+  "timestamp": "2025-10-04T12:28:01.015852",
   "predictions": {
     "LSTM": {
-      "predicted_price": 76.94176239840453,
-      "predicted_return": 0.0024985328782349825,
-      "pct_diff": 0.24985328782349825,
+      "predicted_price": 78.40669536957051,
+      "predicted_return": 0.002386798383668065,
+      "pct_diff": 0.23867983836680506,
       "signal": "HOLD",
-      "last_price": 76.75
+      "last_price": 78.22
     },
     "Dense NN": {
-      "predicted_price": 76.99002806219505,
-      "predicted_return": 0.0031274014618247747,
-      "pct_diff": 0.3127401461824775,
+      "predicted_price": 78.52326827900018,
+      "predicted_return": 0.003877119394019246,
+      "pct_diff": 0.3877119394019159,
       "signal": "BUY",
-      "last_price": 76.75
+      "last_price": 78.22
     },
     "Random Forest": {
-      "predicted_price": 76.72649446841358,
-      "predicted_return": -0.0003062609978686725,
-      "pct_diff": -0.030626099786870344,
+      "predicted_price": 78.2213205262845,
+      "predicted_return": 1.6882207677147254e-05,
+      "pct_diff": 0.0016882207677089826,
       "signal": "HOLD",
-      "last_price": 76.75,
+      "last_price": 78.22,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.01591180111889302,
-          "upper": 0.017630682482816466,
-          "width": 0.033542483601709486
+          "lower": -0.01655704217328632,
+          "upper": 0.01660097336228473,
+          "width": 0.03315801553557105
         },
         "95%": {
-          "lower": -0.03219477957278861,
-          "upper": 0.03391366093671206,
-          "width": 0.06610844050950067
+          "lower": -0.032653383128555424,
+          "upper": 0.032697314317553836,
+          "width": 0.06535069744610926
         }
       },
-      "std_dev": 0.016864707982125082
+      "std_dev": 0.01667140262820828
     },
     "XGBoost": {
-      "predicted_price": 76.7978904570773,
-      "predicted_return": 0.0006239798967726529,
-      "pct_diff": 0.062397989677265286,
+      "predicted_price": 78.26753108639502,
+      "predicted_return": 0.0006076589925214648,
+      "pct_diff": 0.060765899252142125,
       "signal": "HOLD",
-      "last_price": 76.75,
+      "last_price": 78.22,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.014932523942146095,
-          "upper": 0.015002207869141007,
-          "width": 0.029934731811287103
+          "lower": -0.014925808789359103,
+          "upper": 0.015071652332937042,
+          "width": 0.029997461122296145
         },
         "95%": {
-          "lower": -0.029464142974717944,
-          "upper": 0.029533826901712856,
-          "width": 0.0589979698764308
+          "lower": -0.029487879354134605,
+          "upper": 0.029633722897712544,
+          "width": 0.05912160225184715
         }
       },
-      "std_dev": 0.01505077908109518
+      "std_dev": 0.01508231853191967
     },
     "Ensemble": {
-      "mean_prediction": 76.86404384652262,
-      "median_prediction": 76.86982642774092,
-      "weighted_prediction": 76.83507928744915,
-      "pct_diff_mean": 0.1485913309740973,
-      "pct_diff_median": 0.15612563875038177,
-      "pct_diff_weighted": 0.1108524917904202,
+      "mean_prediction": 78.35470381531255,
+      "median_prediction": 78.33711322798277,
+      "weighted_prediction": 78.32472712355246,
+      "pct_diff_mean": 0.17221147444713392,
+      "pct_diff_median": 0.14972286880947358,
+      "pct_diff_weighted": 0.13388791044805,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.10631121561071077
+      "std_dev": 0.11885630672299723
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.1108524917904202,
+  "pct_diff": 0.13388791044805,
   "qty": 0,
   "sentiment": {
     "ticker": "DD",
-    "signal": "SELL",
-    "confidence": 0.47,
-    "score": -0.664
+    "signal": "BUY",
+    "score": 0.403,
+    "confidence": 0.43
   },
-  "position_size_factor": 0.002217049835808404,
+  "position_size_factor": 0.0030063207450105583,
   "metrics_path": null,
   "model_metrics": {}
 }

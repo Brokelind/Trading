@@ -4,11 +4,11 @@ import json
 import argparse
 from tqdm import tqdm
 from datetime import datetime
-from tradingmodelsystem import TradingModelSystem #from tradingmodelsystem import TradingModelSystem  
+from tradingmodelsystem import TradingModelSystem
 from news_sentiment import analyze_news_sentiment
 import alpaca_trader
 import call_market
-from distribute_results import *  
+from distribute_results import *  # This will import the fixed email functions
 from alpaca.trading.enums import TimeInForce
 from visualize_results import visualize_results, visualize_predictions_chart, visualize_backtest_chart, visualize_comprehensive
 
@@ -18,15 +18,12 @@ try:
 except ImportError:
     env = None
 
-
 SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI") or getattr(env, "SKIP_TRAINING_ON_CI", False)
-
 
 # config
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-# Only retrain on CI if explicit flag is false
 class TradingExecutor:
     def __init__(self, tickers=None):
         self.ticker_list = tickers or [
@@ -77,10 +74,7 @@ class TradingExecutor:
     def execute_strategy(self, ticker: str):
         print(f"\n=== Processing {ticker} === {datetime.utcnow().isoformat()}")
         # ensure we have data
-        data_path = f"data/{ticker}_data.csv"
-        if not os.path.exists(data_path):
-            print(f"No data for {ticker}, fetching...")
-            call_market.get_data(ticker)
+        call_market.get_data(ticker)
 
         # ensure models trained (or load existing). Respect SKIP on CI.
         
@@ -255,44 +249,53 @@ class TradingExecutor:
                 print("Error executing", t, e)
         
     def post_results(self):
-        # 1. Load strong signals summaries
+        # Load strong signals summaries using the fixed function
         summaries = load_results()
-        
 
         if not summaries:
             print("No strong signals to report today.")
+            # Optionally, you can still send a "no signals" email
+            no_signals_html = """
+            <html>
+            <body style="font-family:Arial, sans-serif; background-color:#111; color:#ddd; padding:20px;">
+                <h2 style="color:#00ff99;">📊 Daily Trading Report</h2>
+                <p>No strong trading signals detected today.</p>
+                <p><em>All models returned HOLD signals or signals didn't meet confidence thresholds.</em></p>
+            </body>
+            </html>
+            """
+            send_email("Daily Trading Summary - No Strong Signals", no_signals_html)
+            return
+
+        print(f"📈 Found {len(summaries)} strong signals. Sending email...")
+
+        # Generate HTML charts (optional - much faster than PNG)
+        # If you want to include visualizations, generate HTML files instead
+        try:
+            print("Generating backtest charts...")
+            visualize_backtest_chart([s["ticker"] for s in summaries])
             
-            strong_tickers = self.ticker_list   # fallback to full list
-        else:
-            strong_tickers = [s["ticker"] for s in summaries]
+            print("Generating prediction charts...")
+            visualize_predictions_chart([s["ticker"] for s in summaries])
+            
+            print("Charts generated as HTML files in results directory")
+        except Exception as e:
+            print(f"Chart generation failed (non-critical): {e}")
 
-        print(f"📈 Compiling signal summary for {len(strong_tickers)} tickers... {strong_tickers}")
-
-        # 3. Generate visualization images for those tickers
-        backtest_paths = visualize_backtest_chart(strong_tickers)
-        prediction_paths = visualize_predictions_chart(strong_tickers)
-        comprehensive_paths = visualize_comprehensive(strong_tickers)
+        # Compose and send email WITHOUT images
+        html_body = compose_html_email(summaries)
         
-        # Combine all images paths
-        all_images = []
-        if backtest_paths:
-            all_images.extend(backtest_paths if isinstance(backtest_paths, list) else [backtest_paths])
-        if prediction_paths:
-            all_images.extend(prediction_paths if isinstance(prediction_paths, list) else [prediction_paths])
-
-        # 4. Compose enhanced email with model performance metrics
-        html_body = compose_html_email(
-            summaries,
-            image_cids=[f"chart{i}" for i in range(len(all_images))],
-            #include_model_metrics=True  # Add this parameter to your email composition function
-        )
-
-        # 5. Send email with inline images attached
-        send_email(
-            "Daily Trading Summary - Strong Signals",
-            html_body,
-            inline_images=all_images
-        )
+        if html_body:
+            success = send_email(
+                f"Daily Trading Summary - {len(summaries)} Strong Signals", 
+                html_body
+            )
+            if success:
+                print("✅ Email sent successfully")
+            else:
+                print("❌ Failed to send email")
+        else:
+            print("❌ Failed to compose email body")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run trading executor")
@@ -300,6 +303,11 @@ if __name__ == "__main__":
         "--debug_ticker",
         type=str,
         help="Run trading only on this ticker (for debugging)"
+    )
+    parser.add_argument(
+        "--skip_email",
+        action="store_true",
+        help="Skip sending email (for testing)"
     )
     args = parser.parse_args()
 
@@ -312,4 +320,8 @@ if __name__ == "__main__":
     trader = TradingExecutor(tickers=tickers)
     print("Running script...")
     trader.run_daily_trading()
-    trader.post_results()
+    
+    if not args.skip_email:
+        trader.post_results()
+    else:
+        print("Skipping email (--skip_email flag set)")

@@ -1,86 +1,86 @@
 {
   "ticker": "QQQ",
-  "timestamp": "2025-09-16T07:33:07.934432",
+  "timestamp": "2025-10-02T13:24:18.315651",
   "predictions": {
     "LSTM": {
-      "predicted_price": 576.2780493901215,
-      "predicted_return": 0.0003785185399465263,
-      "pct_diff": 0.037851853994647106,
+      "predicted_price": 599.9678183906246,
+      "predicted_return": 0.0020674066618084908,
+      "pct_diff": 0.20674066618085363,
       "signal": "HOLD",
-      "last_price": 576.06
+      "last_price": 598.73
     },
     "Dense NN": {
-      "predicted_price": 576.5435673910227,
-      "predicted_return": 0.0008394392789341509,
-      "pct_diff": 0.08394392789341432,
-      "signal": "HOLD",
-      "last_price": 576.06
+      "predicted_price": 602.2238792047929,
+      "predicted_return": 0.005835483781993389,
+      "pct_diff": 0.5835483781993298,
+      "signal": "BUY",
+      "last_price": 598.73
     },
     "Random Forest": {
-      "predicted_price": 576.6102065787278,
-      "predicted_return": 0.0009551202630418807,
-      "pct_diff": 0.09551202630417882,
+      "predicted_price": 599.1989721760141,
+      "predicted_return": 0.0007832782322818704,
+      "pct_diff": 0.07832782322817679,
       "signal": "HOLD",
-      "last_price": 576.06,
+      "last_price": 598.73,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.014402770896158879,
-          "upper": 0.016960519321091792,
-          "width": 0.03136329021725067
+          "lower": -0.009278715147341366,
+          "upper": 0.011828176880298023,
+          "width": 0.02110689202763939
         },
         "95%": {
-          "lower": -0.029627874228243083,
-          "upper": 0.032185622653175996,
-          "width": 0.06181349688141908
+          "lower": -0.019524917312801676,
+          "upper": 0.022074379045758333,
+          "width": 0.04159929635856001
         }
       },
-      "std_dev": 0.015769038964235073
+      "std_dev": 0.010612260400367036
     },
     "XGBoost": {
-      "predicted_price": 576.5599589376488,
-      "predicted_return": 0.0008678938611410558,
-      "pct_diff": 0.08678938611410243,
+      "predicted_price": 599.2410399155639,
+      "predicted_return": 0.0008535398519597948,
+      "pct_diff": 0.08535398519597415,
       "signal": "HOLD",
-      "last_price": 576.06,
+      "last_price": 598.73,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.009796695747040488,
-          "upper": 0.012210846609063722,
-          "width": 0.02200754235610421
+          "lower": -0.009451341982068345,
+          "upper": 0.0118114020946192,
+          "width": 0.021262744076687545
         },
         "95%": {
-          "lower": -0.020480112701573225,
-          "upper": 0.02289426356359646,
-          "width": 0.043374376265169684
+          "lower": -0.019773201501551103,
+          "upper": 0.022133261614101958,
+          "width": 0.04190646311565306
         }
       },
-      "std_dev": 0.011065095228101443
+      "std_dev": 0.010690620706861427
     },
     "Ensemble": {
-      "mean_prediction": 576.4979455743802,
-      "median_prediction": 576.5517631643359,
-      "weighted_prediction": 576.5359609006422,
-      "pct_diff_mean": 0.07602429857658073,
-      "pct_diff_median": 0.08536665700376825,
-      "pct_diff_weighted": 0.08262349419196528,
+      "mean_prediction": 600.1579274217488,
+      "median_prediction": 599.6044291530943,
+      "weighted_prediction": 599.9410423195005,
+      "pct_diff_mean": 0.23849271320107412,
+      "pct_diff_median": 0.14604732568842338,
+      "pct_diff_weighted": 0.20226852162084863,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.1293095823269861
+      "std_dev": 1.2313180007514375
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.08262349419196528,
+  "pct_diff": 0.20226852162084863,
   "qty": 0,
   "sentiment": {
     "ticker": "QQQ",
-    "signal": "HOLD",
-    "confidence": 0.51,
-    "score": -0.176
+    "signal": "BUY",
+    "score": 0.313,
+    "confidence": 0.38
   },
-  "position_size_factor": 0.0016524698838393057,
+  "position_size_factor": 0.004045370432416972,
   "metrics_path": null,
   "model_metrics": {}
 }

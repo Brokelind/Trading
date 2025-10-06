@@ -1,81 +1,86 @@
 {
   "ticker": "VTI",
-  "timestamp": "2025-09-16T07:33:13.916470",
+  "timestamp": "2025-10-02T14:31:38.802097",
   "predictions": {
     "LSTM": {
-      "predicted_price": 319.77244859567145,
-      "predicted_return": 0.000696130795404315,
-      "pct_diff": 0.06961307954042795,
+      "predicted_price": 328.49824772255613,
+      "predicted_return": 0.0010002368362620473,
+      "pct_diff": 0.10002368362620404,
       "signal": "HOLD",
-      "last_price": 319.55
+      "last_price": 328.17
     },
     "Dense NN": {
-      "predicted_price": 318.51007653614505,
-      "predicted_return": -0.0032543372362852097,
-      "pct_diff": -0.32543372362852807,
-      "signal": "SELL",
-      "last_price": 319.55
+      "predicted_price": 328.95543285354506,
+      "predicted_return": 0.0023933718912303448,
+      "pct_diff": 0.23933718912302962,
+      "signal": "HOLD",
+      "last_price": 328.17
     },
     "Random Forest": {
-      "predicted_price": 303.37518299099287,
-      "predicted_return": -0.050617483990008365,
-      "pct_diff": -5.061748399000827,
-      "signal": "SELL",
-      "last_price": 319.55,
+      "predicted_price": 328.163550879489,
+      "predicted_return": -1.9651767410232778e-05,
+      "pct_diff": -0.0019651767410292665,
+      "signal": "HOLD",
+      "last_price": 328.17,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.04604334735089355,
-          "upper": -0.028571120141858062,
-          "width": 0.017472227209035483
+          "lower": -0.007712064546122535,
+          "upper": 0.008704532950721044,
+          "width": 0.016416597496843578
         },
         "95%": {
-          "lower": -0.05452512534218676,
-          "upper": -0.02008934215056485,
-          "width": 0.03443578319162191
+          "lower": -0.015681394023971836,
+          "upper": 0.016673862428570347,
+          "width": 0.03235525645254218
         }
       },
-      "std_dev": 0.008784799992052655
+      "std_dev": 0.00825404362216763
     },
     "XGBoost": {
-      "predicted_price": 319.4023464364742,
-      "predicted_return": -0.00046206716797314584,
-      "pct_diff": -0.046206716797311025,
+      "predicted_price": 328.3523326021561,
+      "predicted_return": 0.0005556041141971946,
+      "pct_diff": 0.055560411419711145,
       "signal": "HOLD",
-      "last_price": 319.55,
+      "last_price": 328.17,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.008771151515170316,
-          "upper": 0.007692436083666364,
-          "width": 0.01646358759883668
+          "lower": -0.007306531020221352,
+          "upper": 0.009146486939643561,
+          "width": 0.016453017959864914
         },
         "95%": {
-          "lower": -0.016763292029536338,
-          "upper": 0.015684576598032386,
-          "width": 0.032447868627568724
+          "lower": -0.015293540572739517,
+          "upper": 0.017133496492161726,
+          "width": 0.03242703706490124
         }
       },
-      "std_dev": 0.008277669611154432
+      "std_dev": 0.008272355339353573
     },
     "Ensemble": {
-      "mean_prediction": 315.26501363982095,
-      "median_prediction": 318.9562114863096,
-      "weighted_prediction": 314.5881303055399,
-      "pct_diff_mean": -1.3409439399715417,
-      "pct_diff_median": -0.18582022021292843,
-      "pct_diff_weighted": -1.5527678593209575,
-      "signal_mean": "SELL",
+      "mean_prediction": 328.4923910144366,
+      "median_prediction": 328.4252901623561,
+      "weighted_prediction": 328.4411565421342,
+      "pct_diff_mean": 0.0982390268569832,
+      "pct_diff_median": 0.07779204752294892,
+      "pct_diff_weighted": 0.08262685258682355,
+      "signal_mean": "HOLD",
       "signal_median": "HOLD",
-      "signal_weighted": "SELL",
+      "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 6.879916398663515
+      "std_dev": 0.29248685397717145
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "SELL",
-  "pct_diff": -1.5527678593209575,
+  "signal": "HOLD",
+  "pct_diff": 0.08262685258682355,
   "qty": 0,
-  "sentiment": {},
-  "position_size_factor": 0.031055357186419153,
+  "sentiment": {
+    "ticker": "VTI",
+    "signal": "BUY",
+    "score": 0.632,
+    "confidence": 0.56
+  },
+  "position_size_factor": 0.0016525370517364712,
   "metrics_path": null,
   "model_metrics": {}
 }

@@ -1,81 +1,81 @@
 {
   "ticker": "LIN",
-  "timestamp": "2025-09-16T07:36:13.086923",
+  "timestamp": "2025-10-04T09:14:26.941487",
   "predictions": {
     "LSTM": {
-      "predicted_price": 473.6899726016447,
-      "predicted_return": 0.000527992146089673,
-      "pct_diff": 0.05279921460896538,
+      "predicted_price": 466.41283217476155,
+      "predicted_return": -0.0008508125902153552,
+      "pct_diff": -0.08508125902154087,
       "signal": "HOLD",
-      "last_price": 473.44
+      "last_price": 466.81
     },
     "Dense NN": {
-      "predicted_price": 475.08516052987426,
-      "predicted_return": 0.0034749081823974848,
-      "pct_diff": 0.34749081823974753,
-      "signal": "BUY",
-      "last_price": 473.44
+      "predicted_price": 467.0200869811539,
+      "predicted_return": 0.0004500481591094285,
+      "pct_diff": 0.04500481591094724,
+      "signal": "HOLD",
+      "last_price": 466.81
     },
     "Random Forest": {
-      "predicted_price": 472.79956323088743,
-      "predicted_return": -0.001352730587006949,
-      "pct_diff": -0.1352730587006946,
+      "predicted_price": 467.1961229757673,
+      "predicted_return": 0.0008271523227166384,
+      "pct_diff": 0.08271523227165384,
       "signal": "HOLD",
-      "last_price": 473.44,
+      "last_price": 466.81,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.010337079947148602,
-          "upper": 0.012014077164389438,
-          "width": 0.02235115711153804
+          "lower": -0.010600959650749801,
+          "upper": 0.01188705386564768,
+          "width": 0.02248801351639748
         },
         "95%": {
-          "lower": -0.021187302428833314,
-          "upper": 0.02286429964607415,
-          "width": 0.044051602074907464
+          "lower": -0.0215176181756943,
+          "upper": 0.02280371239059218,
+          "width": 0.04432133056628648
         }
       },
-      "std_dev": 0.011237860088853899
+      "std_dev": 0.011306669641862678
     },
     "XGBoost": {
-      "predicted_price": 473.7873354798369,
-      "predicted_return": 0.0007336420239880681,
-      "pct_diff": 0.07336420239880154,
+      "predicted_price": 467.18616727462273,
+      "predicted_return": 0.0008058252278715372,
+      "pct_diff": 0.0805825227871576,
       "signal": "HOLD",
-      "last_price": 473.44,
+      "last_price": 466.81,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.010996157590683403,
-          "upper": 0.012480657834943237,
-          "width": 0.02347681542562664
+          "lower": -0.011064903891213599,
+          "upper": 0.012580026254557434,
+          "width": 0.023644930145771032
         },
         "95%": {
-          "lower": -0.022392823510856343,
-          "upper": 0.023877323755116177,
-          "width": 0.04627014726597252
+          "lower": -0.0225431799985867,
+          "upper": 0.024058302361930534,
+          "width": 0.046601482360517234
         }
       },
-      "std_dev": 0.011803825894492333
+      "std_dev": 0.01188835170648639
     },
     "Ensemble": {
-      "mean_prediction": 473.84050796056084,
-      "median_prediction": 473.7386540407408,
-      "weighted_prediction": 473.7574450995437,
-      "pct_diff_mean": 0.08459529413671095,
-      "pct_diff_median": 0.06308170850388946,
-      "pct_diff_weighted": 0.06705075607124539,
+      "mean_prediction": 466.95380235157637,
+      "median_prediction": 467.10312712788834,
+      "weighted_prediction": 467.05780407216787,
+      "pct_diff_mean": 0.030805327987054452,
+      "pct_diff_median": 0.06279366934905851,
+      "pct_diff_weighted": 0.05308456806149541,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.8152015326782237
+      "std_dev": 0.320060590627743
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.06705075607124539,
+  "pct_diff": 0.05308456806149541,
   "qty": 0,
   "sentiment": {},
-  "position_size_factor": 0.0013410151214249078,
+  "position_size_factor": 0.0010616913612299082,
   "metrics_path": null,
   "model_metrics": {}
 }

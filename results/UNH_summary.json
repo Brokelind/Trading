@@ -1,86 +1,86 @@
 {
   "ticker": "UNH",
-  "timestamp": "2025-09-16T07:35:01.670094",
+  "timestamp": "2025-10-03T17:13:19.554383",
   "predictions": {
     "LSTM": {
-      "predicted_price": 315.04767760346994,
-      "predicted_return": -0.0010853939456865191,
-      "pct_diff": -0.10853939456864543,
+      "predicted_price": 349.11510151578113,
+      "predicted_return": 0.002340228296816349,
+      "pct_diff": 0.23402282968163166,
       "signal": "HOLD",
-      "last_price": 315.39
+      "last_price": 348.3
     },
     "Dense NN": {
-      "predicted_price": 315.37588004121045,
-      "predicted_return": -4.4769836677005515e-05,
-      "pct_diff": -0.004476983667692621,
+      "predicted_price": 348.0588594504981,
+      "predicted_return": -0.0006923357723280787,
+      "pct_diff": -0.0692335772328144,
       "signal": "HOLD",
-      "last_price": 315.39
+      "last_price": 348.3
     },
     "Random Forest": {
-      "predicted_price": 315.8009423701317,
-      "predicted_return": 0.0013029657570996665,
-      "pct_diff": 0.13029657570997585,
+      "predicted_price": 348.5449881030466,
+      "predicted_return": 0.0007033824376876935,
+      "pct_diff": 0.07033824376875693,
       "signal": "HOLD",
-      "last_price": 315.39,
+      "last_price": 348.3,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.012115539113558334,
-          "upper": 0.013145110101623943,
-          "width": 0.025260649215182278
+          "lower": -0.012500386869385392,
+          "upper": 0.012830184821564245,
+          "width": 0.025330571690949637
         },
         "95%": {
-          "lower": -0.02437815543578156,
-          "upper": 0.025407726423847168,
-          "width": 0.049785881859628726
+          "lower": -0.024796946598420178,
+          "upper": 0.025126744550599028,
+          "width": 0.049923691149019206
         }
       },
-      "std_dev": 0.012700713444821796
+      "std_dev": 0.012735869521789919
     },
     "XGBoost": {
-      "predicted_price": 311.87470340975557,
-      "predicted_return": -0.011145872063934803,
-      "pct_diff": -1.114587206393487,
-      "signal": "SELL",
-      "last_price": 315.39,
+      "predicted_price": 348.5311359917047,
+      "predicted_return": 0.0006636118050664663,
+      "pct_diff": 0.0663611805066499,
+      "signal": "HOLD",
+      "last_price": 348.3,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.011245649398919224,
-          "upper": 0.012641751065533637,
-          "width": 0.02388740046445286
+          "lower": -0.011303796704165066,
+          "upper": 0.012581086057476128,
+          "width": 0.023884882761641194
         },
         "95%": {
-          "lower": -0.02284163113064878,
-          "upper": 0.024237732797263194,
-          "width": 0.047079363927911975
+          "lower": -0.022898556233593728,
+          "upper": 0.02417584558690479,
+          "width": 0.04707440182049852
         }
       },
-      "std_dev": 0.012010262509736911
+      "std_dev": 0.012008996642748387
     },
     "Ensemble": {
-      "mean_prediction": 314.5248008561419,
-      "median_prediction": 315.2117788223402,
-      "weighted_prediction": 314.14589001229933,
-      "pct_diff_mean": -0.2743267522299668,
-      "pct_diff_median": -0.056508189118169024,
-      "pct_diff_weighted": -0.3944671637339972,
-      "signal_mean": "SELL",
+      "mean_prediction": 348.5625212652576,
+      "median_prediction": 348.53806204737566,
+      "weighted_prediction": 348.5097809352709,
+      "pct_diff_mean": 0.07537216918104786,
+      "pct_diff_median": 0.06834971213771156,
+      "pct_diff_weighted": 0.06022995557590727,
+      "signal_mean": "HOLD",
       "signal_median": "HOLD",
-      "signal_weighted": "SELL",
+      "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 1.553165277041112
+      "std_dev": 0.37427015780334916
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "SELL",
-  "pct_diff": -0.3944671637339972,
+  "signal": "HOLD",
+  "pct_diff": 0.06022995557590727,
   "qty": 0,
   "sentiment": {
     "ticker": "UNH",
     "signal": "HOLD",
-    "confidence": 0.51,
-    "score": -0.039
+    "score": 0.051,
+    "confidence": 0.31
   },
-  "position_size_factor": 0.007889343274679944,
+  "position_size_factor": 0.0012045991115181454,
   "metrics_path": null,
   "model_metrics": {}
 }

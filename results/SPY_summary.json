@@ -1,86 +1,86 @@
 {
   "ticker": "SPY",
-  "timestamp": "2025-10-01T13:11:37.528068",
+  "timestamp": "2025-10-02T13:02:45.676710",
   "predictions": {
     "LSTM": {
-      "predicted_price": 620.6361878706688,
-      "predicted_return": 0.00047741722664795816,
-      "pct_diff": 0.047741722664790945,
+      "predicted_price": 664.3813600357621,
+      "predicted_return": 0.0010567744029685855,
+      "pct_diff": 0.10567744029685239,
       "signal": "HOLD",
-      "last_price": 620.3400268554688
+      "last_price": 663.68
     },
     "Dense NN": {
-      "predicted_price": 620.7492154966394,
-      "predicted_return": 0.0006596199236810207,
-      "pct_diff": 0.0659619923680975,
+      "predicted_price": 662.4103564307093,
+      "predicted_return": -0.0019130357541143894,
+      "pct_diff": -0.19130357541144513,
       "signal": "HOLD",
-      "last_price": 620.3400268554688
+      "last_price": 663.68
     },
     "Random Forest": {
-      "predicted_price": 623.9355042552986,
-      "predicted_return": 0.005795978405674452,
-      "pct_diff": 0.5795978405674539,
-      "signal": "BUY",
-      "last_price": 620.3400268554688,
+      "predicted_price": 663.719601005924,
+      "predicted_return": 5.9668825223081084e-05,
+      "pct_diff": 0.005966882522308228,
+      "signal": "HOLD",
+      "last_price": 663.68,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.003970956159920151,
-          "upper": 0.013599475588810209,
-          "width": 0.01757043174873036
+          "lower": -0.007340396940613213,
+          "upper": 0.008451700516724345,
+          "width": 0.015792097457337558
         },
         "95%": {
-          "lower": -0.012500406900283291,
-          "upper": 0.02212892632917335,
-          "width": 0.03462933322945664
+          "lower": -0.015006566974204332,
+          "upper": 0.016117870550315466,
+          "width": 0.031124437524519797
         }
       },
-      "std_dev": 0.008834175908998432
+      "std_dev": 0.007940053432110333
     },
     "XGBoost": {
-      "predicted_price": 620.6303824837308,
-      "predicted_return": 0.0004680588317569345,
-      "pct_diff": 0.046805883175702334,
+      "predicted_price": 664.0533519319816,
+      "predicted_return": 0.0005625481135211885,
+      "pct_diff": 0.056254811352110634,
       "signal": "HOLD",
-      "last_price": 620.3400268554688,
+      "last_price": 663.68,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.008110862252104787,
-          "upper": 0.009409624062280861,
-          "width": 0.017520486314385648
+          "lower": -0.00689378973061675,
+          "upper": 0.008743155384086909,
+          "width": 0.01563694511470366
         },
         "95%": {
-          "lower": -0.01661606730926324,
-          "upper": 0.017914829119439313,
-          "width": 0.03453089642870255
+          "lower": -0.014484642078070565,
+          "upper": 0.01633400773154072,
+          "width": 0.030818649809611288
         }
       },
-      "std_dev": 0.008809064018797759
+      "std_dev": 0.007862044928556052
     },
     "Ensemble": {
-      "mean_prediction": 621.4878225265844,
-      "median_prediction": 620.6927016836541,
-      "weighted_prediction": 621.6198588848279,
-      "pct_diff_mean": 0.18502685969401117,
-      "pct_diff_median": 0.05685185751645338,
-      "pct_diff_weighted": 0.20631137343283149,
+      "mean_prediction": 663.6411673510943,
+      "median_prediction": 663.8864764689529,
+      "weighted_prediction": 663.6547181954222,
+      "pct_diff_mean": -0.005851110310039186,
+      "pct_diff_median": 0.031110846937217995,
+      "pct_diff_weighted": -0.0038093365142433597,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 1.4139635076630144
+      "std_dev": 0.7481357996891311
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.20631137343283149,
+  "pct_diff": -0.0038093365142433597,
   "qty": 0,
   "sentiment": {
     "ticker": "SPY",
-    "signal": "SELL",
-    "confidence": 0.45,
-    "score": -0.425
+    "signal": "HOLD",
+    "score": -0.174,
+    "confidence": 0.36
   },
-  "position_size_factor": 0.00412622746865663,
+  "position_size_factor": 7.61867302848672e-05,
   "metrics_path": null,
   "model_metrics": {}
 }

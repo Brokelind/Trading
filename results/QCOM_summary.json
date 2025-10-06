@@ -1,86 +1,86 @@
 {
   "ticker": "QCOM",
-  "timestamp": "2025-09-16T07:34:22.607312",
+  "timestamp": "2025-10-03T10:46:34.898233",
   "predictions": {
     "LSTM": {
-      "predicted_price": 160.63226293323564,
-      "predicted_return": 0.002447971375659108,
-      "pct_diff": 0.24479713756591862,
+      "predicted_price": 166.2390854164306,
+      "predicted_return": -0.0007268248591572046,
+      "pct_diff": -0.07268248591572593,
       "signal": "HOLD",
-      "last_price": 160.24
+      "last_price": 166.36
     },
     "Dense NN": {
-      "predicted_price": 158.95291073270144,
-      "predicted_return": -0.008032259531319141,
-      "pct_diff": -0.8032259531319077,
+      "predicted_price": 165.92022021481768,
+      "predicted_return": -0.00264354282990098,
+      "pct_diff": -0.2643542829901048,
       "signal": "SELL",
-      "last_price": 160.24
+      "last_price": 166.36
     },
     "Random Forest": {
-      "predicted_price": 160.30686602846671,
-      "predicted_return": 0.00041728674779527796,
-      "pct_diff": 0.04172867477952167,
+      "predicted_price": 166.4355140494124,
+      "predicted_return": 0.000453919508369662,
+      "pct_diff": 0.045391950836974455,
       "signal": "HOLD",
-      "last_price": 160.24,
+      "last_price": 166.36,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.015736074201238716,
-          "upper": 0.01855622163474771,
-          "width": 0.034292295835986426
+          "lower": -0.016403324747025213,
+          "upper": 0.01784363095269922,
+          "width": 0.034246955699724434
         },
         "95%": {
-          "lower": -0.032383044081653975,
-          "upper": 0.03520319151516296,
-          "width": 0.06758623559681694
+          "lower": -0.03302828455595568,
+          "upper": 0.03446859076162969,
+          "width": 0.06749687531758537
         }
       },
-      "std_dev": 0.017241703452188038
+      "std_dev": 0.017218907043698793
     },
     "XGBoost": {
-      "predicted_price": 160.36944793162868,
-      "predicted_return": 0.0008078378159552813,
-      "pct_diff": 0.08078378159552883,
+      "predicted_price": 166.48879625360948,
+      "predicted_return": 0.0007742020534351468,
+      "pct_diff": 0.07742020534351125,
       "signal": "HOLD",
-      "last_price": 160.24,
+      "last_price": 166.36,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.016817543992475505,
-          "upper": 0.01866651488158935,
-          "width": 0.035484058874064854
+          "lower": -0.016876163803705355,
+          "upper": 0.018602795111679813,
+          "width": 0.03547895891538517
         },
         "95%": {
-          "lower": -0.03404304741565416,
-          "upper": 0.035892018304768,
-          "width": 0.06993506572042216
+          "lower": -0.03409919148542481,
+          "upper": 0.03582582279339927,
+          "width": 0.06992501427882408
         }
       },
-      "std_dev": 0.017840905820734727
+      "std_dev": 0.017838341630352313
     },
     "Ensemble": {
-      "mean_prediction": 160.06537190650812,
-      "median_prediction": 160.3381569800477,
-      "weighted_prediction": 160.08893483529744,
-      "pct_diff_mean": -0.10897908979773466,
-      "pct_diff_median": 0.06125622818752525,
-      "pct_diff_weighted": -0.09427431646441117,
+      "mean_prediction": 166.27090398356754,
+      "median_prediction": 166.3372997329215,
+      "weighted_prediction": 166.32358841465634,
+      "pct_diff_mean": -0.053556153181340535,
+      "pct_diff_median": -0.013645267539375734,
+      "pct_diff_weighted": -0.021887223697806865,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.6537807238297083
+      "std_dev": 0.22280318781423195
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -0.09427431646441117,
+  "pct_diff": -0.021887223697806865,
   "qty": 0,
   "sentiment": {
     "ticker": "QCOM",
     "signal": "HOLD",
-    "confidence": 0.63,
-    "score": 0.182
+    "score": -0.005,
+    "confidence": 0.29
   },
-  "position_size_factor": 0.0018854863292882237,
+  "position_size_factor": 0.00043774447395613736,
   "metrics_path": null,
   "model_metrics": {}
 }

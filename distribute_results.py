@@ -3,7 +3,8 @@ import json
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
+# Removed MIMEImage import
+
 # Optional: load secrets locally
 try:
     import env  # local env.py file with credentials
@@ -43,7 +44,6 @@ def load_results():
                     else:
                         pct_diff = preds[chosen_model].get("pct_diff", 0)
 
-
                 sentiment_conf = data.get("sentiment", {}).get("confidence", 0)
 
                 if abs(pct_diff) >= 0.01 and sentiment_conf >= 0.4:
@@ -51,7 +51,7 @@ def load_results():
 
     return summaries
 
-def compose_html_email(results, image_cids=None):
+def compose_html_email(results):
     if not results:
         return None
 
@@ -69,96 +69,118 @@ def compose_html_email(results, image_cids=None):
         </tr>
     """ for res in results)
 
-    imgs_html = ""
-    if image_cids:
-        for cid in image_cids:
-            imgs_html += f'<br><img src="cid:{cid}" style="max-width:100%;">'
-
     html = f"""
     <html>
-    <body style="font-family:Arial, sans-serif; background-color:#111; color:#ddd; padding:20px;">
-        <h2 style="color:#00ff99;">📊 Daily Trading Report</h2>
-        <table style="border-collapse:collapse; width:100%; background-color:#222; color:#ddd;">
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; background-color: #111; color: #ddd; padding: 20px; }}
+            table {{ border-collapse: collapse; width: 100%; background-color: #222; color: #ddd; }}
+            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #444; }}
+            th {{ background-color: #333; color: #00ff99; }}
+            tr:hover {{ background-color: #2a2a2a; }}
+            .signal-buy {{ color: #00ff99; font-weight: bold; }}
+            .signal-sell {{ color: #ff4444; font-weight: bold; }}
+            .header {{ color: #00ff99; margin-bottom: 20px; }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h2>📊 Daily Trading Report</h2>
+            <p>Generated on {os.path.basename(RESULTS_DIR)}</p>
+        </div>
+        <table>
             <thead>
-                <tr style="background-color:#333; color:#00ff99;">
+                <tr>
                     <th>Ticker</th><th>Signal</th><th>Confidence</th><th>Strategy</th>
                     <th>Perf vs B&H</th><th>Sentiment</th><th>Sent. Conf.</th><th>Pred. Diff</th><th>Accuracy</th>
                 </tr>
             </thead>
             <tbody>{table_rows}</tbody>
         </table>
-        {imgs_html}
+        <br>
+        <div style="color: #888; font-size: 12px;">
+            <p><em>Note: Charts and detailed analysis available in the results directory.</em></p>
+        </div>
     </body>
     </html>
     """
     return html
 
-def compose_email_body(results):
+def compose_text_email(results):
+    """Fallback plain text version"""
     if not results:
         return None
-
-    body = "<strong>🚨 Strong Trading Signals Detected</strong><br><br>"
+        
+    text = "🚨 Strong Trading Signals Detected\n\n"
     for res in results:
-        body += (
-            f"<b>Ticker:</b> {res['ticker']}<br>"
-            f"<b>Signal:</b> {res['signal']}<br>"
-            f"<b>Confidence:</b> {res['confidence']:.2f}<br>"
-            f"<b>Strategy:</b> {res.get('strategy')}<br>"
-            f"<b>Model performance vs Buy & Hold:</b> {res.get('model performance vs Buy & Hold')}%<br>"
-            f"<b>Sentiment Score:</b> {res.get('sentiment_score')}<br>"
-            f"<b>Sentiment Confidence:</b> {res.get('sentiment_confidence')}<br>"
-            f"<b>Predicted difference:</b> {res.get('predicted_diff')}<br>"
-            f"<b>Accuracy:</b> {res.get('accuracy')}%<br><br>"
+        text += (
+            f"Ticker: {res['ticker']}\n"
+            f"Signal: {res['signal']}\n"
+            f"Confidence: {res.get('confidence', 0):.2f}\n"
+            f"Strategy: {res.get('strategy', '')}\n"
+            f"Model performance vs Buy & Hold: {res.get('model performance vs Buy & Hold', '')}%\n"
+            f"Sentiment Score: {res.get('sentiment_score', '')}\n"
+            f"Sentiment Confidence: {res.get('sentiment_confidence', '')}\n"
+            f"Predicted difference: {res.get('predicted_diff', '')}\n"
+            f"Accuracy: {res.get('accuracy', '')}%\n"
+            f"{'-' * 50}\n"
         )
-    return body
+    return text
 
-
-def send_email(subject, body, inline_images=None):
+def send_email(subject, html_body):
     if not (EMAIL_SENDER and EMAIL_RECEIVER and GMAIL_APP_PASSWORD):
         print("Missing email credentials.")
-        return
+        return False
 
-    msg = MIMEMultipart("related")
-    msg["Subject"] = subject
-    msg["From"] = EMAIL_SENDER
-    msg["To"] = EMAIL_RECEIVER
+    # Create message container
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = EMAIL_SENDER
+    msg['To'] = EMAIL_RECEIVER
 
-    alt = MIMEMultipart("alternative")
-    alt.attach(MIMEText(body, "html"))
-    msg.attach(alt)
-
-    if inline_images:
-        for i, img_path in enumerate(inline_images):
-            with open(img_path, "rb") as f:
-                img = MIMEImage(f.read())
-                img.add_header("Content-ID", f"<chart{i}>")
-                img.add_header("Content-Disposition", "inline", filename=os.path.basename(img_path))
-                msg.attach(img)
+    # Create text fallback
+    text_body = "Please view this email in an HTML-compatible email client."
+    
+    # Attach both text and HTML versions
+    part1 = MIMEText(text_body, 'plain')
+    part2 = MIMEText(html_body, 'html')
+    
+    msg.attach(part1)
+    msg.attach(part2)
 
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(EMAIL_SENDER, GMAIL_APP_PASSWORD)
             server.sendmail(EMAIL_SENDER, EMAIL_RECEIVER, msg.as_string())
         print("✅ Email sent successfully.")
+        return True
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
+        return False
 
-
-
-if __name__ == "__main__":
+def send_daily_summary():
+    """Main function to compile and send daily summary"""
     print("📈 Compiling signal summary...")
     summaries = load_results()
 
     if summaries:
-        # example: you generate these paths somewhere else, replace with actual paths
-        backtest_images = ["path/to/backtest1.png", "path/to/backtest2.png"]  
-        prediction_images = ["path/to/prediction1.png", "path/to/prediction2.png"]
-        all_images = backtest_images + prediction_images
-
-        image_cids = [f"chart{i}" for i in range(len(all_images))]
-
-        email_body = compose_html_email(summaries, image_cids=image_cids)
-
-        send_email("Daily Trading Summary - Strong Signals", email_body, inline_images=all_images)
+        print(f"📧 Found {len(summaries)} strong signals. Sending email...")
+        
+        # Compose HTML email (no images)
+        email_body = compose_html_email(summaries)
+        
+        if email_body:
+            success = send_email(
+                f"Daily Trading Summary - {len(summaries)} Strong Signals", 
+                email_body
+            )
+            return success
+        else:
+            print("❌ Failed to compose email body")
+            return False
     else:
         print("📭 No strong signals to report today.")
+        return True  # No error, just nothing to send
+
+if __name__ == "__main__":
+    send_daily_summary()

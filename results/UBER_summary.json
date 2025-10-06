@@ -1,86 +1,86 @@
 {
   "ticker": "UBER",
-  "timestamp": "2025-09-16T07:34:09.440678",
+  "timestamp": "2025-10-03T08:33:27.182325",
   "predictions": {
     "LSTM": {
-      "predicted_price": 94.39727054496528,
-      "predicted_return": 0.0003949824604205787,
-      "pct_diff": 0.03949824604205305,
+      "predicted_price": 98.02893105176685,
+      "predicted_return": 0.0006015214021317661,
+      "pct_diff": 0.06015214021317545,
       "signal": "HOLD",
-      "last_price": 94.36
+      "last_price": 97.97
     },
     "Dense NN": {
-      "predicted_price": 94.91411847874522,
-      "predicted_return": 0.0058723874390125275,
-      "pct_diff": 0.5872387439012545,
-      "signal": "BUY",
-      "last_price": 94.36
+      "predicted_price": 97.8593652405974,
+      "predicted_return": -0.0011292718118056655,
+      "pct_diff": -0.11292718118056597,
+      "signal": "HOLD",
+      "last_price": 97.97
     },
     "Random Forest": {
-      "predicted_price": 94.56283953312979,
-      "predicted_return": 0.0021496347300740373,
-      "pct_diff": 0.2149634730074079,
+      "predicted_price": 97.80884591076877,
+      "predicted_return": -0.0016449330328797839,
+      "pct_diff": -0.16449330328797793,
       "signal": "HOLD",
-      "last_price": 94.36,
+      "last_price": 97.97,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.022038158295140022,
-          "upper": 0.024898464051378678,
-          "width": 0.0469366223465187
+          "lower": -0.0241198923199343,
+          "upper": 0.02346495544323707,
+          "width": 0.04758484776317137
         },
         "95%": {
-          "lower": -0.044823233468525445,
-          "upper": 0.04768353922476409,
-          "width": 0.09250677269328954
+          "lower": -0.04721964426615371,
+          "upper": 0.04656470738945647,
+          "width": 0.09378435165561018
         }
       },
-      "std_dev": 0.023599100142393217
+      "std_dev": 0.02392501913182313
     },
     "XGBoost": {
-      "predicted_price": 94.47473595485091,
-      "predicted_return": 0.0012159384787082672,
-      "pct_diff": 0.12159384787082912,
+      "predicted_price": 98.06059191217122,
+      "predicted_return": 0.0009246903355233371,
+      "pct_diff": 0.09246903355233255,
       "signal": "HOLD",
-      "last_price": 94.36,
+      "last_price": 97.97,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.025789487943008716,
-          "upper": 0.026860388297543104,
-          "width": 0.05264987624055182
+          "lower": -0.025703317828041947,
+          "upper": 0.026747273507093525,
+          "width": 0.05245059133513547
         },
         "95%": {
-          "lower": -0.051348024711033925,
-          "upper": 0.05241892506556831,
-          "width": 0.10376694977660224
+          "lower": -0.051165113047062845,
+          "upper": 0.05220906872611442,
+          "width": 0.10337418177317727
         }
       },
-      "std_dev": 0.02647164708002359
+      "std_dev": 0.026371449319625165
     },
     "Ensemble": {
-      "mean_prediction": 94.58724112792281,
-      "median_prediction": 94.51878774399034,
-      "weighted_prediction": 94.58228768142453,
-      "pct_diff_mean": 0.24082357770539367,
-      "pct_diff_median": 0.16827866043911097,
-      "pct_diff_weighted": 0.23557405831340872,
+      "mean_prediction": 97.93943352882606,
+      "median_prediction": 97.94414814618213,
+      "weighted_prediction": 97.94128616430041,
+      "pct_diff_mean": -0.031199827675758973,
+      "pct_diff_median": -0.02638752048368801,
+      "pct_diff_weighted": -0.029308804429510126,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.19760470431285448
+      "std_dev": 0.10741649924138132
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.23557405831340872,
+  "pct_diff": -0.029308804429510126,
   "qty": 0,
   "sentiment": {
     "ticker": "UBER",
-    "signal": "HOLD",
-    "confidence": 0.45,
-    "score": -0.266
+    "signal": "BUY",
+    "score": 0.646,
+    "confidence": 0.5
   },
-  "position_size_factor": 0.007593870800110848,
+  "position_size_factor": 0.0005861760885902025,
   "metrics_path": null,
   "model_metrics": {}
 }
