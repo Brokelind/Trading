@@ -1,6 +1,6 @@
 {
   "ticker": "SBUX",
-  "timestamp": "2025-10-03T22:00:43.495972",
+  "timestamp": "2025-10-06T08:56:32.743938",
   "predictions": {
     "LSTM": {
       "predicted_price": 84.31082725264133,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 84.43813058358424,
-      "predicted_return": 0.0004517841656898538,
+      "predicted_return": 0.00045178416568985376,
       "pct_diff": 0.04517841656899768,
       "signal": "HOLD",
       "last_price": 84.4,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.09417350061064475,
   "qty": 0,
-  "sentiment": {
-    "ticker": "SBUX",
-    "signal": "HOLD",
-    "score": -0.199,
-    "confidence": 0.4
-  },
+  "sentiment": {},
   "position_size_factor": 0.001883470012212895,
   "metrics_path": null,
   "model_metrics": {}

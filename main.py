@@ -11,6 +11,8 @@ import call_market
 from distribute_results import *  # This will import the fixed email functions
 from alpaca.trading.enums import TimeInForce
 from visualize_results import visualize_results, visualize_predictions_chart, visualize_backtest_chart, visualize_comprehensive
+from web_dev.web_dashboard import generate_dashboard
+
 
 # only for local use
 try:
@@ -248,42 +250,53 @@ class TradingExecutor:
             except Exception as e:
                 print("Error executing", t, e)
         
+
+    # Update the post_results method in TradingExecutor class:
     def post_results(self):
-        # Load strong signals summaries using the fixed function
+        # Load strong signals summaries
         summaries = load_results()
 
         if not summaries:
             print("No strong signals to report today.")
-            # Optionally, you can still send a "no signals" email
-            no_signals_html = """
-            <html>
-            <body style="font-family:Arial, sans-serif; background-color:#111; color:#ddd; padding:20px;">
-                <h2 style="color:#00ff99;">📊 Daily Trading Report</h2>
-                <p>No strong trading signals detected today.</p>
-                <p><em>All models returned HOLD signals or signals didn't meet confidence thresholds.</em></p>
-            </body>
-            </html>
-            """
-            send_email("Daily Trading Summary - No Strong Signals", no_signals_html)
+            # Still generate dashboard with no signals
+            generate_dashboard()
             return
 
-        print(f"📈 Found {len(summaries)} strong signals. Sending email...")
-
-        # Generate HTML charts (optional - much faster than PNG)
-        # If you want to include visualizations, generate HTML files instead
+        print(f"📈 Found {len(summaries)} strong signals.")
+        
+        # Generate web dashboard
+        signal_count = generate_dashboard()
+        print(f"🌐 Generated web dashboard with {signal_count} signals")
+        
+        # Optional: Generate charts as HTML (not PNG)
         try:
             print("Generating backtest charts...")
             visualize_backtest_chart([s["ticker"] for s in summaries])
-            
             print("Generating prediction charts...")
             visualize_predictions_chart([s["ticker"] for s in summaries])
-            
-            print("Charts generated as HTML files in results directory")
         except Exception as e:
             print(f"Chart generation failed (non-critical): {e}")
-
-        # Compose and send email WITHOUT images
-        html_body = compose_html_email(summaries)
+        
+        # Send minimal email notification with link to dashboard
+        html_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
+                <h2 style="color: #333;">📊 Trading Signals Ready</h2>
+                <p>Your daily trading analysis is complete with <strong>{len(summaries)}</strong> strong signals.</p>
+                <p>View the complete dashboard at:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="file://{os.path.abspath('web_dashboard/index.html')}" 
+                    style="background: #007bff; color: white; padding: 15px 30px; 
+                            text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    Open Dashboard
+                    </a>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
         
         if html_body:
             success = send_email(

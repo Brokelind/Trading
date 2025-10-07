@@ -1,6 +1,6 @@
 {
   "ticker": "CVS",
-  "timestamp": "2025-10-03T19:51:10.422465",
+  "timestamp": "2025-10-06T08:56:17.457463",
   "predictions": {
     "LSTM": {
       "predicted_price": 76.9188704790955,
@@ -18,14 +18,14 @@
     },
     "Random Forest": {
       "predicted_price": 76.75760634819936,
-      "predicted_return": -0.0014621263405832404,
+      "predicted_return": -0.0014621263405832398,
       "pct_diff": -0.14621263405833815,
       "signal": "HOLD",
       "last_price": 76.87,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.014089642620612306,
-          "upper": 0.012931916997268535,
+          "lower": -0.014089642620612304,
+          "upper": 0.012931916997268537,
           "width": 0.02702155961788084
         },
         "95%": {
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": -0.11327413109065586,
   "qty": 0,
-  "sentiment": {
-    "ticker": "CVS",
-    "signal": "HOLD",
-    "score": 0.253,
-    "confidence": 0.44
-  },
+  "sentiment": {},
   "position_size_factor": 0.002265482621813117,
   "metrics_path": null,
   "model_metrics": {}

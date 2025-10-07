@@ -1,6 +1,6 @@
 {
   "ticker": "PFE",
-  "timestamp": "2025-10-03T18:17:35.612475",
+  "timestamp": "2025-10-06T08:56:06.195495",
   "predictions": {
     "LSTM": {
       "predicted_price": 27.235662638535143,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 27.268106797446702,
-      "predicted_return": 0.0021354942097279454,
+      "predicted_return": 0.002135494209727946,
       "pct_diff": 0.21354942097280816,
       "signal": "HOLD",
       "last_price": 27.21,
@@ -77,8 +77,8 @@
   "sentiment": {
     "ticker": "PFE",
     "signal": "HOLD",
-    "score": -0.096,
-    "confidence": 0.39
+    "score": -0.201,
+    "confidence": 0.4
   },
   "position_size_factor": 0.01743513181772624,
   "metrics_path": null,

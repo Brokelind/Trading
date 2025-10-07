@@ -1,6 +1,6 @@
 {
   "ticker": "SO",
-  "timestamp": "2025-10-04T07:02:25.958464",
+  "timestamp": "2025-10-06T08:57:17.285065",
   "predictions": {
     "LSTM": {
       "predicted_price": 94.65497768525965,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "SO",
-    "signal": "SELL",
-    "score": -0.304,
-    "confidence": 0.18
+    "signal": "BUY",
+    "score": 0.763,
+    "confidence": 0.67
   },
   "position_size_factor": 0.0014074060058521189,
   "metrics_path": null,

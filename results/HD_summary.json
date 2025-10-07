@@ -1,6 +1,6 @@
 {
   "ticker": "HD",
-  "timestamp": "2025-10-03T20:23:15.177145",
+  "timestamp": "2025-10-06T08:56:21.068845",
   "predictions": {
     "LSTM": {
       "predicted_price": 396.15455081898716,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": -0.03916413021501779,
   "qty": 0,
-  "sentiment": {
-    "ticker": "HD",
-    "signal": "SELL",
-    "score": -0.307,
-    "confidence": 0.43
-  },
+  "sentiment": {},
   "position_size_factor": 0.0007832826043003557,
   "metrics_path": null,
   "model_metrics": {}

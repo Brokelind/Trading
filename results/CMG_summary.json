@@ -1,6 +1,6 @@
 {
   "ticker": "CMG",
-  "timestamp": "2025-10-03T23:31:47.934044",
+  "timestamp": "2025-10-06T08:56:40.552010",
   "predictions": {
     "LSTM": {
       "predicted_price": 39.0372465814976,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 38.76313295892912,
-      "predicted_return": -0.005308366463199318,
+      "predicted_return": -0.0053083664631993184,
       "pct_diff": -0.530836646319936,
       "signal": "SELL",
       "last_price": 38.97,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "CMG",
-    "signal": "BUY",
-    "score": 0.773,
-    "confidence": 0.75
+    "signal": "SELL",
+    "score": -0.472,
+    "confidence": 0.33
   },
   "position_size_factor": 0.028006754654008294,
   "metrics_path": null,

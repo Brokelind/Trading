@@ -1,6 +1,6 @@
 {
   "ticker": "LLY",
-  "timestamp": "2025-10-03T18:47:12.550486",
+  "timestamp": "2025-10-06T08:56:09.861644",
   "predictions": {
     "LSTM": {
       "predicted_price": 827.9587398906424,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.24012358040705956,
   "qty": 0,
-  "sentiment": {
-    "ticker": "LLY",
-    "signal": "HOLD",
-    "score": 0.154,
-    "confidence": 0.44
-  },
+  "sentiment": {},
   "position_size_factor": 0.004802471608141192,
   "metrics_path": null,
   "model_metrics": {}

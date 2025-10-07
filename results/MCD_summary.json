@@ -1,6 +1,6 @@
 {
   "ticker": "MCD",
-  "timestamp": "2025-10-03T22:44:31.763890",
+  "timestamp": "2025-10-06T08:56:36.525215",
   "predictions": {
     "LSTM": {
       "predicted_price": 300.2087791182287,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 300.56267963303844,
-      "predicted_return": 0.0001420192767152454,
+      "predicted_return": 0.0001420192767152453,
       "pct_diff": 0.014201927671522846,
       "signal": "HOLD",
       "last_price": 300.52,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "MCD",
-    "signal": "HOLD",
-    "score": 0.207,
-    "confidence": 0.44
+    "signal": "SELL",
+    "score": -0.71,
+    "confidence": 0.59
   },
   "position_size_factor": 0.0008038572939454054,
   "metrics_path": null,

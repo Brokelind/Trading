@@ -1,6 +1,6 @@
 {
   "ticker": "CAT",
-  "timestamp": "2025-10-04T02:34:20.455144",
+  "timestamp": "2025-10-06T08:56:55.672503",
   "predictions": {
     "LSTM": {
       "predicted_price": 482.408829340036,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 481.3538389660898,
-      "predicted_return": 0.0011102678051865312,
+      "predicted_return": 0.0011102678051865317,
       "pct_diff": 0.11102678051866219,
       "signal": "HOLD",
       "last_price": 480.82,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.1183300995923063,
   "qty": 0,
-  "sentiment": {
-    "ticker": "CAT",
-    "signal": "SELL",
-    "score": -0.398,
-    "confidence": 0.44
-  },
+  "sentiment": {},
   "position_size_factor": 0.002366601991846126,
   "metrics_path": null,
   "model_metrics": {}

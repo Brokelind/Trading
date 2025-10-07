@@ -1,6 +1,6 @@
 {
   "ticker": "JNJ",
-  "timestamp": "2025-10-03T17:45:15.483358",
+  "timestamp": "2025-10-06T08:56:01.552824",
   "predictions": {
     "LSTM": {
       "predicted_price": 186.17812316016352,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 185.7840463804258,
-      "predicted_return": -0.0014294739025757196,
+      "predicted_return": -0.0014294739025757191,
       "pct_diff": -0.14294739025757544,
       "signal": "HOLD",
       "last_price": 186.05,
@@ -29,7 +29,7 @@
           "width": 0.017170075211607787
         },
         "95%": {
-          "lower": -0.018465208045554894,
+          "lower": -0.01846520804555489,
           "upper": 0.01537506774166726,
           "width": 0.03384027578722215
         }
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": -0.028043113716164112,
   "qty": 0,
-  "sentiment": {
-    "ticker": "JNJ",
-    "signal": "HOLD",
-    "score": 0.045,
-    "confidence": 0.4
-  },
+  "sentiment": {},
   "position_size_factor": 0.0005608622743232823,
   "metrics_path": null,
   "model_metrics": {}

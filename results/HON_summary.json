@@ -1,6 +1,6 @@
 {
   "ticker": "HON",
-  "timestamp": "2025-10-04T04:43:13.479698",
+  "timestamp": "2025-10-06T08:57:06.212993",
   "predictions": {
     "LSTM": {
       "predicted_price": 210.345702549282,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 210.22744761946944,
-      "predicted_return": 0.00022574754719499897,
+      "predicted_return": 0.00022574754719499905,
       "pct_diff": 0.022574754719496402,
       "signal": "HOLD",
       "last_price": 210.18,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "HON",
-    "signal": "BUY",
-    "score": 0.618,
-    "confidence": 0.52
+    "signal": "SELL",
+    "score": -0.499,
+    "confidence": 0.29
   },
   "position_size_factor": 0.0008742423563472168,
   "metrics_path": null,

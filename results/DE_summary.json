@@ -1,6 +1,6 @@
 {
   "ticker": "DE",
-  "timestamp": "2025-10-04T03:18:34.025340",
+  "timestamp": "2025-10-06T08:56:59.099907",
   "predictions": {
     "LSTM": {
       "predicted_price": 451.83065785209754,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 452.67293241023293,
-      "predicted_return": 0.0020873805375620016,
+      "predicted_return": 0.002087380537562001,
       "pct_diff": 0.20873805375620685,
       "signal": "HOLD",
       "last_price": 451.73,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.08880135204472682,
   "qty": 0,
-  "sentiment": {
-    "ticker": "DE",
-    "signal": "BUY",
-    "score": 0.737,
-    "confidence": 0.63
-  },
+  "sentiment": {},
   "position_size_factor": 0.0017760270408945366,
   "metrics_path": null,
   "model_metrics": {}

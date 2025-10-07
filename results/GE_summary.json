@@ -1,6 +1,6 @@
 {
   "ticker": "GE",
-  "timestamp": "2025-10-04T01:48:42.974488",
+  "timestamp": "2025-10-06T08:56:51.961760",
   "predictions": {
     "LSTM": {
       "predicted_price": 302.4403878908977,
@@ -18,23 +18,23 @@
     },
     "Random Forest": {
       "predicted_price": 300.97963917985146,
-      "predicted_return": 0.00033115919918732736,
+      "predicted_return": 0.00033115919918732866,
       "pct_diff": 0.03311591991872676,
       "signal": "HOLD",
       "last_price": 300.88,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.019423775953084917,
-          "upper": 0.019502191706918155,
-          "width": 0.03892596766000307
+          "lower": -0.01942377595308492,
+          "upper": 0.019502191706918158,
+          "width": 0.03892596766000308
         },
         "95%": {
-          "lower": -0.038320131399840314,
-          "upper": 0.038398547153673544,
-          "width": 0.07671867855351386
+          "lower": -0.03832013139984032,
+          "upper": 0.03839854715367355,
+          "width": 0.07671867855351387
         }
       },
-      "std_dev": 0.01957145109773981
+      "std_dev": 0.019571451097739813
     },
     "XGBoost": {
       "predicted_price": 301.84363105494526,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "GE",
-    "signal": "HOLD",
-    "score": 0.08,
-    "confidence": 0.42
+    "signal": "BUY",
+    "score": 0.664,
+    "confidence": 0.58
   },
   "position_size_factor": 0.002636395443076802,
   "metrics_path": null,

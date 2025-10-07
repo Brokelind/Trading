@@ -1,6 +1,6 @@
 {
   "ticker": "XOM",
-  "timestamp": "2025-10-03T14:36:39.538445",
+  "timestamp": "2025-10-06T08:55:39.111155",
   "predictions": {
     "LSTM": {
       "predicted_price": 111.88678587299015,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "XOM",
-    "signal": "HOLD",
-    "score": -0.032,
-    "confidence": 0.31
+    "signal": "SELL",
+    "score": -0.33,
+    "confidence": 0.05
   },
   "position_size_factor": 0.00030356642720144264,
   "metrics_path": null,

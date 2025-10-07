@@ -1,6 +1,6 @@
 {
   "ticker": "UNH",
-  "timestamp": "2025-10-03T17:13:19.554383",
+  "timestamp": "2025-10-06T08:55:58.202873",
   "predictions": {
     "LSTM": {
       "predicted_price": 349.11510151578113,
@@ -29,8 +29,8 @@
           "width": 0.025330571690949637
         },
         "95%": {
-          "lower": -0.024796946598420178,
-          "upper": 0.025126744550599028,
+          "lower": -0.024796946598420175,
+          "upper": 0.02512674455059903,
           "width": 0.049923691149019206
         }
       },
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "UNH",
-    "signal": "HOLD",
-    "score": 0.051,
-    "confidence": 0.31
+    "signal": "BUY",
+    "score": 0.711,
+    "confidence": 0.59
   },
   "position_size_factor": 0.0012045991115181454,
   "metrics_path": null,
