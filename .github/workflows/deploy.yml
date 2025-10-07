@@ -2,7 +2,7 @@ name: Run main.py daily and deploy dashboard
 
 on:
   schedule:
-    - cron: "0 7 * * *"  # every day at 07:00 UTC
+    - cron: "0 7 * * *"  # daily at 07:00 UTC
   workflow_dispatch:
   push:
     branches:
@@ -25,10 +25,10 @@ jobs:
       GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
 
     steps:
-      - name: Checkout web-dashboard branch
+      - name: Checkout the branch that triggered workflow
         uses: actions/checkout@v3
         with:
-          ref: web-dashboard
+          ref: ${{ github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -40,7 +40,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run main script
+      - name: Run main.py
         run: python main.py
 
       - name: Upload dashboard artifact
@@ -58,7 +58,7 @@ jobs:
       id-token: write
 
     steps:
-      - name: Download artifact
+      - name: Download dashboard artifact
         uses: actions/download-artifact@v4
         with:
           name: web_dashboard
