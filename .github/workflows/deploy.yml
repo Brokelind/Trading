@@ -2,8 +2,11 @@ name: Run main.py daily and deploy dashboard
 
 on:
   schedule:
-    - cron: "0 7 * * *"  # runs every day at 07:00 UTC
+    - cron: "0 7 * * *"  # every day at 07:00 UTC
   workflow_dispatch:
+  push:
+    branches:
+      - web-dashboard
 
 jobs:
   build:
@@ -21,7 +24,10 @@ jobs:
       GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout web-dashboard branch
+        uses: actions/checkout@v3
+        with:
+          ref: web-dashboard
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -61,5 +67,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: web_dashboard
           publish_branch: gh-pages
+          publish_dir: web_dashboard
