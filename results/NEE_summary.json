@@ -1,6 +1,6 @@
 {
   "ticker": "NEE",
-  "timestamp": "2025-10-04T05:27:08.686019",
+  "timestamp": "2025-10-06T08:57:09.755316",
   "predictions": {
     "LSTM": {
       "predicted_price": 78.73769209404126,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.07994560002672305,
   "qty": 0,
-  "sentiment": {
-    "ticker": "NEE",
-    "signal": "BUY",
-    "score": 0.598,
-    "confidence": 0.54
-  },
+  "sentiment": {},
   "position_size_factor": 0.008619582521361718,
   "metrics_path": null,
   "model_metrics": {}

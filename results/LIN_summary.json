@@ -1,6 +1,6 @@
 {
   "ticker": "LIN",
-  "timestamp": "2025-10-04T09:14:26.941487",
+  "timestamp": "2025-10-06T08:57:27.752487",
   "predictions": {
     "LSTM": {
       "predicted_price": 466.41283217476155,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 467.1961229757673,
-      "predicted_return": 0.0008271523227166384,
+      "predicted_return": 0.0008271523227166383,
       "pct_diff": 0.08271523227165384,
       "signal": "HOLD",
       "last_price": 466.81,

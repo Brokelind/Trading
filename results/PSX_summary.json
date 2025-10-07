@@ -1,6 +1,6 @@
 {
   "ticker": "PSX",
-  "timestamp": "2025-10-03T16:41:38.284121",
+  "timestamp": "2025-10-06T08:55:54.535252",
   "predictions": {
     "LSTM": {
       "predicted_price": 134.93182068475755,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.11454294990793422,
   "qty": 0,
-  "sentiment": {
-    "ticker": "PSX",
-    "signal": "HOLD",
-    "score": 0.009,
-    "confidence": 0.55
-  },
+  "sentiment": {},
   "position_size_factor": 0.0022908589981586844,
   "metrics_path": null,
   "model_metrics": {}

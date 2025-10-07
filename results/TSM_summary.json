@@ -1,86 +1,86 @@
 {
   "ticker": "TSM",
-  "timestamp": "2025-09-16T07:34:19.705811",
+  "timestamp": "2025-10-06T08:55:06.559418",
   "predictions": {
     "LSTM": {
-      "predicted_price": 247.28461962810775,
-      "predicted_return": 0.0003827809705398977,
-      "pct_diff": 0.038278097053987006,
-      "signal": "HOLD",
-      "last_price": 247.19
+      "predicted_price": 287.69241536950926,
+      "predicted_return": -0.0026955476496368647,
+      "pct_diff": -0.26955476496369274,
+      "signal": "SELL",
+      "last_price": 288.47
     },
     "Dense NN": {
-      "predicted_price": 245.70771454009227,
-      "predicted_return": -0.0059965429827570915,
-      "pct_diff": -0.5996542982757105,
-      "signal": "SELL",
-      "last_price": 247.19
+      "predicted_price": 293.8481157806516,
+      "predicted_return": 0.018643587827682495,
+      "pct_diff": 1.864358782768249,
+      "signal": "BUY",
+      "last_price": 288.47
     },
     "Random Forest": {
-      "predicted_price": 232.77734417118583,
-      "predicted_return": -0.058305982559222355,
-      "pct_diff": -5.830598255922233,
-      "signal": "SELL",
-      "last_price": 247.19,
+      "predicted_price": 288.9056857450458,
+      "predicted_return": 0.0015103329463921366,
+      "pct_diff": 0.15103329463922058,
+      "signal": "HOLD",
+      "last_price": 288.47,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.06169443337374125,
-          "upper": -0.026289859286977146,
-          "width": 0.03540457408676411
+          "lower": -0.013976889340651128,
+          "upper": 0.019405167497635,
+          "width": 0.03338205683828613
         },
         "95%": {
-          "lower": -0.07888135142875222,
-          "upper": -0.009102941231966179,
-          "width": 0.06977841019678604
+          "lower": -0.030181989675464396,
+          "upper": 0.03561026783244827,
+          "width": 0.06579225750791266
         }
       },
-      "std_dev": 0.017800941942604367
+      "std_dev": 0.01678404757099457
     },
     "XGBoost": {
-      "predicted_price": 247.0079803582409,
-      "predicted_return": -0.0007363551994785666,
-      "pct_diff": -0.07363551994785299,
+      "predicted_price": 288.8190032343532,
+      "predicted_return": 0.0012098423903807998,
+      "pct_diff": 0.12098423903808943,
       "signal": "HOLD",
-      "last_price": 247.19,
+      "last_price": 288.47,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.018881739062665073,
-          "upper": 0.016396431430650917,
-          "width": 0.03527817049331599
+          "lower": -0.01717202262773421,
+          "upper": 0.018744091874056127,
+          "width": 0.03591611450179034
         },
         "95%": {
-          "lower": -0.03600729532309188,
-          "upper": 0.033521987691077726,
-          "width": 0.06952928301416961
+          "lower": -0.03460726461889356,
+          "upper": 0.03617933386521548,
+          "width": 0.07078659848410904
         }
       },
-      "std_dev": 0.017737387922076048
+      "std_dev": 0.01805813755825737
     },
     "Ensemble": {
-      "mean_prediction": 243.1944146744067,
-      "median_prediction": 246.35784744916657,
-      "weighted_prediction": 242.62106933363555,
-      "pct_diff_mean": -1.6164024942729522,
-      "pct_diff_median": -0.3366449091117875,
-      "pct_diff_weighted": -1.8483476946334607,
-      "signal_mean": "SELL",
-      "signal_median": "SELL",
-      "signal_weighted": "SELL",
+      "mean_prediction": 289.81630503238995,
+      "median_prediction": 288.86234448969947,
+      "weighted_prediction": 289.75119393067854,
+      "pct_diff_mean": 0.4667053878704617,
+      "pct_diff_median": 0.13600876683864516,
+      "pct_diff_weighted": 0.44413420136531073,
+      "signal_mean": "BUY",
+      "signal_median": "HOLD",
+      "signal_weighted": "BUY",
       "model_count": 4,
-      "std_dev": 6.043697003327678
+      "std_dev": 2.3764597394412186
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -1.8483476946334607,
+  "pct_diff": 0.44413420136531073,
   "qty": 0,
   "sentiment": {
     "ticker": "TSM",
-    "signal": "BUY",
-    "confidence": 0.54,
-    "score": 0.734
+    "signal": "SELL",
+    "score": -0.448,
+    "confidence": 0.48
   },
-  "position_size_factor": 0.03696695389266921,
+  "position_size_factor": 0.008882684027306215,
   "metrics_path": null,
   "model_metrics": {}
 }

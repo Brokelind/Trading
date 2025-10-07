@@ -1,6 +1,6 @@
 {
   "ticker": "NKE",
-  "timestamp": "2025-10-03T21:27:20.745998",
+  "timestamp": "2025-10-06T08:56:28.984691",
   "predictions": {
     "LSTM": {
       "predicted_price": 74.04745504055172,
@@ -77,8 +77,8 @@
   "sentiment": {
     "ticker": "NKE",
     "signal": "HOLD",
-    "score": 0.093,
-    "confidence": 0.34
+    "score": 0.048,
+    "confidence": 0.28
   },
   "position_size_factor": 0.00017213010867370843,
   "metrics_path": null,

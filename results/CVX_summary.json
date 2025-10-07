@@ -1,6 +1,6 @@
 {
   "ticker": "CVX",
-  "timestamp": "2025-10-03T15:08:58.175786",
+  "timestamp": "2025-10-06T08:55:42.977593",
   "predictions": {
     "LSTM": {
       "predicted_price": 154.4588393454114,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.01149122699616267,
   "qty": 0,
-  "sentiment": {
-    "ticker": "CVX",
-    "signal": "HOLD",
-    "score": -0.079,
-    "confidence": 0.41
-  },
+  "sentiment": {},
   "position_size_factor": 0.00022982453992325343,
   "metrics_path": null,
   "model_metrics": {}

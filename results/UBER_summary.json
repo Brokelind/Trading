@@ -1,86 +1,86 @@
 {
   "ticker": "UBER",
-  "timestamp": "2025-10-03T08:33:27.182325",
+  "timestamp": "2025-10-06T08:54:53.958138",
   "predictions": {
     "LSTM": {
-      "predicted_price": 98.02893105176685,
-      "predicted_return": 0.0006015214021317661,
-      "pct_diff": 0.06015214021317545,
+      "predicted_price": 96.67450390091457,
+      "predicted_return": 0.0006676731281913817,
+      "pct_diff": 0.06676731281914229,
       "signal": "HOLD",
-      "last_price": 97.97
+      "last_price": 96.61
     },
     "Dense NN": {
-      "predicted_price": 97.8593652405974,
-      "predicted_return": -0.0011292718118056655,
-      "pct_diff": -0.11292718118056597,
-      "signal": "HOLD",
-      "last_price": 97.97
+      "predicted_price": 96.2313051709719,
+      "predicted_return": -0.003919830545783043,
+      "pct_diff": -0.3919830545783108,
+      "signal": "SELL",
+      "last_price": 96.61
     },
     "Random Forest": {
-      "predicted_price": 97.80884591076877,
-      "predicted_return": -0.0016449330328797839,
-      "pct_diff": -0.16449330328797793,
+      "predicted_price": 96.61183391750309,
+      "predicted_return": 1.8982688159582557e-05,
+      "pct_diff": 0.001898268815952487,
       "signal": "HOLD",
-      "last_price": 97.97,
+      "last_price": 96.61,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.0241198923199343,
-          "upper": 0.02346495544323707,
-          "width": 0.04758484776317137
+          "lower": -0.02546040251417106,
+          "upper": 0.021971440195048535,
+          "width": 0.047431842709219595
         },
         "95%": {
-          "lower": -0.04721964426615371,
-          "upper": 0.04656470738945647,
-          "width": 0.09378435165561018
+          "lower": -0.04848587916144668,
+          "upper": 0.04499691684232416,
+          "width": 0.09348279600377084
         }
       },
-      "std_dev": 0.02392501913182313
+      "std_dev": 0.023848090256033072
     },
     "XGBoost": {
-      "predicted_price": 98.06059191217122,
-      "predicted_return": 0.0009246903355233371,
-      "pct_diff": 0.09246903355233255,
+      "predicted_price": 96.69466900201573,
+      "predicted_return": 0.0008763999794609845,
+      "pct_diff": 0.08763999794610257,
       "signal": "HOLD",
-      "last_price": 97.97,
+      "last_price": 96.61,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.025703317828041947,
-          "upper": 0.026747273507093525,
-          "width": 0.05245059133513547
+          "lower": -0.025822302423803022,
+          "upper": 0.026606810551056525,
+          "width": 0.05242911297485955
         },
         "95%": {
-          "lower": -0.051165113047062845,
-          "upper": 0.05220906872611442,
-          "width": 0.10337418177317727
+          "lower": -0.051273671113836065,
+          "upper": 0.05205817924108957,
+          "width": 0.10333185035492563
         }
       },
-      "std_dev": 0.026371449319625165
+      "std_dev": 0.02636065029000382
     },
     "Ensemble": {
-      "mean_prediction": 97.93943352882606,
-      "median_prediction": 97.94414814618213,
-      "weighted_prediction": 97.94128616430041,
-      "pct_diff_mean": -0.031199827675758973,
-      "pct_diff_median": -0.02638752048368801,
-      "pct_diff_weighted": -0.029308804429510126,
+      "mean_prediction": 96.55307799785132,
+      "median_prediction": 96.64316890920884,
+      "weighted_prediction": 96.57145399992775,
+      "pct_diff_mean": -0.05891936874928204,
+      "pct_diff_median": 0.03433279081755475,
+      "pct_diff_weighted": -0.039898561300325666,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.10741649924138132
+      "std_dev": 0.18826993427464395
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -0.029308804429510126,
+  "pct_diff": -0.039898561300325666,
   "qty": 0,
   "sentiment": {
     "ticker": "UBER",
-    "signal": "BUY",
-    "score": 0.646,
-    "confidence": 0.5
+    "signal": "HOLD",
+    "score": -0.109,
+    "confidence": 0.48
   },
-  "position_size_factor": 0.0005861760885902025,
+  "position_size_factor": 0.0007979712260065133,
   "metrics_path": null,
   "model_metrics": {}
 }

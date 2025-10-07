@@ -1,86 +1,81 @@
 {
   "ticker": "JPM",
-  "timestamp": "2025-10-03T11:53:03.865305",
+  "timestamp": "2025-10-06T08:55:20.902067",
   "predictions": {
     "LSTM": {
-      "predicted_price": 316.3127658149088,
-      "predicted_return": 0.002798610832542181,
-      "pct_diff": 0.27986108325422243,
+      "predicted_price": 311.5789191039721,
+      "predicted_return": 0.002796559827402234,
+      "pct_diff": 0.2796559827402183,
       "signal": "BUY",
-      "last_price": 315.43
+      "last_price": 310.71
     },
     "Dense NN": {
-      "predicted_price": 316.3245472701988,
-      "predicted_return": 0.002835961291566491,
-      "pct_diff": 0.28359612915664767,
+      "predicted_price": 311.8283124025468,
+      "predicted_return": 0.0035992159973829985,
+      "pct_diff": 0.3599215997382926,
       "signal": "BUY",
-      "last_price": 315.43
+      "last_price": 310.71
     },
     "Random Forest": {
-      "predicted_price": 315.7497038671511,
-      "predicted_return": 0.001013549336306142,
-      "pct_diff": 0.10135493363062384,
+      "predicted_price": 310.8323783008571,
+      "predicted_return": 0.0003938666308040403,
+      "pct_diff": 0.03938666308040352,
       "signal": "HOLD",
-      "last_price": 315.43,
+      "last_price": 310.71,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.011560173934085172,
-          "upper": 0.013496518344165308,
-          "width": 0.02505669227825048
+          "lower": -0.011697097122146212,
+          "upper": 0.01355420972647397,
+          "width": 0.025251306848620182
         },
         "95%": {
-          "lower": -0.023723780700277374,
-          "upper": 0.02566012511035751,
-          "width": 0.049383905810634884
+          "lower": -0.02395517825385566,
+          "upper": 0.025812290858183415,
+          "width": 0.049767469112039074
         }
       },
-      "std_dev": 0.012598166650042765
+      "std_dev": 0.012696016229022198
     },
     "XGBoost": {
-      "predicted_price": 315.68402470853005,
+      "predicted_price": 310.9602235589112,
       "predicted_return": 0.0008053283090703189,
-      "pct_diff": 0.08053283090702829,
+      "pct_diff": 0.08053283090702458,
       "signal": "HOLD",
-      "last_price": 315.43,
+      "last_price": 310.71,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.011733402319460308,
-          "upper": 0.013290591242930984,
-          "width": 0.02502399356239129
+          "lower": -0.0117413138397114,
+          "upper": 0.013289077662311646,
+          "width": 0.025030391502023047
         },
         "95%": {
-          "lower": -0.023881135708709783,
-          "upper": 0.02543832463218046,
-          "width": 0.04931946034089024
+          "lower": -0.023892153066751846,
+          "upper": 0.025439916889352092,
+          "width": 0.04933206995610394
         }
       },
-      "std_dev": 0.012581726177091992
+      "std_dev": 0.012584942974776326
     },
     "Ensemble": {
-      "mean_prediction": 316.0177604151972,
-      "median_prediction": 316.0312348410299,
-      "weighted_prediction": 315.9152159684395,
-      "pct_diff_mean": 0.18633624423713055,
-      "pct_diff_median": 0.19060800844241413,
-      "pct_diff_weighted": 0.15382682954680613,
+      "mean_prediction": 311.29995834157177,
+      "median_prediction": 311.2695713314416,
+      "weighted_prediction": 311.1811241442021,
+      "pct_diff_mean": 0.189874269116471,
+      "pct_diff_median": 0.1800944068236123,
+      "pct_diff_weighted": 0.1516282527765833,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 0.3018195632807005
+      "std_dev": 0.4156404509103916
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.15382682954680613,
+  "pct_diff": 0.1516282527765833,
   "qty": 0,
-  "sentiment": {
-    "ticker": "JPM",
-    "signal": "HOLD",
-    "score": -0.023,
-    "confidence": 0.36
-  },
-  "position_size_factor": 0.0030765365909361225,
+  "sentiment": {},
+  "position_size_factor": 0.0030325650555316657,
   "metrics_path": null,
   "model_metrics": {}
 }

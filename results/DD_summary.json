@@ -1,6 +1,6 @@
 {
   "ticker": "DD",
-  "timestamp": "2025-10-04T12:28:01.015852",
+  "timestamp": "2025-10-06T08:57:42.234082",
   "predictions": {
     "LSTM": {
       "predicted_price": 78.40669536957051,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 78.2213205262845,
-      "predicted_return": 1.6882207677147254e-05,
+      "predicted_return": 1.688220767714747e-05,
       "pct_diff": 0.0016882207677089826,
       "signal": "HOLD",
       "last_price": 78.22,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.13388791044805,
   "qty": 0,
-  "sentiment": {
-    "ticker": "DD",
-    "signal": "BUY",
-    "score": 0.403,
-    "confidence": 0.43
-  },
+  "sentiment": {},
   "position_size_factor": 0.0030063207450105583,
   "metrics_path": null,
   "model_metrics": {}

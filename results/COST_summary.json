@@ -1,6 +1,6 @@
 {
   "ticker": "COST",
-  "timestamp": "2025-10-04T00:19:17.845748",
+  "timestamp": "2025-10-06T08:56:44.597775",
   "predictions": {
     "LSTM": {
       "predicted_price": 917.3213480794695,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 918.4405851044734,
-      "predicted_return": 0.0011997570197238387,
+      "predicted_return": 0.001199757019723839,
       "pct_diff": 0.11997570197237,
       "signal": "HOLD",
       "last_price": 917.34,
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "COST",
-    "signal": "SELL",
-    "score": -0.737,
-    "confidence": 0.63
+    "signal": "HOLD",
+    "score": -0.167,
+    "confidence": 0.54
   },
   "position_size_factor": 0.002468767656397883,
   "metrics_path": null,

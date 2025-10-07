@@ -1,6 +1,6 @@
 {
   "ticker": "MRK",
-  "timestamp": "2025-10-03T19:19:44.399563",
+  "timestamp": "2025-10-06T08:56:13.760344",
   "predictions": {
     "LSTM": {
       "predicted_price": 90.0788750522479,
@@ -18,7 +18,7 @@
     },
     "Random Forest": {
       "predicted_price": 90.42688809410056,
-      "predicted_return": 0.0032939986031351527,
+      "predicted_return": 0.003293998603135154,
       "pct_diff": 0.32939986031350993,
       "signal": "BUY",
       "last_price": 90.13,
@@ -77,8 +77,8 @@
   "sentiment": {
     "ticker": "MRK",
     "signal": "HOLD",
-    "score": -0.031,
-    "confidence": 0.42
+    "score": 0.192,
+    "confidence": 0.34
   },
   "position_size_factor": 0.009356324594028584,
   "metrics_path": null,

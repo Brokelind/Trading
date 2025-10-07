@@ -1,6 +1,6 @@
 {
   "ticker": "NEM",
-  "timestamp": "2025-10-04T10:48:53.018451",
+  "timestamp": "2025-10-06T08:57:35.163091",
   "predictions": {
     "LSTM": {
       "predicted_price": 86.26698131089798,
@@ -18,14 +18,14 @@
     },
     "Random Forest": {
       "predicted_price": 85.32459705613185,
-      "predicted_return": -0.007276357694801067,
+      "predicted_return": -0.007276357694801065,
       "pct_diff": -0.7276357694801079,
       "signal": "SELL",
       "last_price": 85.95,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.029943892472617736,
-          "upper": 0.004448651285094229,
+          "lower": -0.029943892472617743,
+          "upper": 0.004448651285094226,
           "width": 0.03439254375771197
         },
         "95%": {
@@ -76,9 +76,9 @@
   "qty": 0,
   "sentiment": {
     "ticker": "NEM",
-    "signal": "BUY",
-    "score": 0.433,
-    "confidence": 0.39
+    "signal": "SELL",
+    "score": -0.483,
+    "confidence": 0.32
   },
   "position_size_factor": 0.004111464816032502,
   "metrics_path": null,

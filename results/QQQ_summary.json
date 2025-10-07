@@ -1,86 +1,86 @@
 {
   "ticker": "QQQ",
-  "timestamp": "2025-10-02T13:24:18.315651",
+  "timestamp": "2025-10-06T08:53:34.627946",
   "predictions": {
     "LSTM": {
-      "predicted_price": 599.9678183906246,
-      "predicted_return": 0.0020674066618084908,
-      "pct_diff": 0.20674066618085363,
+      "predicted_price": 604.4810059583979,
+      "predicted_return": 0.0020406232215464115,
+      "pct_diff": 0.20406232215464115,
       "signal": "HOLD",
-      "last_price": 598.73
+      "last_price": 603.25
     },
     "Dense NN": {
-      "predicted_price": 602.2238792047929,
-      "predicted_return": 0.005835483781993389,
-      "pct_diff": 0.5835483781993298,
+      "predicted_price": 606.7003471625503,
+      "predicted_return": 0.005719597451388836,
+      "pct_diff": 0.5719597451388836,
       "signal": "BUY",
-      "last_price": 598.73
+      "last_price": 603.25
     },
     "Random Forest": {
-      "predicted_price": 599.1989721760141,
-      "predicted_return": 0.0007832782322818704,
-      "pct_diff": 0.07832782322817679,
+      "predicted_price": 603.7343814278483,
+      "predicted_return": 0.0008029530507225318,
+      "pct_diff": 0.08029530507224994,
       "signal": "HOLD",
-      "last_price": 598.73,
+      "last_price": 603.25,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.009278715147341366,
-          "upper": 0.011828176880298023,
-          "width": 0.02110689202763939
+          "lower": -0.009364905416191388,
+          "upper": 0.011737871276571906,
+          "width": 0.021102776692763295
         },
         "95%": {
-          "lower": -0.019524917312801676,
-          "upper": 0.022074379045758333,
-          "width": 0.04159929635856001
+          "lower": -0.019609109819353786,
+          "upper": 0.0219820756797343,
+          "width": 0.041591185499088086
         }
       },
-      "std_dev": 0.010612260400367036
+      "std_dev": 0.010610191265542135
     },
     "XGBoost": {
-      "predicted_price": 599.2410399155639,
+      "predicted_price": 603.7648979156947,
       "predicted_return": 0.0008535398519597948,
-      "pct_diff": 0.08535398519597415,
+      "pct_diff": 0.08535398519597948,
       "signal": "HOLD",
-      "last_price": 598.73,
+      "last_price": 603.25,
       "confidence_intervals": {
         "68%": {
-          "lower": -0.009451341982068345,
-          "upper": 0.0118114020946192,
-          "width": 0.021262744076687545
+          "lower": -0.009445511731323806,
+          "upper": 0.011811183295217362,
+          "width": 0.021256695026541168
         },
         "95%": {
-          "lower": -0.019773201501551103,
-          "upper": 0.022133261614101958,
-          "width": 0.04190646311565306
+          "lower": -0.019764434779125768,
+          "upper": 0.022130106343019325,
+          "width": 0.04189454112214509
         }
       },
-      "std_dev": 0.010690620706861427
+      "std_dev": 0.010687579326100859
     },
     "Ensemble": {
-      "mean_prediction": 600.1579274217488,
-      "median_prediction": 599.6044291530943,
-      "weighted_prediction": 599.9410423195005,
-      "pct_diff_mean": 0.23849271320107412,
-      "pct_diff_median": 0.14604732568842338,
-      "pct_diff_weighted": 0.20226852162084863,
+      "mean_prediction": 604.6701581161228,
+      "median_prediction": 604.1229519370463,
+      "weighted_prediction": 604.4570627051723,
+      "pct_diff_mean": 0.23541783939043853,
+      "pct_diff_median": 0.1447081536753103,
+      "pct_diff_weighted": 0.20009327893449608,
       "signal_mean": "HOLD",
       "signal_median": "HOLD",
       "signal_weighted": "HOLD",
       "model_count": 4,
-      "std_dev": 1.2313180007514375
+      "std_dev": 1.2096094559612207
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.20226852162084863,
+  "pct_diff": 0.20009327893449608,
   "qty": 0,
   "sentiment": {
     "ticker": "QQQ",
-    "signal": "BUY",
-    "score": 0.313,
-    "confidence": 0.38
+    "signal": "HOLD",
+    "score": 0.007,
+    "confidence": 0.39
   },
-  "position_size_factor": 0.004045370432416972,
+  "position_size_factor": 0.004001865578689922,
   "metrics_path": null,
   "model_metrics": {}
 }

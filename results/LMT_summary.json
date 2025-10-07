@@ -1,6 +1,6 @@
 {
   "ticker": "LMT",
-  "timestamp": "2025-10-04T04:00:16.897076",
+  "timestamp": "2025-10-06T08:57:02.589859",
   "predictions": {
     "LSTM": {
       "predicted_price": 500.4371221130714,
@@ -74,12 +74,7 @@
   "signal": "HOLD",
   "pct_diff": 0.028736343621543082,
   "qty": 0,
-  "sentiment": {
-    "ticker": "LMT",
-    "signal": "BUY",
-    "score": 0.5,
-    "confidence": 0.29
-  },
+  "sentiment": {},
   "position_size_factor": 0.0005747268724308616,
   "metrics_path": null,
   "model_metrics": {}
