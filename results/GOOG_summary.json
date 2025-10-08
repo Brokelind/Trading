@@ -1,86 +1,89 @@
 {
   "ticker": "GOOG",
-  "timestamp": "2025-10-06T08:54:07.107793",
+  "timestamp": "2025-10-07T14:35:29.180881",
+  "last_price": 249.26,
   "predictions": {
     "LSTM": {
-      "predicted_price": 245.97615739514353,
-      "predicted_return": 0.001776319113560021,
-      "pct_diff": 0.17763191135600673,
-      "signal": "HOLD",
-      "last_price": 245.54
+      "predicted_price": 246.82391119250678,
+      "predicted_return": 0.0015171888517215848,
+      "pct_diff": 0.1517188851721631,
+      "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 246.1430387120135,
-      "predicted_return": 0.0024559693410992622,
-      "pct_diff": 0.24559693410992114,
-      "signal": "HOLD",
-      "last_price": 245.54
+      "predicted_price": 244.05293341996148,
+      "predicted_return": -0.009726380929350853,
+      "pct_diff": -0.9726380929350831,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 245.83685034860795,
-      "predicted_return": 0.0012089694086826752,
-      "pct_diff": 0.1208969408682745,
-      "signal": "HOLD",
-      "last_price": 245.54,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.01381000450238987,
-          "upper": 0.017773484406886714,
-          "width": 0.031583488909276584
-        },
-        "95%": {
-          "lower": -0.029142001843886402,
-          "upper": 0.03310548174838325,
-          "width": 0.06224748359226965
-        }
-      },
-      "std_dev": 0.015879751894236287
+      "predicted_price": 246.5412684955447,
+      "predicted_return": 0.00037033270661259506,
+      "pct_diff": 0.0370332706612743,
+      "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 245.60007725663658,
-      "predicted_return": 0.00024467401090078056,
-      "pct_diff": 0.024467401090082684,
-      "signal": "HOLD",
-      "last_price": 245.54,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.013260888304270479,
-          "upper": 0.014957628464966687,
-          "width": 0.028218516769237166
-        },
-        "95%": {
-          "lower": -0.026959382011843246,
-          "upper": 0.028656122172539454,
-          "width": 0.0556155041843827
-        }
-      },
-      "std_dev": 0.014187889324260728
+      "predicted_price": 250.93104712273924,
+      "predicted_return": 0.018182378262281418,
+      "pct_diff": 1.8182378262281418,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 245.8890309281004,
-      "median_prediction": 245.90650387187574,
-      "weighted_prediction": 245.82926306231178,
-      "pct_diff_mean": 0.14214829685607416,
-      "pct_diff_median": 0.1492644261121406,
-      "pct_diff_weighted": 0.1178069000210921,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.19895226354357354
+      "signal": "HOLD",
+      "predicted_price": 247.08729005768805
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.1178069000210921,
+  "pct_diff": 0,
   "qty": 0,
   "sentiment": {
     "ticker": "GOOG",
     "signal": "HOLD",
-    "score": -0.155,
-    "confidence": 0.32
+    "score": -0.06,
+    "confidence": 0.39
   },
-  "position_size_factor": 0.002356138000421842,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9014471706718642,
+      "RMSE": 0.9422809636590411,
+      "R2": -859.247412752543,
+      "DirectionAcc": 0.9065974796145293,
+      "FinalPortfolio": 54868036.482999995,
+      "Sharpe": 8.463248014550745,
+      "Volatility": 0.012154654722841288
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.02082957682455376,
+      "RMSE": 0.06223237093929559,
+      "R2": -2.752279965549303,
+      "DirectionAcc": 0.6011860637509266,
+      "FinalPortfolio": 21066.5,
+      "Sharpe": 0.7381632312255267,
+      "Volatility": 0.013991723854211385
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.014413259399045041,
+      "RMSE": 0.03205165495386106,
+      "R2": 0.004678333930318357,
+      "DirectionAcc": 0.5596738324684952,
+      "FinalPortfolio": 21740.72,
+      "Sharpe": 0.7603409617043023,
+      "Volatility": 0.014104893148416685
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.02069186941272082,
+      "RMSE": 0.035984598096257286,
+      "R2": -0.2545727590611029,
+      "DirectionAcc": 0.5470719051148999,
+      "FinalPortfolio": 21740.72,
+      "Sharpe": 0.7603409617043023,
+      "Volatility": 0.014104893148416685
+    }
+  ]
 }

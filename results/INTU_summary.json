@@ -1,81 +1,89 @@
 {
   "ticker": "INTU",
-  "timestamp": "2025-10-06T08:54:41.385606",
+  "timestamp": "2025-10-07T15:01:28.135567",
+  "last_price": 657.0,
   "predictions": {
     "LSTM": {
-      "predicted_price": 680.5682658258593,
-      "predicted_return": 0.0015721351373940706,
-      "pct_diff": 0.15721351373940706,
-      "signal": "HOLD",
-      "last_price": 679.5
+      "predicted_price": 681.3761092804326,
+      "predicted_return": 0.0021121117752045393,
+      "pct_diff": 0.2112111775204519,
+      "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 675.747965126764,
-      "predicted_return": -0.005521758459508419,
-      "pct_diff": -0.5521758459508419,
-      "signal": "SELL",
-      "last_price": 679.5
+      "predicted_price": 668.3550386586786,
+      "predicted_return": -0.017038211226463318,
+      "pct_diff": -1.7038211226463282,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 676.8919073287123,
-      "predicted_return": -0.0038382526435433743,
-      "pct_diff": -0.38382526435434144,
-      "signal": "SELL",
-      "last_price": 679.5,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.01779366161899112,
-          "upper": 0.011852462842432365,
-          "width": 0.029646124461423486
-        },
-        "95%": {
-          "lower": -0.03218517810831463,
-          "upper": 0.026243979331755877,
-          "width": 0.05842915744007051
-        }
-      },
-      "std_dev": 0.01490567120134662
+      "predicted_price": 680.5073018626389,
+      "predicted_return": 0.0008343410633862754,
+      "pct_diff": 0.08343410633862229,
+      "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 680.2023935820325,
-      "predicted_return": 0.0010336918057873845,
-      "pct_diff": 0.10336918057873845,
-      "signal": "HOLD",
-      "last_price": 679.5,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.014624694900789697,
-          "upper": 0.01701840439645334,
-          "width": 0.03164309929724304
-        },
-        "95%": {
-          "lower": -0.029985629713774976,
-          "upper": 0.03237933920943862,
-          "width": 0.062364968923213596
-        }
-      },
-      "std_dev": 0.01590972319265571
+      "predicted_price": 687.534220457077,
+      "predicted_return": 0.011168956756591797,
+      "pct_diff": 1.1168956756591715,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 678.3526329658421,
-      "median_prediction": 678.5471504553724,
-      "weighted_prediction": 678.3545631937782,
-      "pct_diff_mean": -0.1688546039967511,
-      "pct_diff_median": -0.1402280418878015,
-      "pct_diff_weighted": -0.16857053807532357,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 2.076575139893395
+      "signal": "HOLD",
+      "predicted_price": 679.4431675647068
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -0.16857053807532357,
+  "pct_diff": 0,
   "qty": 0,
-  "sentiment": {},
-  "position_size_factor": 0.0033714107615064716,
+  "sentiment": {
+    "ticker": "INTU",
+    "signal": "HOLD",
+    "score": 0.272,
+    "confidence": 0.48
+  },
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.950483102467357,
+      "RMSE": 0.9672413701236734,
+      "R2": -2146.3491319442674,
+      "DirectionAcc": 0.9451445515196442,
+      "FinalPortfolio": 227187292.86999995,
+      "Sharpe": 10.15550771413224,
+      "Volatility": 0.011781132716439298
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.011186606467499137,
+      "RMSE": 0.015035929469978735,
+      "R2": 0.48108826334432897,
+      "DirectionAcc": 0.7331356560415122,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.016721807084500523,
+      "RMSE": 0.021931415931072604,
+      "R2": -0.10399289058990391,
+      "DirectionAcc": 0.530763528539659,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.015545111099115666,
+      "RMSE": 0.02099231703461726,
+      "R2": -0.011471585875964196,
+      "DirectionAcc": 0.5048183839881394,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    }
+  ]
 }

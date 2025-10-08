@@ -1,86 +1,89 @@
 {
   "ticker": "NVDA",
-  "timestamp": "2025-09-16T07:33:50.237314",
+  "timestamp": "2025-10-07T14:47:53.460140",
+  "last_price": 188.0037,
   "predictions": {
     "LSTM": {
-      "predicted_price": 168.799273293179,
-      "predicted_return": 0.002906976966187358,
-      "pct_diff": 0.2906976966187371,
-      "signal": "BUY",
-      "last_price": 168.31
+      "predicted_price": 188.3883865898475,
+      "predicted_return": 0.0040954407304525375,
+      "pct_diff": 0.4095440730452483,
+      "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 168.30908757412098,
-      "predicted_return": -5.421103196567856e-06,
-      "pct_diff": -0.0005421103196615138,
-      "signal": "HOLD",
-      "last_price": 168.31
+      "predicted_price": 192.16468672391028,
+      "predicted_return": 0.024222826585173607,
+      "pct_diff": 2.4222826585173616,
+      "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 168.72274590072618,
-      "predicted_return": 0.0024522957680836845,
-      "pct_diff": 0.24522957680837687,
-      "signal": "HOLD",
-      "last_price": 168.31,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.023135367028553212,
-          "upper": 0.030287649212434944,
-          "width": 0.05342301624098816
-        },
-        "95%": {
-          "lower": -0.049069219534030505,
-          "upper": 0.05622150171791223,
-          "width": 0.10529072125194273
-        }
-      },
-      "std_dev": 0.026860371436021914
+      "predicted_price": 196.49519433544594,
+      "predicted_return": 0.04730409516813746,
+      "pct_diff": 4.73040951681374,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 168.6482914508623,
-      "predicted_return": 0.0020099307876080275,
-      "pct_diff": 0.20099307876079867,
-      "signal": "HOLD",
-      "last_price": 168.31,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.02381589496150139,
-          "upper": 0.029080527365351945,
-          "width": 0.052896422326853335
-        },
-        "95%": {
-          "lower": -0.049494115908516115,
-          "upper": 0.05475874831236667,
-          "width": 0.10425286422088278
-        }
-      },
-      "std_dev": 0.02659560712421659
+      "predicted_price": 193.16917035330087,
+      "predicted_return": 0.02957664616405964,
+      "pct_diff": 2.957664616405962,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 168.61984955472212,
-      "median_prediction": 168.68551867579424,
-      "weighted_prediction": 168.61821258804105,
-      "pct_diff_mean": 0.18409456046706701,
-      "pct_diff_median": 0.22311132778458775,
-      "pct_diff_weighted": 0.18312197019846976,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.18719140337233853
+      "signal": "BUY",
+      "predicted_price": 192.55435950062613
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0.18312197019846976,
-  "qty": 0,
+  "signal": "BUY",
+  "pct_diff": 0,
+  "qty": 4,
   "sentiment": {
     "ticker": "NVDA",
     "signal": "HOLD",
-    "confidence": 0.49,
-    "score": -0.225
+    "score": -0.07,
+    "confidence": 0.36
   },
-  "position_size_factor": 0.0036624394039693957,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9378693865283677,
+      "RMSE": 0.9564771222808519,
+      "R2": -449.63981093119696,
+      "DirectionAcc": 0.9426891991182954,
+      "FinalPortfolio": 155616326825.40994,
+      "Sharpe": 9.94381169631367,
+      "Volatility": 0.019858590742447568
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.018818416811990594,
+      "RMSE": 0.02971910123660322,
+      "R2": 0.5649374256310138,
+      "DirectionAcc": 0.7259368111682586,
+      "FinalPortfolio": 94760.35999999999,
+      "Sharpe": 1.1564686280179188,
+      "Volatility": 0.028084350695060885
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.024605316100656572,
+      "RMSE": 0.04485614879102427,
+      "R2": 0.008884313216094508,
+      "DirectionAcc": 0.5679647318148421,
+      "FinalPortfolio": 10141.269999999999,
+      "Sharpe": 0.5919031879831796,
+      "Volatility": 0.03694242377709578
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.02859455824909299,
+      "RMSE": 0.04619236975795132,
+      "R2": -0.05104393025033471,
+      "DirectionAcc": 0.5459221160911095,
+      "FinalPortfolio": 10141.269999999999,
+      "Sharpe": 0.5919031879831796,
+      "Volatility": 0.03694242377709578
+    }
+  ]
 }

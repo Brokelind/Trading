@@ -1,86 +1,89 @@
 {
   "ticker": "UBER",
-  "timestamp": "2025-10-06T08:54:53.958138",
+  "timestamp": "2025-10-07T15:15:44.597697",
+  "last_price": 98.66,
   "predictions": {
     "LSTM": {
-      "predicted_price": 96.67450390091457,
-      "predicted_return": 0.0006676731281913817,
-      "pct_diff": 0.06676731281914229,
-      "signal": "HOLD",
-      "last_price": 96.61
+      "predicted_price": 96.82126919156872,
+      "predicted_return": 0.00229057134129107,
+      "pct_diff": 0.22905713412911288,
+      "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 96.2313051709719,
-      "predicted_return": -0.003919830545783043,
-      "pct_diff": -0.3919830545783108,
-      "signal": "SELL",
-      "last_price": 96.61
+      "predicted_price": 96.64098444489645,
+      "predicted_return": 0.0004242696159053594,
+      "pct_diff": 0.042426961590530055,
+      "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 96.61183391750309,
-      "predicted_return": 1.8982688159582557e-05,
-      "pct_diff": 0.001898268815952487,
-      "signal": "HOLD",
-      "last_price": 96.61,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.02546040251417106,
-          "upper": 0.021971440195048535,
-          "width": 0.047431842709219595
-        },
-        "95%": {
-          "lower": -0.04848587916144668,
-          "upper": 0.04499691684232416,
-          "width": 0.09348279600377084
-        }
-      },
-      "std_dev": 0.023848090256033072
+      "predicted_price": 96.7101280508239,
+      "predicted_return": 0.001140041933994824,
+      "pct_diff": 0.11400419339948538,
+      "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 96.69466900201573,
-      "predicted_return": 0.0008763999794609845,
-      "pct_diff": 0.08763999794610257,
-      "signal": "HOLD",
-      "last_price": 96.61,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.025822302423803022,
-          "upper": 0.026606810551056525,
-          "width": 0.05242911297485955
-        },
-        "95%": {
-          "lower": -0.051273671113836065,
-          "upper": 0.05205817924108957,
-          "width": 0.10333185035492563
-        }
-      },
-      "std_dev": 0.02636065029000382
+      "predicted_price": 98.227509220317,
+      "predicted_return": 0.016847921535372734,
+      "pct_diff": 1.6847921535372765,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 96.55307799785132,
-      "median_prediction": 96.64316890920884,
-      "weighted_prediction": 96.57145399992775,
-      "pct_diff_mean": -0.05891936874928204,
-      "pct_diff_median": 0.03433279081755475,
-      "pct_diff_weighted": -0.039898561300325666,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.18826993427464395
+      "signal": "HOLD",
+      "predicted_price": 97.09997272690153
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -0.039898561300325666,
+  "pct_diff": 0,
   "qty": 0,
   "sentiment": {
     "ticker": "UBER",
     "signal": "HOLD",
-    "score": -0.109,
-    "confidence": 0.48
+    "score": -0.041,
+    "confidence": 0.4
   },
-  "position_size_factor": 0.0007979712260065133,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9387314734047829,
+      "RMSE": 0.958009961257511,
+      "R2": -979.6082683062203,
+      "DirectionAcc": 0.9437453737971873,
+      "FinalPortfolio": 13169608544.160006,
+      "Sharpe": 8.750026685731452,
+      "Volatility": 0.019357383133657757
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.019444546578886557,
+      "RMSE": 0.0275660943722027,
+      "R2": 0.1880935746509923,
+      "DirectionAcc": 0.6683937823834197,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.021899180020480545,
+      "RMSE": 0.03054838106037954,
+      "R2": 0.002915649725530267,
+      "DirectionAcc": 0.5122131754256106,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.02609508602447512,
+      "RMSE": 0.034138213437978356,
+      "R2": -0.24519417343630923,
+      "DirectionAcc": 0.5011102886750555,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    }
+  ]
 }

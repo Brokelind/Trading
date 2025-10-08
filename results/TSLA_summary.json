@@ -1,86 +1,89 @@
 {
   "ticker": "TSLA",
-  "timestamp": "2025-09-16T07:33:40.891937",
+  "timestamp": "2025-10-07T14:37:38.004969",
+  "last_price": 447.04,
   "predictions": {
     "LSTM": {
-      "predicted_price": 351.6145768901426,
-      "predicted_return": 0.002207778161391616,
-      "pct_diff": 0.22077781613915512,
-      "signal": "HOLD",
-      "last_price": 350.84
+      "predicted_price": 431.8574515926558,
+      "predicted_return": 0.004716868512332439,
+      "pct_diff": 0.4716868512332403,
+      "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 350.8564265233115,
-      "predicted_return": 4.682055441662669e-05,
-      "pct_diff": 0.004682055441656837,
-      "signal": "HOLD",
-      "last_price": 350.84
+      "predicted_price": 430.1154136966448,
+      "predicted_return": 0.0006640153005719185,
+      "pct_diff": 0.06640153005718762,
+      "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 350.99709760393023,
-      "predicted_return": 0.00044777563541873724,
-      "pct_diff": 0.04477756354185772,
-      "signal": "HOLD",
-      "last_price": 350.84,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.04249936521844818,
-          "upper": 0.04357812283695394,
-          "width": 0.08607748805540212
-        },
-        "95%": {
-          "lower": -0.08428511668558568,
-          "upper": 0.08536387430409144,
-          "width": 0.16964899098967712
-        }
-      },
-      "std_dev": 0.04327859907831132
+      "predicted_price": 451.92056068243113,
+      "predicted_return": 0.051393715381502274,
+      "pct_diff": 5.1393715381502325,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 351.1838145861728,
-      "predicted_return": 0.0009799754479900002,
-      "pct_diff": 0.09799754479900002,
-      "signal": "HOLD",
-      "last_price": 350.84,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.028881623129480147,
-          "upper": 0.03127268906601574,
-          "width": 0.06015431219549589
-        },
-        "95%": {
-          "lower": -0.058083139064282564,
-          "upper": 0.06047420500081816,
-          "width": 0.11855734406510073
-        }
-      },
-      "std_dev": 0.030244776179630322
+      "predicted_price": 440.84554734844716,
+      "predicted_return": 0.025627683848142624,
+      "pct_diff": 2.562768384814269,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 351.1629789008893,
-      "median_prediction": 351.09045609505154,
-      "weighted_prediction": 351.1149949079188,
-      "pct_diff_mean": 0.09205874498042553,
-      "pct_diff_median": 0.07138755417043699,
-      "pct_diff_weighted": 0.07838185723373164,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.28542329729643645
+      "signal": "BUY",
+      "predicted_price": 438.68474333004474
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0.07838185723373164,
-  "qty": 0,
+  "signal": "BUY",
+  "pct_diff": 0,
+  "qty": 1,
   "sentiment": {
     "ticker": "TSLA",
     "signal": "HOLD",
-    "confidence": 0.48,
-    "score": -0.064
+    "score": -0.076,
+    "confidence": 0.42
   },
-  "position_size_factor": 0.001567637144674633,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9128805854872499,
+      "RMSE": 0.9409117498954936,
+      "R2": -367.77853452435,
+      "DirectionAcc": 0.9229058561897702,
+      "FinalPortfolio": 654059413170.1799,
+      "Sharpe": 8.949203006037303,
+      "Volatility": 0.024336796060893107
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.02912205304562315,
+      "RMSE": 0.045273490872649376,
+      "R2": 0.14620065841330343,
+      "DirectionAcc": 0.6456634544106745,
+      "FinalPortfolio": 8815.92,
+      "Sharpe": 0.3286203789127932,
+      "Volatility": 0.03920389097488311
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.029806376352600746,
+      "RMSE": 0.04855317235295245,
+      "R2": 0.018019028547380134,
+      "DirectionAcc": 0.5774647887323944,
+      "FinalPortfolio": 8815.92,
+      "Sharpe": 0.3286203789127932,
+      "Volatility": 0.03920389097488311
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.03795680086937555,
+      "RMSE": 0.05503601569350852,
+      "R2": -0.26171661438485905,
+      "DirectionAcc": 0.5263157894736842,
+      "FinalPortfolio": 8815.92,
+      "Sharpe": 0.3286203789127932,
+      "Volatility": 0.03920389097488311
+    }
+  ]
 }
