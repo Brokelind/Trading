@@ -1,86 +1,89 @@
 {
   "ticker": "AMD",
-  "timestamp": "2025-10-06T08:54:57.726404",
+  "timestamp": "2025-10-07T15:21:49.311894",
+  "last_price": 211.4,
   "predictions": {
     "LSTM": {
-      "predicted_price": 163.87613369410042,
-      "predicted_return": -0.0008162081940099597,
-      "pct_diff": -0.08162081940099597,
-      "signal": "HOLD",
-      "last_price": 164.01
+      "predicted_price": 170.06111874069902,
+      "predicted_return": 0.0019508557161316276,
+      "pct_diff": 0.19508557161316545,
+      "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 163.9941469858156,
-      "predicted_return": -9.665882680565119e-05,
-      "pct_diff": -0.009665882680560267,
-      "signal": "HOLD",
-      "last_price": 164.01
+      "predicted_price": 168.70358559543266,
+      "predicted_return": -0.006047336384654045,
+      "pct_diff": -0.6047336384654058,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 164.50883733536418,
-      "predicted_return": 0.0030415056116347146,
-      "pct_diff": 0.30415056116345723,
-      "signal": "BUY",
-      "last_price": 164.01,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.026481037703092177,
-          "upper": 0.029845643309610644,
-          "width": 0.05632668101270282
-        },
-        "95%": {
-          "lower": -0.05382445520907991,
-          "upper": 0.05718906081559838,
-          "width": 0.1110135160246783
-        }
-      },
-      "std_dev": 0.02832029488815579
+      "predicted_price": 169.95301180695498,
+      "predicted_return": 0.0013139209742237697,
+      "pct_diff": 0.1313920974223685,
+      "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 164.39014977860495,
-      "predicted_return": 0.0023178451228886843,
-      "pct_diff": 0.2317845122888601,
-      "signal": "HOLD",
-      "last_price": 164.01,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.02788194581327712,
-          "upper": 0.0304836233651427,
-          "width": 0.05836556917841982
-        },
-        "95%": {
-          "lower": -0.056215128193759144,
-          "upper": 0.05881680574562472,
-          "width": 0.11503193393938387
-        }
-      },
-      "std_dev": 0.029345420335970734
+      "predicted_price": 172.47066362679004,
+      "predicted_return": 0.016147196292877197,
+      "pct_diff": 1.6147196292877233,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 164.1923169484713,
-      "median_prediction": 164.1921483822103,
-      "weighted_prediction": 164.27801439026553,
-      "pct_diff_mean": 0.11116209284269894,
-      "pct_diff_median": 0.1110593148041586,
-      "pct_diff_weighted": 0.16341344446407813,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.26389683990199114
+      "signal": "HOLD",
+      "predicted_price": 170.2970949424692
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.16341344446407813,
+  "pct_diff": 0,
   "qty": 0,
   "sentiment": {
     "ticker": "AMD",
     "signal": "HOLD",
-    "score": -0.052,
-    "confidence": 0.63
+    "score": 0.014,
+    "confidence": 0.35
   },
-  "position_size_factor": 0.003268268889281563,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.926504302067472,
+      "RMSE": 0.9508994584537184,
+      "R2": -901.8947226283183,
+      "DirectionAcc": 0.9183823529411764,
+      "FinalPortfolio": 23600849331.40999,
+      "Sharpe": 9.14200213405894,
+      "Volatility": 0.01915754916196958
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.01554053341304168,
+      "RMSE": 0.02036324178870885,
+      "R2": 0.5859414561320421,
+      "DirectionAcc": 0.7720588235294118,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.023250544545954172,
+      "RMSE": 0.03152692695577238,
+      "R2": 0.007498445671176968,
+      "DirectionAcc": 0.5345588235294118,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.027265055913363888,
+      "RMSE": 0.03503812036745629,
+      "R2": -0.22588439008818773,
+      "DirectionAcc": 0.49779411764705883,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    }
+  ]
 }

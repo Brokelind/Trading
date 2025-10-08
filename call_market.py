@@ -5,6 +5,7 @@ import pandas as pd
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest
 from alpaca.data.timeframe import TimeFrame
+import yfinance as yf
 
 # Local-only env support
 try:
@@ -31,8 +32,8 @@ client = StockHistoricalDataClient(ALPACA_API_KEY, ALPACA_SECRET_KEY)
 
 def get_data(symbol, save_folder="data"):
     try:
-        import yfinance as yf
-        df = yf.Ticker(symbol).history(period="max", auto_adjust=True)
+        ticker = yf.Tickers(symbol)
+        df = ticker.history(period="1y", auto_adjust=True)
         if df.empty:
             raise ValueError("Empty DataFrame from Yahoo")
         log.info("Fetched from Yahoo Finance")
@@ -42,7 +43,7 @@ def get_data(symbol, save_folder="data"):
             request = StockBarsRequest(
                 symbol_or_symbols=symbol,
                 timeframe=TimeFrame.Day,
-                start="2010-01-01"  # limited depth
+                start="2020-01-01"  # limited depth
             )
             bars = client.get_stock_bars(request).df
             if isinstance(bars.index, pd.MultiIndex):

@@ -1,86 +1,89 @@
 {
   "ticker": "AAPL",
-  "timestamp": "2025-10-06T08:53:51.743658",
+  "timestamp": "2025-10-07T14:19:34.878885",
+  "last_price": 257.07,
   "predictions": {
     "LSTM": {
-      "predicted_price": 256.04109962338117,
-      "predicted_return": 0.0023139542900025845,
-      "pct_diff": 0.23139542900026733,
-      "signal": "HOLD",
-      "last_price": 255.45
+      "predicted_price": 258.6781174313882,
+      "predicted_return": 0.0025506450328975916,
+      "pct_diff": 0.25506450328975827,
+      "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 256.30253931451585,
-      "predicted_return": 0.003337401896715164,
-      "pct_diff": 0.33374018967150754,
-      "signal": "BUY",
-      "last_price": 255.45
+      "predicted_price": 259.74933145252055,
+      "predicted_return": 0.006702315527945757,
+      "pct_diff": 0.6702315527945775,
+      "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 255.6781846881977,
-      "predicted_return": 0.000893265563506386,
-      "pct_diff": 0.08932655635063626,
-      "signal": "HOLD",
-      "last_price": 255.45,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.014264702032347781,
-          "upper": 0.016376267100008793,
-          "width": 0.030640969132356574
-        },
-        "95%": {
-          "lower": -0.02913915933589743,
-          "upper": 0.031250724403558444,
-          "width": 0.06038988373945587
-        }
-      },
-      "std_dev": 0.015405865672992864
+      "predicted_price": 265.33412993400987,
+      "predicted_return": 0.02834714337652076,
+      "pct_diff": 2.8347143376520756,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 255.66808500556508,
-      "predicted_return": 0.000853728735819459,
-      "pct_diff": 0.08537287358194813,
-      "signal": "HOLD",
-      "last_price": 255.45,
-      "confidence_intervals": {
-        "68%": {
-          "lower": -0.013139716608589383,
-          "upper": 0.015455401528766247,
-          "width": 0.02859511813735563
-        },
-        "95%": {
-          "lower": -0.02702102897788069,
-          "upper": 0.029336713898057552,
-          "width": 0.05635774287593824
-        }
-      },
-      "std_dev": 0.01437723940860162
+      "predicted_price": 261.7802682939544,
+      "predicted_return": 0.014573553577065468,
+      "pct_diff": 1.4573553577065441,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "mean_prediction": 255.92247715791495,
-      "median_prediction": 255.85964215578943,
-      "weighted_prediction": 255.84983555459135,
-      "pct_diff_mean": 0.1849587621510926,
-      "pct_diff_median": 0.1603609926754518,
-      "pct_diff_weighted": 0.1565220413354326,
-      "signal_mean": "HOLD",
-      "signal_median": "HOLD",
-      "signal_weighted": "HOLD",
-      "model_count": 4,
-      "std_dev": 0.2659476969871972
+      "signal": "BUY",
+      "predicted_price": 261.38546177796826
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0.1565220413354326,
-  "qty": 0,
+  "signal": "BUY",
+  "pct_diff": 0,
+  "qty": 3,
   "sentiment": {
     "ticker": "AAPL",
     "signal": "HOLD",
-    "score": 0.23,
-    "confidence": 0.38
+    "score": 0.006,
+    "confidence": 0.44
   },
-  "position_size_factor": 0.003130440826708652,
+  "position_size_factor": 0.1,
   "metrics_path": null,
-  "model_metrics": {}
+  "model_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9282473481902962,
+      "RMSE": 0.9567674657074395,
+      "R2": -1238.63951374368,
+      "DirectionAcc": 0.9302152932442465,
+      "FinalPortfolio": 45924230.61900002,
+      "Sharpe": 9.260620000053182,
+      "Volatility": 0.010871301728326213
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.018246113677425013,
+      "RMSE": 0.038959357208416666,
+      "R2": -1.0554465068112218,
+      "DirectionAcc": 0.5991091314031181,
+      "FinalPortfolio": 9110.13,
+      "Sharpe": -0.2264089704513498,
+      "Volatility": 0.004213870721252813
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.013557626664087717,
+      "RMSE": 0.02726859586313464,
+      "R2": -0.0069505976215051835,
+      "DirectionAcc": 0.5545657015590201,
+      "FinalPortfolio": 19350.57,
+      "Sharpe": 0.6063049647428201,
+      "Volatility": 0.01637613254148549
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.01842695484120794,
+      "RMSE": 0.030640212836538783,
+      "R2": -0.27135304773345803,
+      "DirectionAcc": 0.5337787676317743,
+      "FinalPortfolio": 19350.57,
+      "Sharpe": 0.6063049647428201,
+      "Volatility": 0.01637613254148549
+    }
+  ]
 }

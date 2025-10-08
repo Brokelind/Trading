@@ -1,43 +1,53 @@
 {
-  "feature_columns": [
-    "open",
-    "high",
-    "low",
-    "adj_close",
-    "log_ret",
-    "volatility",
-    "RSI_14",
-    "RSI_7",
-    "stoch_k",
-    "stoch_d",
-    "MACD",
-    "MACD_signal",
-    "MACD_hist",
-    "ADX",
-    "ATR",
-    "BB_upper",
-    "BB_lower",
-    "BB_width",
-    "ret_lag_1",
-    "vol_lag_1",
-    "ret_lag_2",
-    "vol_lag_2",
-    "ret_lag_3",
-    "vol_lag_3",
-    "ret_lag_4",
-    "vol_lag_4",
-    "ret_lag_5",
-    "vol_lag_5",
-    "ret_lag_6",
-    "vol_lag_6",
-    "ret_lag_7",
-    "vol_lag_7",
-    "ret_lag_8",
-    "vol_lag_8",
-    "ret_lag_9",
-    "vol_lag_9",
-    "ret_lag_10",
-    "vol_lag_10"
+  "last_trained": "2025-10-07T15:46:50.672587",
+  "model_paths": {
+    "LSTM": "saved_models\\ARM_LSTM.keras",
+    "Dense NN": "saved_models\\ARM_Dense_NN.keras",
+    "Random Forest": "saved_models\\ARM_Random_Forest.joblib",
+    "XGBoost": "saved_models\\ARM_XGBoost.joblib"
+  },
+  "metrics_file": "saved_models\\ARM_metrics.csv",
+  "metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.9172907684156454,
+      "RMSE": 0.9428410478531827,
+      "R2": -374.7330739070793,
+      "DirectionAcc": 0.9029345372460497,
+      "FinalPortfolio": 6742618.8,
+      "Sharpe": 7.056373358484349,
+      "Volatility": 0.03452565922823304
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.027384066083389978,
+      "RMSE": 0.04424142664247887,
+      "R2": 0.17270441237705192,
+      "DirectionAcc": 0.6320541760722348,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.0420320556737131,
+      "RMSE": 0.061447624469749995,
+      "R2": -0.5959256606590984,
+      "DirectionAcc": 0.5711060948081265,
+      "FinalPortfolio": 17015.14,
+      "Sharpe": 0.8209739788808249,
+      "Volatility": 0.03486237385882417
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.03676281235062868,
+      "RMSE": 0.0520483004315421,
+      "R2": -0.14502657756628778,
+      "DirectionAcc": 0.5304740406320542,
+      "FinalPortfolio": 17015.14,
+      "Sharpe": 0.8209739788808249,
+      "Volatility": 0.03486237385882417
+    }
   ],
-  "n_features": 38
+  "best_model": "LSTM"
 }

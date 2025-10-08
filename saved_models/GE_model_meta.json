@@ -1,43 +1,53 @@
 {
-  "feature_columns": [
-    "open",
-    "high",
-    "low",
-    "adj_close",
-    "log_ret",
-    "volatility",
-    "RSI_14",
-    "RSI_7",
-    "stoch_k",
-    "stoch_d",
-    "MACD",
-    "MACD_signal",
-    "MACD_hist",
-    "ADX",
-    "ATR",
-    "BB_upper",
-    "BB_lower",
-    "BB_width",
-    "ret_lag_1",
-    "vol_lag_1",
-    "ret_lag_2",
-    "vol_lag_2",
-    "ret_lag_3",
-    "vol_lag_3",
-    "ret_lag_4",
-    "vol_lag_4",
-    "ret_lag_5",
-    "vol_lag_5",
-    "ret_lag_6",
-    "vol_lag_6",
-    "ret_lag_7",
-    "vol_lag_7",
-    "ret_lag_8",
-    "vol_lag_8",
-    "ret_lag_9",
-    "vol_lag_9",
-    "ret_lag_10",
-    "vol_lag_10"
+  "last_trained": "2025-10-07T17:36:44.861807",
+  "model_paths": {
+    "LSTM": "saved_models\\GE_LSTM.keras",
+    "Dense NN": "saved_models\\GE_Dense_NN.keras",
+    "Random Forest": "saved_models\\GE_Random_Forest.joblib",
+    "XGBoost": "saved_models\\GE_XGBoost.joblib"
+  },
+  "metrics_file": "saved_models\\GE_metrics.csv",
+  "metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.8159513761412566,
+      "RMSE": 0.9060598519491725,
+      "R2": -23.91781769461366,
+      "DirectionAcc": 0.6654135338345865,
+      "FinalPortfolio": 44354971.95999999,
+      "Sharpe": 0.8891667831461202,
+      "Volatility": 0.1714732349808245
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.02692664353740105,
+      "RMSE": 0.06316043658019971,
+      "R2": 0.8789160788161943,
+      "DirectionAcc": 0.6330827067669172,
+      "FinalPortfolio": 197669.02000000002,
+      "Sharpe": 0.5177204005714544,
+      "Volatility": 0.17187893597762624
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.080919133523876,
+      "RMSE": 0.19448936335248218,
+      "R2": -0.14812173735324863,
+      "DirectionAcc": 0.5398496240601504,
+      "FinalPortfolio": 565706.3999999999,
+      "Sharpe": 0.5864040994152523,
+      "Volatility": 0.17621561593638022
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.02092082639350845,
+      "RMSE": 0.18152569410131544,
+      "R2": -0.0001668182837735177,
+      "DirectionAcc": 0.5090225563909775,
+      "FinalPortfolio": 10000.0,
+      "Sharpe": NaN,
+      "Volatility": 0.0
+    }
   ],
-  "n_features": 38
+  "best_model": "Dense NN"
 }

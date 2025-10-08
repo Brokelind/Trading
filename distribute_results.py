@@ -34,22 +34,25 @@ def load_results():
             with open(os.path.join(RESULTS_DIR, file), "r") as f:
                 data = json.load(f)
 
-                # Safely get pct_diff from chosen model
                 chosen_model = data.get("chosen_model")
                 preds = data.get("predictions", {})
                 pct_diff = 0
+
                 if chosen_model and chosen_model in preds:
                     if chosen_model == "Ensemble":
-                        pct_diff = preds[chosen_model].get("pct_diff_weighted", 0)
+                        last_price = data.get("last_price", 0)
+                        ensemble_price = preds[chosen_model].get("predicted_price", 0)
+                        pct_diff = (ensemble_price - last_price) / last_price if last_price else 0
                     else:
                         pct_diff = preds[chosen_model].get("pct_diff", 0)
 
                 sentiment_conf = data.get("sentiment", {}).get("confidence", 0)
 
-                if abs(pct_diff) >= 0.01 and sentiment_conf >= 0.4:
-                    summaries.append(data)
+                #if abs(pct_diff) >= 0.01 and sentiment_conf >= 0.4:
+                summaries.append(data)
 
     return summaries
+
 
 def compose_html_email(results):
     if not results:

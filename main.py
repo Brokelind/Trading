@@ -23,6 +23,7 @@ except ImportError:
 SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI") or getattr(env, "SKIP_TRAINING_ON_CI", False)
 
 # config
+data_path = "data"
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -142,21 +143,18 @@ class TradingExecutor:
 
         model_pred = preds[best_model]
         
-        # Handle both old and new prediction formats
-        if "signal" in model_pred:
-            # Old format
-            signal = model_pred.get("signal", "HOLD")
-            pct_diff = model_pred.get("pct_diff", 0)
-        else:
-            # New ensemble format
-            signal = model_pred.get("signal_weighted", "HOLD")
-            pct_diff = model_pred.get("pct_diff_weighted", 0)
+        signal = model_pred.get("signal", "HOLD")
+        pct_diff = model_pred.get("pct_diff", 0)
+
 
         last_price = None
         try:
             import pandas as pd
-            df = pd.read_csv(data_path, index_col=0, parse_dates=True)
+            df = pd.read_csv(data_path+"/"+ticker+"_data.csv", index_col=0, parse_dates=True)
             last_price = float(df["adj_close"].iloc[-1])
+            if np.isnan(last_price):
+                last_price = float(df["adj_close"].iloc[-2])
+
         except Exception:
             pass
 
@@ -178,21 +176,31 @@ class TradingExecutor:
                 print(f"Upgrading HOLD to {new_signal} due to strong signal ({pct_diff:.2f}%) and confirming sentiment ({sentiment_effect:.2f})")
                 signal = new_signal
 
-        # Position sizing with volatility adjustment
+        # Position sizing with volatility and confidence adjustment
+        # Current perf_index calculation
         perf_index = min(max(abs(pct_diff) / 5.0, 0.0), 1.0)
-        
+
         # Incorporate model confidence if available
         if "std_dev" in model_pred:
-            confidence = 1.0 - min(model_pred["std_dev"] / abs(pct_diff), 1.0) if pct_diff != 0 else 0.0
-            perf_index *= max(confidence, 0.1)  # Don't go below 10% of original size
-            
+            confidence = 1.0 - min(model_pred["std_dev"] / (abs(pct_diff) + 1e-6), 1.0)
+            perf_index *= max(confidence, 0.2)  # Don't go below 20% instead of 10%
+
+        # Apply sentiment multiplier
+        sentiment_multiplier = 1 + min(max(sentiment_effect, -0.5), 0.5)  # boost/dampen ±50%
+        perf_index *= sentiment_multiplier
+
+        # Ensure minimum trade size
+        MIN_TRADE_FACTOR = 0.1
+        perf_index = max(perf_index, MIN_TRADE_FACTOR)
+
         qty = alpaca_trader.qty_to_trade(
             ticker, 
             signal, 
             perf_index, 
-            last_price or 0.0, 
+            last_price or 1e-6 , 
             predicted_diff=pct_diff
         )
+
         
         print(f"Final decision: {signal} ({pct_diff:.2f}%), sentiment effect: {sentiment_effect:.2f}, qty: {qty}")
 
@@ -216,6 +224,7 @@ class TradingExecutor:
         out = {
             "ticker": ticker,
             "timestamp": datetime.utcnow().isoformat(),
+            "last_price": last_price,
             "predictions": preds,
             "chosen_model": best_model,
             "signal": signal,
@@ -228,7 +237,6 @@ class TradingExecutor:
 
         try:
             meta = self.model_system.load_meta(ticker)
-            out["metrics_path"] = meta.get("metrics_file")
             out["model_metrics"] = meta.get("metrics", {})
         except Exception:
             pass
@@ -270,9 +278,7 @@ class TradingExecutor:
         
         # Optional: Generate charts as HTML (not PNG)
         try:
-            print("Generating backtest charts...")
             visualize_backtest_chart([s["ticker"] for s in summaries])
-            print("Generating prediction charts...")
             visualize_predictions_chart([s["ticker"] for s in summaries])
         except Exception as e:
             print(f"Chart generation failed (non-critical): {e}")
@@ -309,6 +315,7 @@ class TradingExecutor:
                 print("❌ Failed to send email")
         else:
             print("❌ Failed to compose email body")
+            
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run trading executor")
