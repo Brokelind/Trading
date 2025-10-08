@@ -1,48 +1,49 @@
 {
   "ticker": "AAPL",
-  "timestamp": "2025-10-07T14:19:34.878885",
-  "last_price": 257.07,
+  "timestamp": "2025-10-08T14:05:35.867243",
+  "last_price": 257.345,
   "predictions": {
     "LSTM": {
-      "predicted_price": 258.6781174313882,
-      "predicted_return": 0.0025506450328975916,
-      "pct_diff": 0.25506450328975827,
+      "predicted_price": 258.0620270435838,
+      "predicted_return": 0.0053450739942491055,
+      "pct_diff": 0.5345073994249034,
       "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 259.74933145252055,
-      "predicted_return": 0.006702315527945757,
-      "pct_diff": 0.6702315527945775,
+      "predicted_price": 257.8502754852595,
+      "predicted_return": 0.004520142916589975,
+      "pct_diff": 0.4520142916590011,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 265.33412993400987,
+      "predicted_price": 263.9664282333191,
       "predicted_return": 0.02834714337652076,
-      "pct_diff": 2.8347143376520756,
+      "pct_diff": 2.834714337652074,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 261.7802682939544,
-      "predicted_return": 0.014573553577065468,
-      "pct_diff": 1.4573553577065441,
+      "predicted_price": 260.6549962505698,
+      "predicted_return": 0.015446633100509644,
+      "pct_diff": 1.5446633100509608,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 261.38546177796826
+      "predicted_price": 260.13343175318306,
+      "pct_diff": 3.443431753183063
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 3,
+  "pct_diff": 3.443431753183063,
+  "qty": 16,
   "sentiment": {
     "ticker": "AAPL",
     "signal": "HOLD",
-    "score": 0.006,
-    "confidence": 0.44
+    "score": -0.147,
+    "confidence": 0.36
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.6157957872852335,
   "metrics_path": null,
   "model_metrics": [
     {
@@ -57,20 +58,20 @@
     },
     {
       "Model": "Dense NN",
-      "MAE": 0.018246113677425013,
-      "RMSE": 0.038959357208416666,
-      "R2": -1.0554465068112218,
-      "DirectionAcc": 0.5991091314031181,
-      "FinalPortfolio": 9110.13,
-      "Sharpe": -0.2264089704513498,
-      "Volatility": 0.004213870721252813
+      "MAE": 0.01854212581385652,
+      "RMSE": 0.046573557837715586,
+      "R2": -1.9373888670306498,
+      "DirectionAcc": 0.6585003711952487,
+      "FinalPortfolio": 18790.74,
+      "Sharpe": 0.5867843813589899,
+      "Volatility": 0.016294350094876595
     },
     {
       "Model": "LSTM",
-      "MAE": 0.013557626664087717,
-      "RMSE": 0.02726859586313464,
-      "R2": -0.0069505976215051835,
-      "DirectionAcc": 0.5545657015590201,
+      "MAE": 0.013591540887217594,
+      "RMSE": 0.02727452431837766,
+      "R2": -0.007388486723741483,
+      "DirectionAcc": 0.5412026726057907,
       "FinalPortfolio": 19350.57,
       "Sharpe": 0.6063049647428201,
       "Volatility": 0.01637613254148549

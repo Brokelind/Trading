@@ -184,14 +184,12 @@ class TradingModelSystem:
 
             # Drop initial NA values
             df = df.dropna()
-            print(f"DEBUG: After initial dropna, shape: {df.shape}")
 
             # Add technical indicators
             df = self._add_technical_indicators(df)
             
             # Drop NA values created by technical indicators
             df = df.dropna()
-            print(f"DEBUG: After final dropna, shape: {df.shape}")
 
             # Check if we still have enough data
             if len(df) < self.config["min_data_points"]:
@@ -200,18 +198,15 @@ class TradingModelSystem:
 
             # Create target variables
             df['target_return'] = df['adj_close'].pct_change().shift(-1)
-            print(f"DEBUG: After target creation, shape: {df.shape}")
             
             # Remove any rows with NaN targets
             df = df.dropna(subset=['target_return'])
-            print(f"DEBUG: After target dropna, shape: {df.shape}")
             
             # Remove extreme outliers
             returns = df['target_return']
             median = returns.median()
             mad = (returns - median).abs().median()
             df = df[(returns >= median - 5*mad) & (returns <= median + 5*mad)]
-            print(f"DEBUG: After outlier removal, shape: {df.shape}")
             
             # Final data check
             if len(df) < self.config["min_data_points"]:
@@ -592,204 +587,89 @@ class TradingModelSystem:
         )
         return model
 
-  
 
-    def _calculate_backtest_metrics(self, bt_df):
-        """Calculate comprehensive backtest metrics"""
-        if bt_df.empty:
-            return {}
-        
-        returns = bt_df['PortfolioValue'].pct_change().dropna()
-        metrics = {
-            "Return": (bt_df['PortfolioValue'].iloc[-1] / bt_df['PortfolioValue'].iloc[0] - 1) * 100,
-            "MaxDrawdown": (bt_df['PortfolioValue'] / bt_df['PortfolioValue'].cummax() - 1).min() * 100,
-            "Volatility": returns.std() * np.sqrt(252) * 100,
-            "Sharpe": returns.mean() / returns.std() * np.sqrt(252) if returns.std() > 0 else 0,
-            "WinRate": (bt_df['Signal'] == np.where(bt_df['TruePrice'].diff() > 0, 'BUY', 'SELL')).mean() * 100
-        }
-        return metrics
-
-
-
-    def _cross_validate_model(self, model_type: str, df: pd.DataFrame, feature_cols: List[str]) -> Dict[str, Any]:
-        features = df[feature_cols].values
-        targets = df['target_return'].values.reshape(-1, 1)
-
-        feature_scaler = RobustScaler()
-        scaled_features = feature_scaler.fit_transform(features)
-
-        target_scaler = StandardScaler()
-        scaled_targets = target_scaler.fit_transform(targets)
-
-        window = self.config["window_size"]
-        X, y = self.create_sequences(scaled_features, scaled_targets, window)
-
-        tscv = TimeSeriesSplit(n_splits=self.config["n_cv_folds"])
-        metrics = defaultdict(list)
-
-        for fold, (train_idx, test_idx) in enumerate(tscv.split(X)):
-            X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
-
-            try:
-                if model_type == "LSTM":
-                    model = self._create_lstm_model(X_train.shape[1:])
-                    model.fit(X_train, y_train, epochs=30, batch_size=32, verbose=0)
-                    preds_scaled = model.predict(X_test, verbose=0).flatten()
-                    preds = target_scaler.inverse_transform(preds_scaled.reshape(-1,1)).flatten()
-                    y_true = target_scaler.inverse_transform(y_test.reshape(-1,1)).flatten()
-                    direction_acc = np.mean(np.sign(y_true) == np.sign(preds)) * 100
-
-                elif model_type == "Dense NN":
-                    model = self._create_dense_model((X_train.shape[1]*X_train.shape[2],))
-                    model.fit(X_train.reshape(X_train.shape[0], -1), y_train, epochs=30, batch_size=32, verbose=0)
-                    preds_scaled = model.predict(X_test.reshape(X_test.shape[0], -1), verbose=0).flatten()
-                    preds = target_scaler.inverse_transform(preds_scaled.reshape(-1,1)).flatten()
-                    y_true = target_scaler.inverse_transform(y_test.reshape(-1,1)).flatten()
-                    direction_acc = np.mean(np.sign(y_true) == np.sign(preds)) * 100
-
-                else:
-                    # Tree-based models as classifiers
-                    # 1 if next day return > 0, else 0
-                    y_train_cls = (y_train > 0).astype(int).ravel()
-                    y_test_cls = (y_test > 0).astype(int).ravel()
-                    
-                    if model_type == "Random Forest":
-                        model = RandomForestClassifier(n_estimators=200, max_depth=10, random_state=42, n_jobs=-1)
-                    else:  # XGBoost
-                        model = XGBClassifier(n_estimators=200, max_depth=6, learning_rate=0.01,
-                                            subsample=0.8, random_state=42, use_label_encoder=False, eval_metric='logloss')
-                    
-                    model.fit(X_train.reshape(X_train.shape[0], -1), y_train_cls)
-                    preds_cls = model.predict(X_test.reshape(X_test.shape[0], -1))
-                    direction_acc = np.mean(preds_cls == y_test_cls) * 100
-
-                # Store metrics
-                metrics['direction_accuracy'].append(direction_acc)
-
-            except Exception as e:
-                logger.warning(f"CV fold {fold} failed for {model_type}: {e}")
-                continue
-
-        # Return mean + std for all folds
-        return {k: {"mean": float(np.mean(v)), "std": float(np.std(v))} for k, v in metrics.items()}
-
-
-
-    def _calculate_prediction_intervals(self, model: Any, df: pd.DataFrame, model_type: str) -> Dict[str, Any]:
-        """Calculate prediction intervals for uncertainty estimation"""
-        try:
-            feature_cols = [c for c in df.columns if c not in ['target_price', 'target_return', 'target_direction']]
-            features = df[feature_cols].values
-            targets = df['target_return'].values.reshape(-1, 1)
-
-            feature_scaler = RobustScaler()
-            scaled_features = feature_scaler.fit_transform(features)
-            
-            target_scaler = StandardScaler()
-            scaled_targets = target_scaler.fit_transform(targets)
-
-            window = self.config["window_size"]
-            X, y = self.create_sequences(scaled_features, scaled_targets, window)
-            
-            # FIX: Proper reshaping based on model type
-            if model_type in ["LSTM"]:
-                # LSTM expects 3D: (samples, timesteps, features)
-                input_data = X
-            else:
-                # Tree-based models expect 2D: (samples, features)
-                input_data = X.reshape(X.shape[0], -1)
-            
-            # Get predictions
-            preds = model.predict(input_data)
-            preds = target_scaler.inverse_transform(preds.reshape(-1, 1)).flatten()
-            y_true = target_scaler.inverse_transform(y.reshape(-1, 1)).flatten()
-            
-            # Calculate residuals and standard deviation
-            residuals = y_true - preds
-            std_dev = np.std(residuals)
-            
-            # Calculate prediction intervals
-            intervals = {}
-            for alpha in [0.68, 0.95]:
-                z_score = norm.ppf(1 - (1 - alpha)/2)
-                margin = z_score * std_dev
-                intervals[f"{int(alpha*100)}%"] = {
-                    "lower": preds[-1] - margin,
-                    "upper": preds[-1] + margin,
-                    "width": 2 * margin
-                }
-                
-            return {
-                "last_prediction": preds[-1],
-                "std_dev": std_dev,
-                "intervals": intervals
-            }
-            
-        except Exception as e:
-            logger.warning(f"Could not calculate prediction intervals: {e}")
-            return {}
-
-    def _save_training_results(self, ticker: str, training_results: Dict[str, Any], 
+    def _save_training_results(self, ticker: str, training_results: Dict[str, Any],
                            backtest_results: Dict[str, Any]) -> None:
         """
-        Normalize backtest_results, compute metrics, save CSV, save meta.
-        Ensures metrics JSON is records-orientated and JSON-safe (NaN -> None).
+        Normalize backtest_results, compute metrics, save backtests & metrics CSVs, save meta.
+        Produces consistent files for visualization and JSON-safe metadata.
         """
 
         import pandas as pd
         import numpy as np
         from datetime import datetime
+        import os
+
+        model_dir = self.config.get("model_dir", "saved_models")
+        os.makedirs(model_dir, exist_ok=True)
 
         normalized = {}
 
-
+        # --- Normalize input ---
         for m, val in backtest_results.items():
             if isinstance(val, pd.DataFrame):
                 normalized[m] = val
             elif isinstance(val, dict) and isinstance(val.get("walk_forward"), pd.DataFrame):
                 normalized[m] = val.get("walk_forward")
             else:
-                # fallback: empty df with expected columns
+                # Fallback: empty placeholder
                 normalized[m] = pd.DataFrame(columns=[
-                    "Date","TruePrice","PredictedPrice","Signal","PortfolioValue","PredictedReturn","y_true","y_pred"
+                    "Date", "TruePrice", "PredictedPrice", "Signal",
+                    "PortfolioValue", "PredictedReturn", "y_true", "y_pred"
                 ])
 
+        # --- Save each model’s backtest CSV ---
+        for model_name, df in normalized.items():
+            try:
+                if not df.empty:
+                    df_sorted = df.sort_values("Date")
+                    csv_path = os.path.join(model_dir, f"{ticker}_{model_name}_backtest.csv")
+                    df_sorted.to_csv(csv_path, index=False)
+                    logger.info(f"[{ticker}] Saved backtest for {model_name} -> {csv_path}")
+                else:
+                    logger.warning(f"[{ticker}] No backtest data for {model_name}")
+            except Exception as e:
+                logger.error(f"[{ticker}] Failed to save backtest for {model_name}: {e}")
 
-        # Suppose normalized is your dict of DataFrames
-        wrapped_results = {model: {"walk_forward": df} for model, df in normalized.items()}
+        # --- Wrap for metrics calculation ---
+        wrapped_results = {m: {"walk_forward": df} for m, df in normalized.items()}
 
-        metrics_df = self._calculate_advanced_metrics(wrapped_results)
-        print(metrics_df)
+        # --- Compute metrics ---
+        try:
+            metrics_df = self._calculate_advanced_metrics(wrapped_results)
+        except Exception as e:
+            logger.error(f"[{ticker}] Metric calculation failed: {e}")
+            metrics_df = pd.DataFrame(columns=[
+                "Model", "MAE", "RMSE", "R2", "DirectionAcc",
+                "FinalPortfolio", "Sharpe", "Volatility"
+            ])
 
-
-        # Save metrics CSV (index=False)
-        metrics_csv = os.path.join(self.config["model_dir"], f"{ticker}_metrics.csv")
+        # --- Save metrics CSV ---
+        metrics_csv = os.path.join(model_dir, f"{ticker}_metrics.csv")
         try:
             metrics_df.to_csv(metrics_csv, index=False)
         except Exception as e:
-            logger.warning(f"Failed to write metrics CSV: {e}")
+            logger.warning(f"[{ticker}] Failed to write metrics CSV: {e}")
 
-        # JSON-safe metrics: replace NaN with None
+        # --- Prepare JSON-safe metrics ---
         metrics_df_clean = metrics_df.where(pd.notnull(metrics_df), None)
 
-        # Persist metadata: make metrics a records list
+        # --- Save metadata ---
         meta = {
             "last_trained": datetime.utcnow().isoformat(),
             "model_paths": {m: self._model_path(ticker, m) for m in training_results.keys()},
             "metrics_file": metrics_csv,
             "metrics": metrics_df_clean.to_dict(orient="records"),
-            # store the 'raw' best model decision from selector (it should accept normalized dict)
             "best_model": self._select_best_model(normalized),
         }
 
-        # Save meta to disk using your save_meta function
         try:
             self.save_meta(ticker, meta)
         except Exception as e:
-            logger.error(f"Could not save meta for {ticker}: {e}")
+            logger.error(f"[{ticker}] Could not save meta: {e}")
 
-        logger.info(f"Saved training results for {ticker} -> {metrics_csv}")
+        logger.info(f"[{ticker}] ✅ Saved training results & backtests -> {metrics_csv}")
+
 
 
 
@@ -1034,8 +914,12 @@ class TradingModelSystem:
 
         # Generate ensemble prediction automatically
         ensemble_pred = self._generate_ensemble_predictions(predictions)
+        ensemble_pred["pct_diff"] = ensemble_pred["predicted_price"] - last_price
         if ensemble_pred:
             predictions["Ensemble"] = ensemble_pred
+            
+        
+        print(predictions)
 
         return predictions
 
@@ -1084,6 +968,8 @@ class TradingModelSystem:
         return {
             "signal": ensemble_signal,
             "predicted_price": float(ensemble_price) if ensemble_price is not None else None
+            
+            
         }
 
 
@@ -1267,38 +1153,3 @@ class TradingModelSystem:
             logger.exception("Training failed: %s", e)
             return {"error": str(e), "status": "failed"}
 
-
-# ---------------------------
-# Example usage
-# ---------------------------
-if __name__ == "__main__":
-    # Initialize with custom config
-    config = {
-        "window_size": 30,
-        "prediction_threshold_pct": 0.2,
-        "enable_uncertainty": True,
-        "verbose": True
-    }
-    
-    system = TradingModelSystem(config)
-    ticker = "AAPL"
-    
-    # Train or load models
-    training_result = system.ensure_trained(ticker, force=False)
-    print("\nTraining Summary:")
-    print(f"Best model: {training_result.get('best_model', 'unknown')}")
-    print(f"Metrics: {training_result.get('metrics', {}).to_dict()}")
-    
-    # Get predictions
-    predictions = system.predict_tomorrow(ticker)
-    print("\nTomorrow's Predictions:")
-    for model, pred in predictions.items():
-        print(f"{model}: {pred.get('signal', 'N/A')} ({pred.get('pct_diff', 0):.2f}%)")
-    
-    # Show ensemble prediction if available
-    if 'Ensemble' in predictions:
-        ensemble = predictions['Ensemble']
-        print(f"\nEnsemble Prediction:")
-        print(f"Mean: {ensemble['mean_prediction']:.2f} ({ensemble['pct_diff_mean']:.2f}%)")
-        print(f"Weighted: {ensemble['weighted_prediction']:.2f} ({ensemble['pct_diff_weighted']:.2f}%)")
-        print(f"Signal: {ensemble['signal_weighted']}")

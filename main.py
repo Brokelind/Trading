@@ -260,7 +260,7 @@ class TradingExecutor:
         
 
     # Update the post_results method in TradingExecutor class:
-    def post_results(self):
+    def post_results(self, skip_email=False):
         # Load strong signals summaries
         summaries = load_results()
 
@@ -304,7 +304,7 @@ class TradingExecutor:
         """
         
         
-        if html_body:
+        if html_body and not skip_email:
             success = send_email(
                 f"Daily Trading Summary - {len(summaries)} Strong Signals", 
                 html_body
@@ -340,8 +340,4 @@ if __name__ == "__main__":
     trader = TradingExecutor(tickers=tickers)
     print("Running script...")
     trader.run_daily_trading()
-    
-    if not args.skip_email:
-        trader.post_results()
-    else:
-        print("Skipping email (--skip_email flag set)")
+    trader.post_results(skip_email=args.skip_email)
