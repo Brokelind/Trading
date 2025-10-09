@@ -1,46 +1,47 @@
 {
   "ticker": "JNJ",
-  "timestamp": "2025-10-07T16:47:23.594635",
-  "last_price": 188.12,
+  "timestamp": "2025-10-09T10:57:45.126351",
+  "last_price": 189.69,
   "predictions": {
     "LSTM": {
-      "predicted_price": 188.60193099422378,
-      "predicted_return": -0.0002018077066168189,
-      "pct_diff": -0.02018077066168792,
+      "predicted_price": 189.655983603817,
+      "predicted_return": -0.00017932624905370176,
+      "pct_diff": -0.01793262490537497,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 187.75249487891793,
-      "predicted_return": -0.0047047557309269905,
-      "pct_diff": -0.47047557309269367,
-      "signal": "SELL"
-    },
-    "Random Forest": {
-      "predicted_price": 188.68525200157012,
-      "predicted_return": 0.00023988550450680006,
-      "pct_diff": 0.02398855045066469,
+      "predicted_price": 189.91774266482562,
+      "predicted_return": 0.001200604485347867,
+      "pct_diff": 0.1200604485347813,
       "signal": "HOLD"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
+    },
     "XGBoost": {
-      "predicted_price": 189.7305715882033,
-      "predicted_return": 0.005781231913715601,
-      "pct_diff": 0.5781231913715638,
+      "predicted_price": 190.770643230211,
+      "predicted_return": 0.005696890875697136,
+      "pct_diff": 0.5696890875697166,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "HOLD",
-      "predicted_price": 188.6925623657288
+      "predicted_price": 190.11478983295123,
+      "pct_diff": 0.42478983295123385
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0,
+  "pct_diff": 0.42478983295123385,
   "qty": 0,
   "sentiment": {
     "ticker": "JNJ",
-    "signal": "BUY",
-    "score": 0.422,
-    "confidence": 0.56
+    "signal": "HOLD",
+    "score": 0.199,
+    "confidence": 0.44
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

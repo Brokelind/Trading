@@ -1,48 +1,49 @@
 {
   "ticker": "INTU",
-  "timestamp": "2025-10-07T15:01:28.135567",
-  "last_price": 657.0,
+  "timestamp": "2025-10-09T10:55:55.185522",
+  "last_price": 657.8,
   "predictions": {
     "LSTM": {
-      "predicted_price": 681.3761092804326,
-      "predicted_return": 0.0021121117752045393,
-      "pct_diff": 0.2112111775204519,
+      "predicted_price": 659.4025776441674,
+      "predicted_return": 0.0024362688418477774,
+      "pct_diff": 0.24362688418477774,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 668.3550386586786,
-      "predicted_return": -0.017038211226463318,
-      "pct_diff": -1.7038211226463282,
+      "predicted_price": 651.5011434931307,
+      "predicted_return": -0.00957564078271389,
+      "pct_diff": -0.9575640782713959,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 680.5073018626389,
-      "predicted_return": 0.0008343410633862754,
-      "pct_diff": 0.08343410633862229,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 687.534220457077,
-      "predicted_return": 0.011168956756591797,
-      "pct_diff": 1.1168956756591715,
+      "predicted_price": 665.4344625715166,
+      "predicted_return": 0.01160605438053608,
+      "pct_diff": 1.1606054380536148,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 679.4431675647068
+      "signal": "BUY",
+      "predicted_price": 658.779394569605,
+      "pct_diff": 0.9793945696050059
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "BUY",
+  "pct_diff": 0.9793945696050059,
   "qty": 0,
   "sentiment": {
     "ticker": "INTU",
     "signal": "HOLD",
-    "score": 0.272,
-    "confidence": 0.48
+    "score": 0.189,
+    "confidence": 0.42
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.22697665029509934,
   "metrics_path": null,
   "model_metrics": [
     {

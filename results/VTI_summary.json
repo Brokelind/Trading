@@ -1,47 +1,43 @@
 {
   "ticker": "VTI",
-  "timestamp": "2025-10-07T14:14:09.782753",
-  "last_price": 331.22,
+  "timestamp": "2025-10-09T10:54:33.298285",
+  "last_price": 331.81,
   "predictions": {
     "LSTM": {
-      "predicted_price": 330.3171724930289,
-      "predicted_return": 0.0010521335061639547,
-      "pct_diff": 0.10521335061638719,
+      "predicted_price": 332.14815960962557,
+      "predicted_return": 0.001019136281684041,
+      "pct_diff": 0.10191362816839862,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 331.45826929975306,
-      "predicted_return": 0.004510316997766495,
-      "pct_diff": 0.4510316997766549,
-      "signal": "BUY"
+      "predicted_price": 330.8229484314681,
+      "predicted_return": -0.0029747493099421263,
+      "pct_diff": -0.29747493099421674,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 330.15925824846363,
-      "predicted_return": 0.0005735619858278712,
-      "pct_diff": 0.057356198582780946,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 332.6584608414956,
-      "predicted_return": 0.008147591724991798,
-      "pct_diff": 0.8147591724991832,
+      "predicted_price": 333.8052346892795,
+      "predicted_return": 0.006013184320181608,
+      "pct_diff": 0.6013184320181642,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 331.1482902206853
+      "signal": "SELL",
+      "predicted_price": 332.25878091012436,
+      "pct_diff": 0.4487809101243556
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "SELL",
+  "pct_diff": 0.4487809101243556,
   "qty": 0,
-  "sentiment": {
-    "ticker": "VTI",
-    "signal": "SELL",
-    "score": -0.679,
-    "confidence": 0.55
-  },
+  "sentiment": {},
   "position_size_factor": 0.1,
   "metrics_path": null,
   "model_metrics": [

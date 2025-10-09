@@ -1,48 +1,49 @@
 {
   "ticker": "NEM",
-  "timestamp": "2025-10-07T18:00:02.502666",
-  "last_price": 87.16,
+  "timestamp": "2025-10-09T11:00:11.333698",
+  "last_price": 88.4,
   "predictions": {
     "LSTM": {
-      "predicted_price": 86.94390052285976,
-      "predicted_return": 0.0009659281931817532,
-      "pct_diff": 0.09659281931817204,
+      "predicted_price": 88.48755955975503,
+      "predicted_return": 0.000990492757409811,
+      "pct_diff": 0.09904927574097466,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 87.1472472162731,
-      "predicted_return": 0.0033070137724280357,
-      "pct_diff": 0.3307013772428062,
+      "predicted_price": 89.02616059463472,
+      "predicted_return": 0.007083264645189047,
+      "pct_diff": 0.7083264645189046,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 86.92163187396642,
-      "predicted_return": 0.0007095541557267944,
-      "pct_diff": 0.07095541557266803,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 87.78164642354473,
-      "predicted_return": 0.010610711760818958,
-      "pct_diff": 1.0610711760818892,
+      "predicted_price": 89.30316466987134,
+      "predicted_return": 0.010216794908046722,
+      "pct_diff": 1.0216794908046722,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 87.198606509161
+      "signal": "BUY",
+      "predicted_price": 88.93896160808703,
+      "pct_diff": 0.5389616080870212
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "BUY",
+  "pct_diff": 0.5389616080870212,
   "qty": 0,
   "sentiment": {
     "ticker": "NEM",
     "signal": "HOLD",
-    "score": 0.2,
-    "confidence": 0.45
+    "score": 0.211,
+    "confidence": 0.34
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.1232583639230694,
   "metrics_path": null,
   "model_metrics": [
     {

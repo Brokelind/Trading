@@ -1,46 +1,47 @@
 {
   "ticker": "IWM",
-  "timestamp": "2025-10-07T14:16:42.020457",
-  "last_price": 246.29,
+  "timestamp": "2025-10-09T10:54:38.645349",
+  "last_price": 246.72,
   "predictions": {
     "LSTM": {
-      "predicted_price": 245.98990384516657,
-      "predicted_return": 0.0006504651391878724,
-      "pct_diff": 0.06504651391878677,
+      "predicted_price": 246.84549799885602,
+      "predicted_return": 0.0005086656892672181,
+      "pct_diff": 0.05086656892672642,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 247.7321595667722,
-      "predicted_return": 0.007737703155726194,
-      "pct_diff": 0.773770315572625,
-      "signal": "BUY"
+      "predicted_price": 245.7702598965168,
+      "predicted_return": -0.003849465399980545,
+      "pct_diff": -0.3849465399980577,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 245.93203324520522,
-      "predicted_return": 0.00041505611684990515,
-      "pct_diff": 0.04150561168498798,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 248.02613636584954,
+      "predicted_price": 248.92408723175527,
       "predicted_return": 0.008933557197451591,
-      "pct_diff": 0.8933557197451595,
+      "pct_diff": 0.8933557197451634,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 246.9200582557484
+      "signal": "SELL",
+      "predicted_price": 247.17994837570936,
+      "pct_diff": 0.4599483757093594
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "SELL",
+  "pct_diff": 0.4599483757093594,
   "qty": 0,
   "sentiment": {
     "ticker": "IWM",
     "signal": "HOLD",
-    "score": -0.201,
-    "confidence": 0.44
+    "score": -0.218,
+    "confidence": 0.41
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

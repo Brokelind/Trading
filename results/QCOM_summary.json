@@ -1,48 +1,49 @@
 {
   "ticker": "QCOM",
-  "timestamp": "2025-10-07T15:38:44.655618",
-  "last_price": 167.66,
+  "timestamp": "2025-10-09T10:56:32.509974",
+  "last_price": 167.77,
   "predictions": {
     "LSTM": {
-      "predicted_price": 169.41462898093974,
-      "predicted_return": 0.001386860036291182,
-      "pct_diff": 0.13868600362911215,
+      "predicted_price": 167.98507990667713,
+      "predicted_return": 0.0012819926487281919,
+      "pct_diff": 0.12819926487281308,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 168.72240341479892,
-      "predicted_return": -0.002704791259020567,
-      "pct_diff": -0.27047912590205,
-      "signal": "SELL"
-    },
-    "Random Forest": {
-      "predicted_price": 173.69157234080964,
-      "predicted_return": 0.02666729129217203,
-      "pct_diff": 2.6667291292171864,
+      "predicted_price": 168.25320670851275,
+      "predicted_return": 0.0028801735024899244,
+      "pct_diff": 0.2880173502489951,
       "signal": "BUY"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
+    },
     "XGBoost": {
-      "predicted_price": 171.53926808219404,
-      "predicted_return": 0.013945313170552254,
-      "pct_diff": 1.394531317055228,
+      "predicted_price": 170.06910336832516,
+      "predicted_return": 0.013703900389373302,
+      "pct_diff": 1.370390038937324,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 170.8419682046856
+      "predicted_price": 168.769129994505,
+      "pct_diff": 0.9991299945049832
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 5,
+  "pct_diff": 0.9991299945049832,
+  "qty": 0,
   "sentiment": {
     "ticker": "QCOM",
-    "signal": "SELL",
-    "score": -0.374,
-    "confidence": 0.36
+    "signal": "HOLD",
+    "score": -0.037,
+    "confidence": 0.4
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.19391114933352716,
   "metrics_path": null,
   "model_metrics": [
     {

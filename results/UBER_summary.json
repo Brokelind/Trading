@@ -1,48 +1,49 @@
 {
   "ticker": "UBER",
-  "timestamp": "2025-10-07T15:15:44.597697",
-  "last_price": 98.66,
+  "timestamp": "2025-10-09T10:56:09.920928",
+  "last_price": 99.28,
   "predictions": {
     "LSTM": {
-      "predicted_price": 96.82126919156872,
-      "predicted_return": 0.00229057134129107,
-      "pct_diff": 0.22905713412911288,
+      "predicted_price": 99.50513442812488,
+      "predicted_return": 0.0022676715161651373,
+      "pct_diff": 0.22676715161651373,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 96.64098444489645,
-      "predicted_return": 0.0004242696159053594,
-      "pct_diff": 0.042426961590530055,
-      "signal": "HOLD"
+      "predicted_price": 99.56091024124996,
+      "predicted_return": 0.0028294746298342943,
+      "pct_diff": 0.28294746298343626,
+      "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 96.7101280508239,
-      "predicted_return": 0.001140041933994824,
-      "pct_diff": 0.11400419339948538,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 98.227509220317,
+      "predicted_price": 100.9526616500318,
       "predicted_return": 0.016847921535372734,
-      "pct_diff": 1.6847921535372765,
+      "pct_diff": 1.6847921535372672,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 97.09997272690153
+      "signal": "BUY",
+      "predicted_price": 100.00623543980221,
+      "pct_diff": 0.7262354398022097
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "BUY",
+  "pct_diff": 0.7262354398022097,
   "qty": 0,
   "sentiment": {
     "ticker": "UBER",
     "signal": "HOLD",
-    "score": -0.041,
-    "confidence": 0.4
+    "score": 0.089,
+    "confidence": 0.46
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.15713991952264292,
   "metrics_path": null,
   "model_metrics": [
     {

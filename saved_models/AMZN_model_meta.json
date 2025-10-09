@@ -1,5 +1,5 @@
 {
-  "last_trained": "2025-10-07T14:31:32.645736",
+  "last_trained": "2025-10-09T08:05:00.483886",
   "model_paths": {
     "LSTM": "saved_models\\AMZN_LSTM.keras",
     "Dense NN": "saved_models\\AMZN_Dense_NN.keras",
@@ -9,44 +9,44 @@
   "metrics_file": "saved_models\\AMZN_metrics.csv",
   "metrics": [
     {
-      "Model": "Random Forest",
-      "MAE": 0.924202790034591,
-      "RMSE": 0.9535290670256367,
-      "R2": -818.284048958901,
-      "DirectionAcc": 0.9349593495934959,
-      "FinalPortfolio": 117657219.53,
-      "Sharpe": 8.693749175958214,
-      "Volatility": 0.012849870139419026
+      "Model": "Random Forest Direction Classifier",
+      "MAE": NaN,
+      "RMSE": NaN,
+      "R2": NaN,
+      "DirectionAcc": 0.9394387001477105,
+      "FinalPortfolio": NaN,
+      "Sharpe": NaN,
+      "Volatility": NaN
     },
     {
       "Model": "Dense NN",
-      "MAE": 0.019484694910814046,
-      "RMSE": 0.05272140117530765,
-      "R2": -1.5046123313717898,
-      "DirectionAcc": 0.6171470805617147,
-      "FinalPortfolio": 17382.449999999997,
-      "Sharpe": 0.5387607382367902,
-      "Volatility": 0.015648406430497988
+      "MAE": 0.019932954169216702,
+      "RMSE": 0.0485459668735683,
+      "R2": -1.1251156894340713,
+      "DirectionAcc": 0.6137370753323486,
+      "FinalPortfolio": 19105.809999999998,
+      "Sharpe": 0.6127437352522179,
+      "Volatility": 0.015503230656390412
     },
     {
       "Model": "LSTM",
-      "MAE": 0.015270532020201325,
-      "RMSE": 0.032300522340026595,
-      "R2": 0.059874749316273346,
-      "DirectionAcc": 0.5912786400591279,
-      "FinalPortfolio": 17419.12,
-      "Sharpe": 0.5375196585633422,
-      "Volatility": 0.015802733114819497
+      "MAE": 0.015525080298897346,
+      "RMSE": 0.0329565061571814,
+      "R2": 0.020603391507660218,
+      "DirectionAcc": 0.5568685376661743,
+      "FinalPortfolio": 17198.719999999998,
+      "Sharpe": 0.5277876235459396,
+      "Volatility": 0.015800955939884835
     },
     {
       "Model": "XGBoost",
-      "MAE": 0.02195810542298745,
-      "RMSE": 0.03741994761473677,
-      "R2": -0.26174902237163256,
-      "DirectionAcc": 0.5195861049519586,
-      "FinalPortfolio": 17419.12,
-      "Sharpe": 0.5375196585633422,
-      "Volatility": 0.015802733114819497
+      "MAE": 0.020833272673047437,
+      "RMSE": 0.035919005632015104,
+      "R2": -0.1633887982854858,
+      "DirectionAcc": 0.5199409158050221,
+      "FinalPortfolio": 17198.719999999998,
+      "Sharpe": 0.5277876235459396,
+      "Volatility": 0.015800955939884835
     }
   ],
   "best_model": "LSTM"

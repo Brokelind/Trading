@@ -1,48 +1,49 @@
 {
   "ticker": "GE",
-  "timestamp": "2025-10-07T17:36:47.988999",
-  "last_price": 301.93,
+  "timestamp": "2025-10-09T10:59:00.379085",
+  "last_price": 302.56,
   "predictions": {
     "LSTM": {
-      "predicted_price": 297.57151706074364,
-      "predicted_return": 0.00192429986782372,
-      "pct_diff": 0.192429986782372,
+      "predicted_price": 303.1396281507984,
+      "predicted_return": 0.0019157461356371641,
+      "pct_diff": 0.1915746135637179,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 311.36623076722026,
-      "predicted_return": 0.048371147364377975,
-      "pct_diff": 4.8371147364377975,
-      "signal": "BUY"
+      "predicted_price": 301.26803937882187,
+      "predicted_return": -0.004270097240805626,
+      "pct_diff": -0.4270097240805573,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 298.79085760854736,
-      "predicted_return": 0.006029823597802443,
-      "pct_diff": 0.6029823597802544,
-      "signal": "BUY"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 321.64495584368706,
-      "predicted_return": 0.08297964930534363,
-      "pct_diff": 8.297964930534363,
+      "predicted_price": 326.18813810944556,
+      "predicted_return": 0.07809405773878098,
+      "pct_diff": 7.809405773878093,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 307.3433903200496
+      "signal": "SELL",
+      "predicted_price": 310.1986018796886,
+      "pct_diff": 7.638601879688622
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 2,
+  "signal": "SELL",
+  "pct_diff": 7.638601879688622,
+  "qty": 0,
   "sentiment": {
     "ticker": "GE",
-    "signal": "HOLD",
-    "score": 0.131,
-    "confidence": 0.46
+    "signal": "SELL",
+    "score": -0.438,
+    "confidence": 0.24
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.78976,
   "metrics_path": null,
   "model_metrics": [
     {

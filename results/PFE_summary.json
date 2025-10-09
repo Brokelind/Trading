@@ -1,46 +1,47 @@
 {
   "ticker": "PFE",
-  "timestamp": "2025-10-07T16:52:30.998631",
-  "last_price": 26.475,
+  "timestamp": "2025-10-09T10:57:50.393829",
+  "last_price": 25.68,
   "predictions": {
     "LSTM": {
-      "predicted_price": 27.374358180349954,
-      "predicted_return": 0.00015923201863188297,
-      "pct_diff": 0.01592320186318414,
+      "predicted_price": 25.700151895182206,
+      "predicted_return": 0.0007847311208024621,
+      "pct_diff": 0.07847311208024123,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 27.380496372963535,
-      "predicted_return": 0.00038349919486790895,
-      "pct_diff": 0.03834991948678726,
-      "signal": "HOLD"
-    },
-    "Random Forest": {
-      "predicted_price": 27.839894522860362,
-      "predicted_return": 0.017168232475716593,
-      "pct_diff": 1.7168232475716523,
+      "predicted_price": 25.93446004115045,
+      "predicted_return": 0.009908880107104778,
+      "pct_diff": 0.9908880107104824,
       "signal": "BUY"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
+    },
     "XGBoost": {
-      "predicted_price": 27.65860205593519,
-      "predicted_return": 0.01054446678608656,
-      "pct_diff": 1.0544466786086586,
+      "predicted_price": 25.882194487452505,
+      "predicted_return": 0.007873617112636566,
+      "pct_diff": 0.7873617112636505,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 27.56333778302726
+      "signal": "BUY",
+      "predicted_price": 25.838935474595058,
+      "pct_diff": 0.15893547459505797
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "BUY",
+  "pct_diff": 0.15893547459505797,
   "qty": 0,
   "sentiment": {
     "ticker": "PFE",
     "signal": "HOLD",
-    "score": 0.043,
-    "confidence": 0.43
+    "score": 0.057,
+    "confidence": 0.36
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

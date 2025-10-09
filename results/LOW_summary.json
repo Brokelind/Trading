@@ -1,46 +1,47 @@
 {
   "ticker": "LOW",
-  "timestamp": "2025-10-07T17:08:33.128345",
-  "last_price": 238.67,
+  "timestamp": "2025-10-09T10:58:20.071063",
+  "last_price": 237.59,
   "predictions": {
     "LSTM": {
-      "predicted_price": 245.7257641924545,
-      "predicted_return": -0.0025339387357234955,
-      "pct_diff": -0.2533938735723518,
-      "signal": "SELL"
+      "predicted_price": 237.77724243994047,
+      "predicted_return": 0.0007880905759520829,
+      "pct_diff": 0.07880905759521116,
+      "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 247.83199369171635,
-      "predicted_return": 0.0060158055275678635,
-      "pct_diff": 0.6015805527567909,
-      "signal": "BUY"
+      "predicted_price": 236.08665599978528,
+      "predicted_return": -0.006327471695840359,
+      "pct_diff": -0.6327471695840416,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 251.6915241895071,
-      "predicted_return": 0.02168266364727861,
-      "pct_diff": 2.168266364727872,
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 249.12862133407035,
-      "predicted_return": 0.011279161088168621,
-      "pct_diff": 1.1279161088168668,
+      "predicted_price": 240.42287634333596,
+      "predicted_return": 0.011923382058739662,
+      "pct_diff": 1.192338205873965,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 248.59447585193706
+      "predicted_price": 238.0955915943539,
+      "pct_diff": 0.5055915943538878
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 3,
+  "signal": "HOLD",
+  "pct_diff": 0.5055915943538878,
+  "qty": 0,
   "sentiment": {
     "ticker": "LOW",
-    "signal": "HOLD",
-    "score": -0.268,
-    "confidence": 0.55
+    "signal": "SELL",
+    "score": -1.622,
+    "confidence": 0.26
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

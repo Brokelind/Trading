@@ -1,48 +1,49 @@
 {
   "ticker": "AMD",
-  "timestamp": "2025-10-07T15:21:49.311894",
-  "last_price": 211.4,
+  "timestamp": "2025-10-09T10:56:19.214378",
+  "last_price": 235.56,
   "predictions": {
     "LSTM": {
-      "predicted_price": 170.06111874069902,
-      "predicted_return": 0.0019508557161316276,
-      "pct_diff": 0.19508557161316545,
+      "predicted_price": 235.856749284938,
+      "predicted_return": 0.001259760931134224,
+      "pct_diff": 0.12597609311342672,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 168.70358559543266,
-      "predicted_return": -0.006047336384654045,
-      "pct_diff": -0.6047336384654058,
+      "predicted_price": 229.88179914303123,
+      "predicted_return": -0.024105114862322807,
+      "pct_diff": -2.4105114862322856,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 169.95301180695498,
-      "predicted_return": 0.0013139209742237697,
-      "pct_diff": 0.1313920974223685,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 172.47066362679004,
-      "predicted_return": 0.016147196292877197,
-      "pct_diff": 1.6147196292877233,
+      "predicted_price": 239.3931676876545,
+      "predicted_return": 0.01627257466316223,
+      "pct_diff": 1.6272574663162291,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 170.2970949424692
+      "signal": "SELL",
+      "predicted_price": 235.04390537187456,
+      "pct_diff": -0.5160946281254439
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": 0,
+  "signal": "SELL",
+  "pct_diff": -0.5160946281254439,
   "qty": 0,
   "sentiment": {
     "ticker": "AMD",
-    "signal": "HOLD",
-    "score": 0.014,
-    "confidence": 0.35
+    "signal": "BUY",
+    "score": 0.383,
+    "confidence": 0.36
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.13168257655546328,
   "metrics_path": null,
   "model_metrics": [
     {

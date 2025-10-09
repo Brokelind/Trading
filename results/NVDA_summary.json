@@ -1,48 +1,49 @@
 {
   "ticker": "NVDA",
-  "timestamp": "2025-10-07T14:47:53.460140",
-  "last_price": 188.0037,
+  "timestamp": "2025-10-09T10:55:41.985761",
+  "last_price": 189.11,
   "predictions": {
     "LSTM": {
-      "predicted_price": 188.3883865898475,
-      "predicted_return": 0.0040954407304525375,
-      "pct_diff": 0.4095440730452483,
+      "predicted_price": 189.87470369950404,
+      "predicted_return": 0.0040436978451907635,
+      "pct_diff": 0.40436978451907635,
       "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 192.16468672391028,
-      "predicted_return": 0.024222826585173607,
-      "pct_diff": 2.4222826585173616,
-      "signal": "BUY"
+      "predicted_price": 185.21449278745803,
+      "predicted_return": -0.020599160343408585,
+      "pct_diff": -2.0599160343408522,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 196.49519433544594,
-      "predicted_return": 0.04730409516813746,
-      "pct_diff": 4.73040951681374,
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 193.16917035330087,
-      "predicted_return": 0.02957664616405964,
-      "pct_diff": 2.957664616405962,
+      "predicted_price": 195.57539457052948,
+      "predicted_return": 0.034188538789749146,
+      "pct_diff": 3.4188538789749185,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 192.55435950062613
+      "predicted_price": 190.22153035249718,
+      "pct_diff": 1.1115303524971694
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 4,
+  "pct_diff": 1.1115303524971694,
+  "qty": 0,
   "sentiment": {
     "ticker": "NVDA",
     "signal": "HOLD",
-    "score": -0.07,
-    "confidence": 0.36
+    "score": 0.005,
+    "confidence": 0.38
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.22315083356733173,
   "metrics_path": null,
   "model_metrics": [
     {

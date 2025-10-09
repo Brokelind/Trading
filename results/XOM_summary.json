@@ -1,46 +1,47 @@
 {
   "ticker": "XOM",
-  "timestamp": "2025-10-07T16:19:24.319249",
-  "last_price": 113.46,
+  "timestamp": "2025-10-09T10:57:12.913215",
+  "last_price": 114.02,
   "predictions": {
     "LSTM": {
-      "predicted_price": 113.38452968533849,
-      "predicted_return": 0.0010995027842000127,
-      "pct_diff": 0.10995027841999575,
+      "predicted_price": 114.15629255509936,
+      "predicted_return": 0.0011953390203416348,
+      "pct_diff": 0.11953390203416896,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 114.33151094194503,
-      "predicted_return": 0.009460629895329475,
-      "pct_diff": 0.9460629895329521,
-      "signal": "BUY"
+      "predicted_price": 113.2342856749054,
+      "predicted_return": -0.006891021970659494,
+      "pct_diff": -0.6891021970659554,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 115.77188795445831,
-      "predicted_return": 0.022178067759652996,
-      "pct_diff": 2.217806775965303,
-      "signal": "BUY"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 114.63266922814772,
-      "predicted_return": 0.012119629420340061,
-      "pct_diff": 1.211962942034005,
+      "predicted_price": 115.41003846572711,
+      "predicted_return": 0.01219118107110262,
+      "pct_diff": 1.219118107110258,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 114.53014945247239
+      "signal": "SELL",
+      "predicted_price": 114.26687223191061,
+      "pct_diff": 0.24687223191061491
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 7,
+  "signal": "SELL",
+  "pct_diff": 0.24687223191061491,
+  "qty": 0,
   "sentiment": {
     "ticker": "XOM",
     "signal": "HOLD",
-    "score": 0.165,
-    "confidence": 0.36
+    "score": 0.038,
+    "confidence": 0.41
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

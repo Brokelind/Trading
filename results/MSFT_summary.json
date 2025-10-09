@@ -1,48 +1,49 @@
 {
   "ticker": "MSFT",
-  "timestamp": "2025-10-07T14:26:38.356278",
-  "last_price": 526.25,
+  "timestamp": "2025-10-09T10:54:53.981686",
+  "last_price": 524.85,
   "predictions": {
     "LSTM": {
-      "predicted_price": 518.3476516650234,
-      "predicted_return": 0.00192838825751096,
-      "pct_diff": 0.19283882575110478,
+      "predicted_price": 525.6773107352725,
+      "predicted_return": 0.0015762803377583623,
+      "pct_diff": 0.15762803377583623,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 520.8857201674255,
-      "predicted_return": 0.0068342904560267925,
-      "pct_diff": 0.6834290456026748,
+      "predicted_price": 529.9185855539516,
+      "predicted_return": 0.009657207876443863,
+      "pct_diff": 0.965720787644395,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 526.6331560151511,
-      "predicted_return": 0.017943666792598865,
-      "pct_diff": 1.7943666792599053,
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 522.9337337331847,
-      "predicted_return": 0.01079295203089714,
-      "pct_diff": 1.0792952030897185,
+      "predicted_price": 530.927968629403,
+      "predicted_return": 0.01158039178699255,
+      "pct_diff": 1.1580391786992505,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 522.2000653951961
+      "predicted_price": 528.8412883062091,
+      "pct_diff": 3.9912883062090714
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 1,
+  "pct_diff": 3.9912883062090714,
+  "qty": 0,
   "sentiment": {
     "ticker": "MSFT",
     "signal": "HOLD",
-    "score": 0.002,
-    "confidence": 0.36
+    "score": 0.015,
+    "confidence": 0.39
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.8075972758783435,
   "metrics_path": null,
   "model_metrics": [
     {

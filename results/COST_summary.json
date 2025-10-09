@@ -1,48 +1,49 @@
 {
   "ticker": "COST",
-  "timestamp": "2025-10-07T17:27:49.655093",
-  "last_price": 913.395,
+  "timestamp": "2025-10-09T10:58:48.357078",
+  "last_price": 914.8,
   "predictions": {
     "LSTM": {
-      "predicted_price": 914.9899926944584,
-      "predicted_return": -0.00042606054921634495,
-      "pct_diff": -0.042606054921633,
+      "predicted_price": 914.4309811139595,
+      "predicted_return": -0.00040338750113733113,
+      "pct_diff": -0.04033875011373063,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 922.2045242270641,
-      "predicted_return": 0.007455400191247463,
-      "pct_diff": 0.7455400191247463,
-      "signal": "BUY"
-    },
-    "Random Forest": {
-      "predicted_price": 916.1651337585333,
-      "predicted_return": 0.0008577134725832434,
-      "pct_diff": 0.08577134725833359,
+      "predicted_price": 914.4459399650455,
+      "predicted_return": -0.0003870354557875544,
+      "pct_diff": -0.03870354557876041,
       "signal": "HOLD"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "BUY"
+    },
     "XGBoost": {
-      "predicted_price": 922.1959568870346,
-      "predicted_return": 0.007446040865033865,
-      "pct_diff": 0.7446040865033805,
+      "predicted_price": 923.1212409235536,
+      "predicted_return": 0.009096240624785423,
+      "pct_diff": 0.9096240624785374,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "HOLD",
-      "predicted_price": 918.8889018917727
+      "predicted_price": 917.3327206675195,
+      "pct_diff": 2.532720667519584
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0,
+  "pct_diff": 2.532720667519584,
   "qty": 0,
   "sentiment": {
     "ticker": "COST",
     "signal": "HOLD",
-    "score": 0.031,
+    "score": 0.016,
     "confidence": 0.35
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.5122174277991607,
   "metrics_path": null,
   "model_metrics": [
     {

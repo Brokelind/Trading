@@ -1,46 +1,47 @@
 {
   "ticker": "NEE",
-  "timestamp": "2025-10-07T17:48:29.218655",
-  "last_price": 83.36,
+  "timestamp": "2025-10-09T10:59:27.281781",
+  "last_price": 84.04,
   "predictions": {
     "LSTM": {
-      "predicted_price": 80.20804326075363,
-      "predicted_return": 0.0018491538939997554,
-      "pct_diff": 0.1849153893999805,
+      "predicted_price": 84.05259103299993,
+      "predicted_return": 0.00014982190623413771,
+      "pct_diff": 0.014982190623419182,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 79.8072321213875,
-      "predicted_return": -0.0031572305597364902,
-      "pct_diff": -0.3157230559736476,
-      "signal": "SELL"
+      "predicted_price": 84.18362988557202,
+      "predicted_return": 0.001709065749309957,
+      "pct_diff": 0.1709065749309984,
+      "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 82.25966792372733,
-      "predicted_return": 0.027475242614630684,
-      "pct_diff": 2.7475242614630684,
-      "signal": "BUY"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 81.19527137422935,
-      "predicted_return": 0.014180256985127926,
-      "pct_diff": 1.4180256985127997,
+      "predicted_price": 85.26023080095649,
+      "predicted_return": 0.014519643038511276,
+      "pct_diff": 1.4519643038511256,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 80.86755367002445
+      "signal": "HOLD",
+      "predicted_price": 84.49881723984281,
+      "pct_diff": 0.4588172398428014
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 8,
+  "signal": "HOLD",
+  "pct_diff": 0.4588172398428014,
+  "qty": 0,
   "sentiment": {
     "ticker": "NEE",
     "signal": "HOLD",
-    "score": 0.141,
-    "confidence": 0.41
+    "score": -0.011,
+    "confidence": 0.11
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

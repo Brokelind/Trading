@@ -1,43 +1,49 @@
 {
   "ticker": "PSX",
-  "timestamp": "2025-10-07T16:40:11.950667",
-  "last_price": 132.08,
+  "timestamp": "2025-10-09T10:57:34.280927",
+  "last_price": 131.3,
   "predictions": {
     "LSTM": {
-      "predicted_price": 133.12415232739528,
-      "predicted_return": 0.0008582236478105187,
-      "pct_diff": 0.08582236478106042,
+      "predicted_price": 131.43170470068,
+      "predicted_return": 0.0010030822595581412,
+      "pct_diff": 0.10030822595581844,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 133.91294447071382,
-      "predicted_return": 0.0067885457538068295,
-      "pct_diff": 0.6788545753806736,
+      "predicted_price": 133.89546082671734,
+      "predicted_return": 0.019767409190535545,
+      "pct_diff": 1.976740919053563,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 136.62966941233853,
-      "predicted_return": 0.027213513362442866,
-      "pct_diff": 2.7213513362442963,
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 134.8659604184702,
-      "predicted_return": 0.013953540474176407,
-      "pct_diff": 1.395354047417641,
+      "predicted_price": 133.16379552818836,
+      "predicted_return": 0.014194939285516739,
+      "pct_diff": 1.4194939285516737,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 134.63318165722947
+      "predicted_price": 132.8303203518619,
+      "pct_diff": 1.5303203518618886
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 6,
-  "sentiment": {},
-  "position_size_factor": 0.1,
+  "pct_diff": 1.5303203518618886,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "PSX",
+    "signal": "HOLD",
+    "score": 0.234,
+    "confidence": 0.39
+  },
+  "position_size_factor": 0.3619268844967441,
   "metrics_path": null,
   "model_metrics": [
     {

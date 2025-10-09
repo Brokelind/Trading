@@ -719,7 +719,6 @@ class TradingModelSystem:
             mae = rmse = r2 = dir_acc = np.nan
             if "y_true" in df.columns and "y_pred" in df.columns:
                 df = df.dropna(subset=["y_true", "y_pred"])
-                print(f"DEBUG: Dropped NA from y_true/y_pred, remaining rows: {len(df)}")
 
                 if not df.empty:
                     y_true = df["y_true"].values
@@ -764,6 +763,11 @@ class TradingModelSystem:
                 print(f"DEBUG: FinalPortfolio={final_port}, Sharpe={sharpe}, Volatility={vol}")
             else:
                 print(f"DEBUG: PortfolioValue not found, portfolio metrics NaN")
+
+            if model_name == "Random Forest":
+                #RF classifier only direction accuracy matters
+                mae = rmse = r2 = final_port = sharpe = vol = np.nan
+                model_name = "Random Forest Direction Classifier"
 
             metrics.append({
                 "Model": model_name,
@@ -846,13 +850,103 @@ class TradingModelSystem:
         except Exception as e:
             raise ValueError(f"Could not load model: {e}")
 
+    def prepare_features_for_tomorrow_pred(self, ticker: str) -> Optional[pd.DataFrame]:
+        """
+        Prepare features for predicting the next day's price.
+        """
+        try:
+            # --- Load raw data ---
+            df = self.load_raw(ticker)
+          
+            if df is None or len(df) < self.config["min_data_points"]:
+                logger.warning(f"{ticker}: Not enough raw data")
+                return None
+
+            # Store the last row BEFORE adding technical indicators
+            last_row_index = df.index[-1]
+            last_row_data = df.iloc[[-1]].copy()
+          
+            # --- Add technical indicators ---
+            df = self._add_technical_indicators(df)
+            
+            
+            # --- RESTORE THE MISSING LAST ROW ---
+            if len(df) > 0 and df.index[-1] != last_row_index:
+                
+                # Simply append the original last row
+                df = pd.concat([df, last_row_data], ignore_index=False)
+                
+                # --- CRITICAL: Fill NaN values for technical indicators in the last row ---
+                if len(df) > 1:
+                    last_idx = df.index[-1]
+                    prev_idx = df.index[-2]  # Previous row
+                    
+                    # Fill each technical indicator column with previous value
+                    for col in df.columns:
+                        if col not in ['open', 'high', 'low', 'adj_close']:  # Skip raw price columns
+                            if pd.isna(df.loc[last_idx, col]) and not pd.isna(df.loc[prev_idx, col]):
+                                df.loc[last_idx, col] = df.loc[prev_idx, col]
+                                #print(f"DEBUG: Filled {col} with previous value: {df.loc[prev_idx, col]}")
+                    
+                    # Special handling for log_ret (calculate it properly)
+                    if 'log_ret' in df.columns and pd.isna(df.loc[last_idx, 'log_ret']):
+                        if not pd.isna(df.loc[prev_idx, 'adj_close']) and not pd.isna(df.loc[last_idx, 'adj_close']):
+                            df.loc[last_idx, 'log_ret'] = np.log(df.loc[last_idx, 'adj_close'] / df.loc[prev_idx, 'adj_close'])
+                            #print(f"DEBUG: Calculated log_ret: {df.loc[last_idx, 'log_ret']}")
+
+
+            # --- Create features ---
+            df['target_price'] = df['adj_close']
+            df['target_return'] = df['target_price'] / df['adj_close'] - 1.0
+            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
+
+            # --- Fill last row targets ---
+            if len(df) > 0:
+                df.iloc[-1, df.columns.get_loc('target_price')] = df['adj_close'].iloc[-1]
+                df.iloc[-1, df.columns.get_loc('target_return')] = 0.0
+                df.iloc[-1, df.columns.get_loc('target_direction')] = 0
+
+            # --- FINAL SANITY CHECK: Ensure no NaN values in the last row ---
+            if len(df) > 0:
+                last_row_nans = df.iloc[-1].isna().sum()
+                if last_row_nans > 0:
+                    #print(f"DEBUG: WARNING - Last row has {last_row_nans} NaN values. Filling with zeros.")
+                    df.iloc[-1] = df.iloc[-1].fillna(0)
+                
+            return df
+
+        except Exception as e:
+            logger.error(f"Error preparing features for tomorrow: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+
+    def _add_technical_indicators_to_single_row(self, row: pd.DataFrame, recent_data: pd.DataFrame) -> pd.DataFrame:
+        """
+        Add technical indicators to a single row using recent data for context.
+        This avoids the dropping behavior in the main technical indicators method.
+        """
+        try:
+            # Combine recent data with the new row
+            combined_data = pd.concat([recent_data, row], ignore_index=False)
+            
+            # Add indicators to the combined data
+            combined_data = self._add_technical_indicators(combined_data)
+            
+            # Return only the last row (our target row)
+            return combined_data.iloc[[-1]]
+        except Exception as e:
+            logger.error(f"Error adding indicators to single row: {e}")
+            return row
+
+
     # ---------- prediction ----------
-    def predict_tomorrow(self, ticker: str) -> Dict[str, Any]:
+    def predict_tomorrow(self, ticker: str) -> Dict[str, Any]: 
         """
         Predict next-day price/return for all models and generate an ensemble.
         Returns structured dictionary with individual predictions + ensemble.
         """
-        df = self.prepare_features(ticker)
+        df = self.prepare_features_for_tomorrow_pred(ticker)
         if df is None:
             return {"error": "Could not prepare data"}
 
@@ -881,6 +975,8 @@ class TradingModelSystem:
         last_price = float(df["adj_close"].iloc[-1])
         threshold = self.config["prediction_threshold_pct"]
         model_types = ["LSTM", "Dense NN", "Random Forest", "XGBoost"]
+        #print(df.tail())
+
 
         for model_type in model_types:
             try:
@@ -901,12 +997,28 @@ class TradingModelSystem:
                 pred_return = target_scaler.inverse_transform(np.array([[pred_scaled]]))[0, 0]
                 pred_price = last_price * (1 + pred_return)
                 pct_diff = (pred_price - last_price) / last_price * 100
+                # float all preds
+                pred_price = float(pred_price)
+                pred_return = float(pred_return)
+                pct_diff = float(pct_diff)
                 signal = "BUY" if pct_diff > threshold else ("SELL" if pct_diff < -threshold else "HOLD")
+                
+                if model_type == "Random Forest":  # classifier
+                    cls_preds = model.predict(input_data)
+                    proba = model.predict_proba(input_data)
+                    confidence = np.max(proba)
+                    
+                    # map class to signal (example)
+                    signal = "BUY" if cls_preds[0] == 1 else "SELL"
+                    
+                    pred_return = None
+                    pred_price = None
+                    pct_diff = None
 
                 predictions[model_type] = {
-                    "predicted_price": float(pred_price),
-                    "predicted_return": float(pred_return),
-                    "pct_diff": float(pct_diff),
+                    "predicted_price": pred_price,
+                    "predicted_return": pred_return,
+                    "pct_diff": pct_diff,
                     "signal": signal
                 }
             except Exception as e:
@@ -914,12 +1026,11 @@ class TradingModelSystem:
 
         # Generate ensemble prediction automatically
         ensemble_pred = self._generate_ensemble_predictions(predictions)
+        print("Ensemble raw:", ensemble_pred)
         ensemble_pred["pct_diff"] = ensemble_pred["predicted_price"] - last_price
         if ensemble_pred:
             predictions["Ensemble"] = ensemble_pred
             
-        
-        print(predictions)
 
         return predictions
 
@@ -932,11 +1043,11 @@ class TradingModelSystem:
         """
         signals = []
         prices = []
-
         for model, pred in model_preds.items():
             if "error" in pred:
                 continue
             # Collect signals
+            
             signal = pred.get("signal")
             if signal:
                 signals.append(signal)

@@ -1,48 +1,49 @@
 {
   "ticker": "SPY",
-  "timestamp": "2025-10-07T14:10:32.049378",
-  "last_price": 672.03,
+  "timestamp": "2025-10-09T10:54:17.307659",
+  "last_price": 673.11,
   "predictions": {
     "LSTM": {
-      "predicted_price": 670.2699020894989,
-      "predicted_return": 0.0015838108956813812,
-      "pct_diff": 0.15838108956813335,
+      "predicted_price": 674.1659069208463,
+      "predicted_return": 0.001568698906339705,
+      "pct_diff": 0.15686989063396306,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 673.2067470056098,
-      "predicted_return": 0.005972336046397686,
-      "pct_diff": 0.5972336046397679,
-      "signal": "BUY"
-    },
-    "Random Forest": {
-      "predicted_price": 669.6051361609035,
-      "predicted_return": 0.000590451668240962,
-      "pct_diff": 0.059045166824085414,
+      "predicted_price": 673.2802478977608,
+      "predicted_return": 0.00025292730424553156,
+      "pct_diff": 0.025292730424560587,
       "signal": "HOLD"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
+    },
     "XGBoost": {
-      "predicted_price": 673.9907657562057,
-      "predicted_return": 0.007143894676119089,
-      "pct_diff": 0.714389467611917,
+      "predicted_price": 677.812468462335,
+      "predicted_return": 0.006986181251704693,
+      "pct_diff": 0.6986181251704761,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "HOLD",
-      "predicted_price": 671.7681377530545
+      "predicted_price": 675.0862077603141,
+      "pct_diff": 1.9762077603140824
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0,
+  "pct_diff": 1.9762077603140824,
   "qty": 0,
   "sentiment": {
     "ticker": "SPY",
     "signal": "HOLD",
-    "score": -0.063,
+    "score": -0.163,
     "confidence": 0.4
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.34370205367382517,
   "metrics_path": null,
   "model_metrics": [
     {

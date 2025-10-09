@@ -1,48 +1,49 @@
 {
   "ticker": "UNH",
-  "timestamp": "2025-10-07T16:44:07.245919",
-  "last_price": 361.815,
+  "timestamp": "2025-10-09T10:57:39.726082",
+  "last_price": 369.92,
   "predictions": {
     "LSTM": {
-      "predicted_price": 361.32081809230147,
-      "predicted_return": 0.00311165489256382,
-      "pct_diff": 0.3111654892563788,
+      "predicted_price": 370.9923829048872,
+      "predicted_return": 0.0028989589773118496,
+      "pct_diff": 0.2898958977311868,
       "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 366.05813948512076,
-      "predicted_return": 0.016263574361801147,
-      "pct_diff": 1.6263574361801147,
+      "predicted_price": 371.13372141271833,
+      "predicted_return": 0.0032810375560075045,
+      "pct_diff": 0.32810375560075533,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 360.33345226916026,
-      "predicted_return": 0.0003704949171579798,
-      "pct_diff": 0.037049491715789244,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 364.086547170952,
-      "predicted_return": 0.010789969936013222,
-      "pct_diff": 1.0789969936013286,
+      "predicted_price": 374.2662594342232,
+      "predicted_return": 0.011749187484383583,
+      "pct_diff": 1.1749187484383532,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 362.9497392543836
+      "predicted_price": 372.1307879172762,
+      "pct_diff": 2.210787917276207
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 2,
+  "signal": "HOLD",
+  "pct_diff": 2.210787917276207,
+  "qty": 0,
   "sentiment": {
     "ticker": "UNH",
-    "signal": "HOLD",
-    "score": -0.172,
-    "confidence": 0.28
+    "signal": "SELL",
+    "score": -0.698,
+    "confidence": 0.29
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.2631545073692215,
   "metrics_path": null,
   "model_metrics": [
     {

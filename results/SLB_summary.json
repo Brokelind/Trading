@@ -1,42 +1,48 @@
 {
   "ticker": "SLB",
-  "timestamp": "2025-10-07T16:33:29.612964",
-  "last_price": 34.33,
+  "timestamp": "2025-10-09T10:57:24.364598",
+  "last_price": 33.97,
   "predictions": {
     "LSTM": {
-      "predicted_price": 34.165557550666854,
-      "predicted_return": -0.0027566389180719852,
-      "pct_diff": -0.27566389180719186,
+      "predicted_price": 33.87999274274102,
+      "predicted_return": -0.002649610163643956,
+      "pct_diff": -0.2649610163643864,
       "signal": "SELL"
     },
     "Dense NN": {
-      "predicted_price": 34.50842404715716,
-      "predicted_return": 0.007251139730215073,
-      "pct_diff": 0.7251139730214982,
+      "predicted_price": 34.21429087873548,
+      "predicted_return": 0.00719137117266655,
+      "pct_diff": 0.7191371172666583,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 34.276743825339906,
-      "predicted_return": 0.0004887281185028557,
-      "pct_diff": 0.04887281185028713,
-      "signal": "HOLD"
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 34.79289694022387,
-      "predicted_return": 0.01555449329316616,
-      "pct_diff": 1.555449329316612,
+      "predicted_price": 34.531357741411774,
+      "predicted_return": 0.01652510277926922,
+      "pct_diff": 1.652510277926923,
       "signal": "BUY"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 34.43590559084695
+      "predicted_price": 34.208547120962756,
+      "pct_diff": 0.23854712096275676
     }
   },
   "chosen_model": "Ensemble",
   "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 23,
-  "sentiment": {},
+  "pct_diff": 0.23854712096275676,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "SLB",
+    "signal": "HOLD",
+    "score": 0.0,
+    "confidence": 0.61
+  },
   "position_size_factor": 0.1,
   "metrics_path": null,
   "model_metrics": [

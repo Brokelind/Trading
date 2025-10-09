@@ -1,48 +1,49 @@
 {
   "ticker": "ADBE",
-  "timestamp": "2025-10-07T14:57:05.756711",
-  "last_price": 348.015,
+  "timestamp": "2025-10-09T10:55:51.385509",
+  "last_price": 348.77,
   "predictions": {
     "LSTM": {
-      "predicted_price": 346.9292953043233,
-      "predicted_return": 0.0005459286621771753,
-      "pct_diff": 0.05459286621771622,
+      "predicted_price": 349.0302653212857,
+      "predicted_return": 0.0007462376961484551,
+      "pct_diff": 0.07462376961485073,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 341.62668808691205,
-      "predicted_return": -0.01474681869149208,
-      "pct_diff": -1.4746818691492054,
-      "signal": "SELL"
+      "predicted_price": 348.90873632174913,
+      "predicted_return": 0.0003977874293923378,
+      "pct_diff": 0.03977874293922922,
+      "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 354.76310187701387,
-      "predicted_return": 0.023138668388457833,
-      "pct_diff": 2.31386683884578,
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 351.73693426497283,
-      "predicted_return": 0.014411184936761856,
-      "pct_diff": 1.44111849367619,
+      "predicted_price": 352.4051085428707,
+      "predicted_return": 0.010422652587294579,
+      "pct_diff": 1.0422652587294605,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 348.7640048833055
+      "signal": "HOLD",
+      "predicted_price": 350.11470339530183,
+      "pct_diff": 1.344703395301849
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 2,
+  "signal": "HOLD",
+  "pct_diff": 1.344703395301849,
+  "qty": 0,
   "sentiment": {
     "ticker": "ADBE",
-    "signal": "HOLD",
-    "score": -0.094,
-    "confidence": 0.25
+    "signal": "SELL",
+    "score": -0.496,
+    "confidence": 0.3
   },
-  "position_size_factor": 0.1,
+  "position_size_factor": 0.18890393297200375,
   "metrics_path": null,
   "model_metrics": [
     {

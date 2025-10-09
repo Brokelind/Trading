@@ -1,46 +1,47 @@
 {
   "ticker": "CMG",
-  "timestamp": "2025-10-07T17:24:36.027588",
-  "last_price": 41.285,
+  "timestamp": "2025-10-09T10:58:42.391566",
+  "last_price": 40.98,
   "predictions": {
     "LSTM": {
-      "predicted_price": 41.55774687521159,
-      "predicted_return": -0.004843226168304682,
-      "pct_diff": -0.48432261683047434,
+      "predicted_price": 40.780445993626486,
+      "predicted_return": -0.00486954627558589,
+      "pct_diff": -0.4869546275585911,
       "signal": "SELL"
     },
     "Dense NN": {
-      "predicted_price": 41.786371064716946,
-      "predicted_return": 0.0006314910133369267,
-      "pct_diff": 0.06314910133368655,
-      "signal": "HOLD"
-    },
-    "Random Forest": {
-      "predicted_price": 43.20696644846174,
-      "predicted_return": 0.03464957970454358,
-      "pct_diff": 3.464957970454368,
+      "predicted_price": 41.298378477310756,
+      "predicted_return": 0.007769118528813124,
+      "pct_diff": 0.7769118528813055,
       "signal": "BUY"
     },
+    "Random Forest": {
+      "predicted_price": null,
+      "predicted_return": null,
+      "pct_diff": null,
+      "signal": "SELL"
+    },
     "XGBoost": {
-      "predicted_price": 42.58405819237232,
-      "predicted_return": 0.019733194261789322,
-      "pct_diff": 1.973319426178927,
+      "predicted_price": 41.73057696137577,
+      "predicted_return": 0.018315689638257027,
+      "pct_diff": 1.8315689638256971,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 42.28378564519065
+      "signal": "HOLD",
+      "predicted_price": 41.26980047743766,
+      "pct_diff": 0.2898004774376659
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0,
-  "qty": 18,
+  "signal": "HOLD",
+  "pct_diff": 0.2898004774376659,
+  "qty": 0,
   "sentiment": {
     "ticker": "CMG",
     "signal": "HOLD",
-    "score": 0.161,
-    "confidence": 0.48
+    "score": -0.233,
+    "confidence": 0.26
   },
   "position_size_factor": 0.1,
   "metrics_path": null,
