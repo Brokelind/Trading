@@ -10,7 +10,7 @@ import alpaca_trader
 import call_market
 from distribute_results import *  # This will import the fixed email functions
 from alpaca.trading.enums import TimeInForce
-from visualize_results import visualize_results, visualize_predictions_chart, visualize_backtest_chart, visualize_comprehensive
+from visualize_results import visualize_backtest_chart
 from web_dev.web_dashboard import generate_dashboard
 
 
@@ -237,7 +237,9 @@ class TradingExecutor:
 
         try:
             meta = self.model_system.load_meta(ticker)
-            out["model_metrics"] = meta.get("metrics", {})
+            out["training_metrics"] = meta.get("training_metrics", {})
+            out["backtest_metrics"] = meta.get("backtest_metrics", {})
+
         except Exception:
             pass
 
@@ -265,8 +267,8 @@ class TradingExecutor:
         summaries = load_results()
 
         if not summaries:
-            print("No strong signals to report today.")
-            # Still generate dashboard with no signals
+            print("No strong signals meeting criteria today.")
+            # Still generate dashboard with no signals message
             generate_dashboard()
             return
 
@@ -276,10 +278,13 @@ class TradingExecutor:
         signal_count = generate_dashboard()
         print(f"🌐 Generated web dashboard with {signal_count} signals")
         
-        # Optional: Generate charts as HTML (not PNG)
+        # Generate enhanced charts as HTML
         try:
-            visualize_backtest_chart([s["ticker"] for s in summaries])
-            visualize_predictions_chart([s["ticker"] for s in summaries])
+            print("📊 Generating backtest charts...")
+            backtest_paths = visualize_backtest_chart([s["ticker"] for s in summaries])
+            print(f"✅ Generated {len(backtest_paths)} backtest charts")
+            
+            
         except Exception as e:
             print(f"Chart generation failed (non-critical): {e}")
         

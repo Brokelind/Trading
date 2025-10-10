@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import talib
+import tensorflow as tf
 from scipy.stats import norm
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor, RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
@@ -52,14 +53,15 @@ class TradingModelSystem:
             "data_dir": DATA_DIR_DEFAULT,
             "model_dir": MODEL_DIR_DEFAULT,
             "window_size": 30,  
-            "prediction_threshold_pct": 0.25,
+            "prediction_threshold_pct": 0.0001,
+            "min_trade_confidence": 0.40,
             "initial_capital": 10000,
             "min_data_points": 200,  # Increased minimum data requirement
             "retrain_days": RETRAIN_DAYS,
             "verbose": False,
             "enable_uncertainty": True,  # Enable prediction intervals
             "n_cv_folds": 5,  # For time series cross-validation
-            "feature_lookback": 10,  # How many past steps to use for feature creation
+            "feature_lookback": 10,  # How many past steps to use for lag feature creation
             "enable_lightgbm": False
         }
         if config:
@@ -260,22 +262,25 @@ class TradingModelSystem:
         return np.array(X), np.array(y)
 
     def _create_lstm_model(self, input_shape: Tuple[int, int]) -> Sequential:
-        """Fixed LSTM model without attention layer issues"""
+        """LSTM with custom loss to encourage larger predictions"""
         model = Sequential([
             Input(shape=input_shape),
-            LSTM(128, return_sequences=True, kernel_regularizer=l2(0.01)),
-            Dropout(0.3),
-            BatchNormalization(),
-            LSTM(64, return_sequences=False),  # Changed to return_sequences=False
-            Dropout(0.2),
-            BatchNormalization(),
-            Dense(32, activation='relu'),
+            LSTM(64, return_sequences=True, dropout=0.3),
+            LSTM(32, dropout=0.3),
+            Dense(16, activation='relu'),
             Dense(1)
         ])
+        
+        # Custom loss that penalizes predictions that are too small
+        def amplified_mse(y_true, y_pred):
+            mse = tf.keras.losses.mse(y_true, y_pred)
+            # Penalize predictions that are too close to zero
+            small_pred_penalty = tf.reduce_mean(tf.square(y_pred)) * 0.1
+            return mse + small_pred_penalty
+        
         model.compile(
-            optimizer=Nadam(learning_rate=0.001),
-            loss='huber_loss',
-            metrics=[RootMeanSquaredError()]
+            optimizer=Adam(learning_rate=0.001),
+            loss=amplified_mse
         )
         return model
 
@@ -307,11 +312,8 @@ class TradingModelSystem:
     # ---------- model training ----------
     def train_all_models(self, ticker: str, force: bool = False) -> Dict[str, Any]:
         """
-        Complete fixed implementation handling:
-        - XGBoost NaN values
-        - Ensemble training requirements
-        - Missing calculate_metrics method
-        - Backtesting integration
+        Enhanced implementation with proper train/validation/backtest split
+        and separate metrics for training and backtesting.
         """
         # 1. Data Preparation with NaN handling
         try:
@@ -343,37 +345,95 @@ class TradingModelSystem:
         feature_cols = [c for c in df.columns if c not in 
                     ['target_price', 'target_return', 'target_direction']]
 
+        # 3. Data Validation Debugging - MOVED AFTER feature_cols IS DEFINED
+        print(f"DEBUG: Target return stats - Min: {df['target_return'].min():.6f}, "
+            f"Max: {df['target_return'].max():.6f}, Mean: {df['target_return'].mean():.6f}, "
+            f"Std: {df['target_return'].std():.6f}")
+
+        # Check for any constant columns that might cause issues
+        constant_cols = []
+        for col in feature_cols:  # Now feature_cols is defined
+            if df[col].std() < 1e-10:  # Near constant
+                constant_cols.append(col)
+        if constant_cols:
+            print(f"DEBUG: Warning - Constant/near-constant columns: {constant_cols}")
+
         # Save feature information
         meta = self.load_meta(ticker)
-        meta['feature_columns'] = feature_cols  # Save the exact columns used
+        meta['feature_columns'] = feature_cols
         meta['n_features'] = len(feature_cols)
-        self.save_meta(ticker, meta)            
         
-        # Scale features and targets separately
-        feature_scaler = RobustScaler()
+        # 4. STRATIFIED TIME-BASED DATA SPLIT
+        total_samples = len(df)
+        
+        # Split: 70% training, 15% validation, 15% backtesting (unseen)
+        train_size = int(total_samples * 0.7)
+        val_size = int(total_samples * 0.15)
+        
+        train_df = df.iloc[:train_size]
+        val_df = df.iloc[train_size:train_size + val_size]
+        backtest_df = df.iloc[train_size + val_size:]
+        
+        print(f"DEBUG: Data split - Train: {len(train_df)}, Val: {len(val_df)}, Backtest: {len(backtest_df)}")
+        
+        meta['data_split'] = {
+            'train_size': len(train_df),
+            'val_size': len(val_df),
+            'backtest_size': len(backtest_df),
+            'split_date_backtest': backtest_df.index[0] if len(backtest_df) > 0 else None
+        }
+        self.save_meta(ticker, meta)
+        
+        # 5. Scale features and targets using TRAINING data only
+        feature_scaler = StandardScaler()
         target_scaler = StandardScaler()
 
-        self.feature_list = feature_cols
-        self._last_feature_scaler = feature_scaler
-        self._last_target_scaler = target_scaler
-        X = feature_scaler.fit_transform(df[feature_cols].values)
-        y = target_scaler.fit_transform(df[['target_return']].values)
+        # Clip extreme returns before scaling to prevent outliers
+        train_returns = train_df['target_return'].values.copy()
+        
+        # Clip returns to 5 standard deviations to handle outliers
+        returns_std = train_returns.std()
+        returns_mean = train_returns.mean()
+        clip_threshold = 5 * returns_std
+        train_returns_clipped = np.clip(train_returns, 
+                                    returns_mean - clip_threshold, 
+                                    returns_mean + clip_threshold)
+        
+        print(f"DEBUG: Returns before clipping - Min: {train_returns.min():.6f}, Max: {train_returns.max():.6f}")
+        print(f"DEBUG: Returns after clipping - Min: {train_returns_clipped.min():.6f}, Max: {train_returns_clipped.max():.6f}")
+        
+        # Fit scalers
+        X_train_scaled = feature_scaler.fit_transform(train_df[feature_cols].values)
+        y_train_scaled = target_scaler.fit_transform(train_returns_clipped.reshape(-1, 1))
+        
+        print(f"DEBUG: Scaled target range: [{y_train_scaled.min():.4f}, {y_train_scaled.max():.4f}]")
+        
+        # Transform validation and backtest data using training scalers
+        X_val_scaled = feature_scaler.transform(val_df[feature_cols].values)
+        y_val_scaled = target_scaler.transform(val_df[['target_return']].values)
+        
+        X_backtest_scaled = feature_scaler.transform(backtest_df[feature_cols].values)
+        y_backtest_scaled = target_scaler.transform(backtest_df[['target_return']].values)
 
-                
+        # Save scalers (trained on training data only)
         joblib.dump(feature_scaler, os.path.join(self.config["model_dir"], f"{ticker}_feature_scaler.joblib"))
         joblib.dump(target_scaler, os.path.join(self.config["model_dir"], f"{ticker}_target_scaler.joblib"))
 
-        # Create sequences
+        # 6. Create sequences for time-series models
         window = self.config["window_size"]
-        X_seq, y_seq = self.create_sequences(X, y, window)
         
-        # Train-val split
-        val_size = min(max(int(len(X_seq) * 0.2), 5), 30)  # 5-30 validation samples
-        X_train, X_val = X_seq[:-val_size], X_seq[-val_size:]
-        y_train, y_val = y_seq[:-val_size], y_seq[-val_size:]
+        # Training sequences
+        X_train_seq, y_train_seq = self.create_sequences(X_train_scaled, y_train_scaled, window)
+        
+        # Validation sequences (for early stopping)
+        X_val_seq, y_val_seq = self.create_sequences(X_val_scaled, y_val_scaled, window)
+        
+        # Backtest sequences (for final evaluation on unseen data)
+        X_backtest_seq, y_backtest_seq = self.create_sequences(X_backtest_scaled, y_backtest_scaled, window)
 
-        # 3. Model Training with Enhanced Error Handling
-        # Define model training methods
+        print(f"DEBUG: Sequence shapes - Train: {X_train_seq.shape}, Val: {X_val_seq.shape}, Backtest: {X_backtest_seq.shape}")
+
+        # 7. Model Training with Enhanced Error Handling
         models = {
             "LSTM": self._train_lstm,
             "Dense NN": self._train_dnn,  
@@ -381,10 +441,8 @@ class TradingModelSystem:
             "XGBoost": self._train_xgb,
         }
         
-        
         results = {}
         trained_models = {}
-        #print(X_train, y_train,X_val, y_val)
         
         for name, train_func in models.items():
             try:
@@ -395,7 +453,8 @@ class TradingModelSystem:
                     results[name] = {"status": "loaded"}
                 else:
                     logger.info(f"Training {name} for {ticker}")
-                    model = train_func(X_train, y_train, X_val, y_val, len(feature_cols))
+                    # Train on training data, validate on validation data
+                    model = train_func(X_train_seq, y_train_seq, X_val_seq, y_val_seq, len(feature_cols))
                     self._save_model(model, name, ticker)
                     results[name] = {"status": "trained"}
                     
@@ -403,8 +462,9 @@ class TradingModelSystem:
             except Exception as e:
                 logger.error(f"Training failed for {name}: {e}")
                 results[name] = {"status": f"error: {str(e)}"}
+                trained_models[name] = None  # Ensure it's set to None on failure
 
-       # 4. Ensemble Training (only if we have at least 2 regressors)
+        # 8. Ensemble Training (only if we have at least 2 regressors)
         try:
             sk_models = {
                 name: m for name, m in trained_models.items()
@@ -413,27 +473,50 @@ class TradingModelSystem:
 
             if len(sk_models) >= 2:
                 ensemble = VotingRegressor(list(sk_models.items()))
-                X_train_flat = X_train.reshape(X_train.shape[0], -1)
-                ensemble.fit(X_train_flat, y_train.ravel())
+                X_train_flat = X_train_seq.reshape(X_train_seq.shape[0], -1)
+                ensemble.fit(X_train_flat, y_train_seq.ravel())
                 joblib.dump(ensemble, self._model_path(ticker, "Ensemble"))
+                trained_models["Ensemble"] = ensemble
                 results["Ensemble"] = {"status": "trained"}
+            else:
+                print(f"DEBUG: Not enough successful models for ensemble. Available: {list(sk_models.keys())}")
         except Exception as e:
             logger.error(f"Ensemble training failed: {e}")
             results["Ensemble"] = {"status": f"error: {str(e)}"}
 
+        # 9. TRAINING METRICS (on validation data - seen during training)
+        training_metrics = {}
+        for name, model in trained_models.items():
+            if model is None:
+                continue
+            try:
+                # Evaluate on validation data (seen during training)
+                val_metrics = self._evaluate_on_validation(
+                    model, name, X_val_seq, y_val_seq, target_scaler
+                )
+                training_metrics[name] = val_metrics
+            except Exception as e:
+                logger.error(f"Training metrics failed for {name}: {e}")
+                training_metrics[name] = {"error": str(e)}
 
-
-
-        # 5. Backtesting and Metrics
+        # 10. BACKTESTING METRICS (on completely unseen data)
         backtest_results = {}
         for name, model in trained_models.items():
             if model is None:
                 continue
             try:
-                bt_pack = self.walk_forward_backtest(df.copy(), model, name,
-                                            feature_scaler, target_scaler,
-                                            feature_cols, ticker)
-                backtest_results[name] = bt_pack
+                # Backtest on completely unseen backtest data
+                bt_df = self.walk_forward_backtest(
+                    backtest_df.copy(), model, name,
+                    feature_scaler, target_scaler,
+                    feature_cols, ticker
+                )
+                # Ensure consistent structure
+                backtest_results[name] = {
+                    "walk_forward": bt_df,
+                    "cv_metrics": {},
+                    "prediction_intervals": {}
+                }
             except Exception as e:
                 logger.error(f"Backtest failed for {name}: {e}")
                 backtest_results[name] = {
@@ -442,41 +525,33 @@ class TradingModelSystem:
                     "prediction_intervals": {}
                 }
 
-        # 6. Save final metrics
-        #metrics_df = self._calculate_advanced_metrics(backtest_results)
-        #metrics_df.to_csv(os.path.join(self.config["model_dir"], f"{ticker}_metrics.csv"))
-        # 7. Save model meta
-        # DEBUG: inspect backtest_results structure
-        for name, val in backtest_results.items():
-            print(f"--- BACKTEST RESULT FOR: {name} ---")
-            print("type:", type(val))
-            if isinstance(val, dict):
-                print("keys:", list(val.keys()))
-                wf = val.get("walk_forward")
-                print("walk_forward type:", type(wf))
-                if isinstance(wf, pd.DataFrame):
-                    print("walk_forward cols:", wf.columns.tolist())
-                    print("walk_forward head:\n", wf.head(3))
-                    print("y_true non-null:", wf['y_true'].notna().sum() if 'y_true' in wf.columns else 'n/a')
-                    print("y_pred non-null:", wf['y_pred'].notna().sum() if 'y_pred' in wf.columns else 'n/a')
-                    print("PortfolioValue present:", 'PortfolioValue' in wf.columns)
-            elif isinstance(val, pd.DataFrame):
-                print("DataFrame cols:", val.columns.tolist())
-                print("head:\n", val.head(3))
-                print("y_true non-null:", val['y_true'].notna().sum() if 'y_true' in val.columns else 'n/a')
-                print("y_pred non-null:", val['y_pred'].notna().sum() if 'y_pred' in val.columns else 'n/a')
-                print("PortfolioValue present:", 'PortfolioValue' in val.columns)
-            else:
-                print("Value preview:", str(val)[:200])
+        # 11. Calculate and save both training and backtest metrics
+        training_metrics_df = self._calculate_training_metrics(training_metrics, target_scaler)
+        backtest_metrics_df = self._calculate_advanced_metrics(backtest_results, target_scaler)
+        
+        # Save both metrics files
+        training_metrics_df.to_csv(os.path.join(self.config["model_dir"], f"{ticker}_training_metrics.csv"), index=False)
+        backtest_metrics_df.to_csv(os.path.join(self.config["model_dir"], f"{ticker}_backtest_metrics.csv"), index=False)
 
-
-        self._save_training_results(ticker, results, backtest_results)
+        # 12. Save comprehensive training results
+        self._save_training_results(
+            ticker, 
+            results, 
+            backtest_results,
+            training_metrics_df,
+            backtest_metrics_df
+        )
 
         return {
             "training_results": results,
+            "training_metrics": training_metrics_df.to_dict(orient='records'),
+            "backtest_metrics": backtest_metrics_df.to_dict(orient='records'),
             "backtest": backtest_results,
-            "best_model": self._select_best_model(backtest_results)
+            "best_model": self._select_best_model(backtest_results),  # Select based on backtest performance
+            "data_split_info": meta['data_split']
         }
+
+
 
 
     # Helper Methods --------------------------------------------------
@@ -541,64 +616,141 @@ class TradingModelSystem:
         )
         return model
 
-
-
+    def _calculate_training_metrics(self, training_metrics: Dict[str, Dict], 
+                              target_scaler: Any) -> pd.DataFrame:
+        """
+        Calculate training/validation metrics in a structured DataFrame
+        """
+        metrics_list = []
+        
+        for model_name, metrics in training_metrics.items():
+            if "error" in metrics:
+                metrics_list.append({
+                    "Model": model_name,
+                    "MAE": np.nan,
+                    "RMSE": np.nan,
+                    "R2": np.nan,
+                    "DirectionAccuracy": np.nan,
+                    "Samples": 0,
+                    "Error": metrics["error"]
+                })
+            else:
+                metrics_list.append({
+                    "Model": model_name,
+                    "MAE": metrics.get("MAE", np.nan),
+                    "RMSE": metrics.get("RMSE", np.nan),
+                    "R2": metrics.get("R2", np.nan),
+                    "DirectionAccuracy": metrics.get("DirectionAccuracy", np.nan),
+                    "Samples": metrics.get("Samples", 0),
+                    "Error": None
+                })
+        
+        return pd.DataFrame(metrics_list)
+        
+    def _evaluate_on_validation(self, model: Any, model_type: str, 
+                          X_val: np.ndarray, y_val: np.ndarray, 
+                          target_scaler: Any) -> Dict[str, float]:
+        """
+        Evaluate model on validation data with proper input handling
+        """
+        try:
+            # Make predictions with proper input shaping
+            if model_type == "LSTM":
+                y_pred_scaled = model.predict(X_val, verbose=0).flatten()
+            elif model_type == "Dense NN":
+                # Flatten sequences for Dense NN
+                X_val_flat = X_val.reshape(X_val.shape[0], -1)
+                y_pred_scaled = model.predict(X_val_flat, verbose=0).flatten()
+            else:
+                # Tree-based models
+                X_val_flat = X_val.reshape(X_val.shape[0], -1)
+                y_pred_scaled = model.predict(X_val_flat)
+            
+            # Inverse transform to get actual returns
+            y_true = target_scaler.inverse_transform(y_val.reshape(-1, 1)).flatten()
+            y_pred = target_scaler.inverse_transform(y_pred_scaled.reshape(-1, 1)).flatten()
+            
+            # Calculate metrics
+            mae = mean_absolute_error(y_true, y_pred)
+            rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+            r2 = r2_score(y_true, y_pred)
+            direction_acc = np.mean(np.sign(y_pred) == np.sign(y_true))
+            
+            return {
+                "MAE": mae,
+                "RMSE": rmse,
+                "R2": r2,
+                "DirectionAccuracy": direction_acc,
+                "Samples": len(y_true)
+            }
+            
+        except Exception as e:
+            logger.error(f"Validation evaluation failed for {model_type}: {e}")
+            return {"error": str(e)}
+            
     def _train_rf(self, X_train, y_train, X_val, y_val, n_features):
-        """Train Random Forest classifier on direction (up/down)"""
-        # Convert targets to direction
-        y_train_cls = (y_train > 0).astype(int).ravel()
-        y_val_cls = (y_val > 0).astype(int).ravel()
-
+        """Fit a random forest regression"""
         X_train_flat = X_train.reshape(X_train.shape[0], -1)
         X_val_flat = X_val.reshape(X_val.shape[0], -1)
 
-        model = RandomForestClassifier(
-            n_estimators=200,
-            max_depth=10,
-            min_samples_split=5,
+        print(f"DEBUG: RF Training - X_train shape: {X_train_flat.shape}, y_train range: [{y_train.min():.4f}, {y_train.max():.4f}]")
+        
+        # Ensure we're using Regressor (NOT Classifier)
+        model = RandomForestRegressor(
+            n_estimators=100,  # Reduced for faster training
+            max_depth=8,       # Reduced to prevent overfitting
+            min_samples_split=10,
+            min_samples_leaf=5,
             random_state=42,
             n_jobs=-1
         )
-        model.fit(X_train_flat, y_train_cls)
+        
+        model.fit(X_train_flat, y_train.ravel())
+        
+        # Check predictions aren't zeros
+        sample_pred = model.predict(X_val_flat[:5])
+        print(f"DEBUG: RF Sample predictions: {sample_pred}")
+        
         return model
 
 
     def _train_xgb(self, X_train, y_train, X_val, y_val, n_features):
-        """Train XGBoost classifier on direction (up/down)"""
-        y_train_cls = (y_train > 0).astype(int).ravel()
-        y_val_cls = (y_val > 0).astype(int).ravel()
-
+        """FIXED XGBoost training without early stopping for ensemble compatibility"""
         X_train_flat = X_train.reshape(X_train.shape[0], -1)
         X_val_flat = X_val.reshape(X_val.shape[0], -1)
 
+        print(f"DEBUG: XGB Training - X_train shape: {X_train_flat.shape}, y_train range: [{y_train.min():.6f}, {y_train.max():.6f}]")
+
         model = XGBRegressor(
-        n_estimators=300,
-        learning_rate=0.05,
-        max_depth=6,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        random_state=42
+            n_estimators=100,  # Reduced number
+            learning_rate=0.1,
+            max_depth=6,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            reg_alpha=0.1,
+            reg_lambda=0.1,
+            random_state=42
+            # Removed early_stopping_rounds for ensemble compatibility
         )
-        model.fit(
-            X_train_flat, y_train_cls,
-            eval_set=[(X_val_flat, y_val_cls)],
-            early_stopping_rounds=20,
-            verbose=False
-        )
+        
+        # Simple fit without early stopping
+        model.fit(X_train_flat, y_train.ravel())
+        
+        # Check predictions
+        sample_pred = model.predict(X_val_flat[:5])
+        print(f"DEBUG: XGB Sample predictions: {sample_pred}")
+        
         return model
 
-
     def _save_training_results(self, ticker: str, training_results: Dict[str, Any],
-                           backtest_results: Dict[str, Any]) -> None:
+                       backtest_results: Dict[str, Any],
+                       training_metrics_df: pd.DataFrame = None,
+                       backtest_metrics_df: pd.DataFrame = None) -> None:
         """
+        Enhanced version to save both training and backtest results with separate metrics.
         Normalize backtest_results, compute metrics, save backtests & metrics CSVs, save meta.
         Produces consistent files for visualization and JSON-safe metadata.
         """
-
-        import pandas as pd
-        import numpy as np
-        from datetime import datetime
-        import os
 
         model_dir = self.config.get("model_dir", "saved_models")
         os.makedirs(model_dir, exist_ok=True)
@@ -618,7 +770,7 @@ class TradingModelSystem:
                     "PortfolioValue", "PredictedReturn", "y_true", "y_pred"
                 ])
 
-        # --- Save each model’s backtest CSV ---
+        # --- Save each model's backtest CSV ---
         for model_name, df in normalized.items():
             try:
                 if not df.empty:
@@ -631,79 +783,150 @@ class TradingModelSystem:
             except Exception as e:
                 logger.error(f"[{ticker}] Failed to save backtest for {model_name}: {e}")
 
-        # --- Wrap for metrics calculation ---
-        wrapped_results = {m: {"walk_forward": df} for m, df in normalized.items()}
-
-        # --- Compute metrics ---
-        try:
-            metrics_df = self._calculate_advanced_metrics(wrapped_results)
-        except Exception as e:
-            logger.error(f"[{ticker}] Metric calculation failed: {e}")
-            metrics_df = pd.DataFrame(columns=[
-                "Model", "MAE", "RMSE", "R2", "DirectionAcc",
-                "FinalPortfolio", "Sharpe", "Volatility"
+        # --- Handle Training Metrics (validation performance) ---
+        if training_metrics_df is None:
+            # Fallback: create empty training metrics if not provided
+            training_metrics_df = pd.DataFrame(columns=[
+                "Model", "MAE", "RMSE", "R2", "DirectionAccuracy", "Samples", "Error"
             ])
-
-        # --- Save metrics CSV ---
-        metrics_csv = os.path.join(model_dir, f"{ticker}_metrics.csv")
+        
+        training_metrics_path = os.path.join(model_dir, f"{ticker}_training_metrics.csv")
         try:
-            metrics_df.to_csv(metrics_csv, index=False)
+            training_metrics_df.to_csv(training_metrics_path, index=False)
+            logger.info(f"[{ticker}] Saved training metrics -> {training_metrics_path}")
         except Exception as e:
-            logger.warning(f"[{ticker}] Failed to write metrics CSV: {e}")
+            logger.error(f"[{ticker}] Failed to write training metrics CSV: {e}")
+
+        # --- Handle Backtest Metrics (unseen data performance) ---
+        if backtest_metrics_df is None:
+            # Fallback: calculate backtest metrics from normalized results
+            try:
+                wrapped_results = {m: {"walk_forward": df} for m, df in normalized.items()}
+                backtest_metrics_df = self._calculate_advanced_metrics(wrapped_results)
+            except Exception as e:
+                logger.error(f"[{ticker}] Backtest metric calculation failed: {e}")
+                backtest_metrics_df = pd.DataFrame(columns=[
+                    "Model", "MAE", "RMSE", "R2", "DirectionAcc",
+                    "FinalPortfolio", "Sharpe", "Volatility"
+                ])
+
+        backtest_metrics_path = os.path.join(model_dir, f"{ticker}_backtest_metrics.csv")
+        try:
+            backtest_metrics_df.to_csv(backtest_metrics_path, index=False)
+            logger.info(f"[{ticker}] Saved backtest metrics -> {backtest_metrics_path}")
+        except Exception as e:
+            logger.error(f"[{ticker}] Failed to write backtest metrics CSV: {e}")
 
         # --- Prepare JSON-safe metrics ---
-        metrics_df_clean = metrics_df.where(pd.notnull(metrics_df), None)
+        training_metrics_clean = training_metrics_df.where(pd.notnull(training_metrics_df), None)
+        backtest_metrics_clean = backtest_metrics_df.where(pd.notnull(backtest_metrics_df), None)
 
-        # --- Save metadata ---
+        # --- Save comprehensive metadata ---
         meta = {
             "last_trained": datetime.utcnow().isoformat(),
             "model_paths": {m: self._model_path(ticker, m) for m in training_results.keys()},
-            "metrics_file": metrics_csv,
-            "metrics": metrics_df_clean.to_dict(orient="records"),
+            "training_metrics_file": training_metrics_path,
+            "backtest_metrics_file": backtest_metrics_path,
+            "training_metrics": training_metrics_clean.to_dict(orient="records"),
+            "backtest_metrics": backtest_metrics_clean.to_dict(orient="records"),
             "best_model": self._select_best_model(normalized),
+            "data_split_info": self.load_meta(ticker).get('data_split', {})
         }
 
         try:
             self.save_meta(ticker, meta)
+            logger.info(f"[{ticker}] ✅ Saved comprehensive training results")
+            logger.info(f"[{ticker}]   - Training metrics: {training_metrics_path}")
+            logger.info(f"[{ticker}]   - Backtest metrics: {backtest_metrics_path}")
+            logger.info(f"[{ticker}]   - Best model: {meta['best_model']}")
         except Exception as e:
             logger.error(f"[{ticker}] Could not save meta: {e}")
 
-        logger.info(f"[{ticker}] ✅ Saved training results & backtests -> {metrics_csv}")
+        # --- Print summary for quick review ---
+        self._print_training_summary(ticker, training_metrics_df, backtest_metrics_df, meta['best_model'])
+
+    def _print_training_summary(self, ticker: str, training_metrics: pd.DataFrame, 
+                            backtest_metrics: pd.DataFrame, best_model: str):
+        """
+        Print a clean summary of training results for quick review.
+        """
+        print(f"\n{'='*60}")
+        print(f"TRAINING SUMMARY: {ticker}")
+        print(f"{'='*60}")
+        
+        # Training Metrics Summary
+        print(f"\n📊 TRAINING METRICS (Validation Data):")
+        print(f"{'-'*40}")
+        if not training_metrics.empty:
+            for _, row in training_metrics.iterrows():
+                model = row['Model']
+                r2 = row.get('R2', np.nan)
+                dir_acc = row.get('DirectionAccuracy', np.nan)
+                print(f"  {model:20} | R²: {r2:6.3f} | Dir Acc: {dir_acc:6.3f}")
+        else:
+            print("  No training metrics available")
+        
+        # Backtest Metrics Summary  
+        print(f"\n🎯 BACKTEST METRICS (Unseen Data):")
+        print(f"{'-'*40}")
+        if not backtest_metrics.empty:
+            for _, row in backtest_metrics.iterrows():
+                model = row['Model']
+                r2 = row.get('R2', np.nan)
+                dir_acc = row.get('DirectionAcc', np.nan)
+                final_port = row.get('FinalPortfolio', np.nan)
+                print(f"  {model:20} | R²: {r2:6.3f} | Dir Acc: {dir_acc:6.3f} | Portfolio: ${final_port:,.0f}")
+        else:
+            print("  No backtest metrics available")
+        
+        # Best Model
+        print(f"\n🏆 BEST MODEL: {best_model}")
+        print(f"{'='*60}\n")
 
 
 
 
     def _calculate_advanced_metrics(self, backtest_results: dict, target_scaler=None) -> pd.DataFrame:
         """
-        Compute performance metrics for all model backtest results.
+        Fixed version to properly handle backtest results structure.
+        Computes performance metrics for all model backtest results.
         Handles:
             - Regression (MAE, RMSE, R2, Direction Accuracy)
-            - Classification (Direction Accuracy)
+            - Classification (Direction Accuracy) 
             - Portfolio metrics (Final value, Sharpe, Volatility)
-        Applies inverse transform to NN outputs if target_scaler is provided.
         """
-
         import numpy as np
         import pandas as pd
         from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
         metrics = []
-        print("calc;:" , backtest_results)
+        print("DEBUG: Backtest results keys:", list(backtest_results.keys()))
+        
         for model_name, result in backtest_results.items():
             print(f"\nDEBUG: --- Calculating metrics for model: {model_name} ---")
+            print(f"DEBUG: Result type: {type(result)}")
 
-            # Extract walk-forward DataFrame
-            df = result.get("walk_forward")
-            cv_metrics = result.get("cv_metrics", {})
-            print(f"DEBUG: Raw walk_forward DataFrame: {type(df)}, shape: {getattr(df, 'shape', None)}")
+            # Handle different result structures
+            df = None
+            if isinstance(result, pd.DataFrame):
+                # Result is already a DataFrame
+                df = result
+                print(f"DEBUG: Using result directly as DataFrame")
+            elif isinstance(result, dict):
+                # Result is a dict with walk_forward key
+                df = result.get("walk_forward")
+                print(f"DEBUG: Extracted walk_forward from dict, type: {type(df)}")
+            else:
+                print(f"DEBUG: Unknown result type: {type(result)}")
 
+            # Check if we have valid data
             if df is None or not isinstance(df, pd.DataFrame) or df.empty:
-                print(f"DEBUG: Empty or invalid DataFrame for {model_name}, using cv_metrics or NaN")
+                print(f"DEBUG: Empty or invalid DataFrame for {model_name}")
                 metrics.append({
                     "Model": model_name,
-                    "MAE": cv_metrics.get("MAE", np.nan),
-                    "RMSE": cv_metrics.get("RMSE", np.nan),
-                    "R2": cv_metrics.get("R2", np.nan),
+                    "MAE": np.nan,
+                    "RMSE": np.nan,
+                    "R2": np.nan,
                     "DirectionAcc": np.nan,
                     "FinalPortfolio": np.nan,
                     "Sharpe": np.nan,
@@ -711,78 +934,102 @@ class TradingModelSystem:
                 })
                 continue
 
-            df = df.copy()
+            print(f"DEBUG: DataFrame shape: {df.shape}")
             print(f"DEBUG: Columns in DataFrame: {df.columns.tolist()}")
             print(f"DEBUG: First 3 rows:\n{df.head(3)}")
 
             # --- Regression / NN metrics ---
             mae = rmse = r2 = dir_acc = np.nan
+            
+            # Check if we have prediction data (y_true and y_pred)
             if "y_true" in df.columns and "y_pred" in df.columns:
-                df = df.dropna(subset=["y_true", "y_pred"])
-
-                if not df.empty:
-                    y_true = df["y_true"].values
-                    y_pred = df["y_pred"].values
+                # Create a clean copy without NaN values
+                clean_df = df.dropna(subset=["y_true", "y_pred"]).copy()
+                
+                if not clean_df.empty:
+                    y_true = clean_df["y_true"].values
+                    y_pred = clean_df["y_pred"].values
+                    
+                    print(f"DEBUG: Clean samples: {len(y_true)}")
                     print(f"DEBUG: Sample y_true: {y_true[:5]}")
-                    print(f"DEBUG: Sample y_pred before scaling: {y_pred[:5]}")
+                    print(f"DEBUG: Sample y_pred: {y_pred[:5]}")
 
-                    # Inverse scale if scaler provided
-                    if target_scaler is not None:
-                        y_true = target_scaler.inverse_transform(y_true.reshape(-1, 1)).ravel()
-                        y_pred = target_scaler.inverse_transform(y_pred.reshape(-1, 1)).ravel()
-                        print(f"DEBUG: Sample y_true after inverse scaling: {y_true[:5]}")
-                        print(f"DEBUG: Sample y_pred after inverse scaling: {y_pred[:5]}")
-
-                    mae = mean_absolute_error(y_true, y_pred)
-                    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-                    r2 = r2_score(y_true, y_pred)
-                    dir_acc = np.mean(np.sign(y_pred) == np.sign(y_true))
-
-                    print(f"DEBUG: MAE={mae}, RMSE={rmse}, R2={r2}, DirectionAcc={dir_acc}")
+                    # Calculate regression metrics
+                    try:
+                        mae = mean_absolute_error(y_true, y_pred)
+                        rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+                        r2 = r2_score(y_true, y_pred)
+                        
+                        # Calculate direction accuracy
+                        dir_acc = np.mean(np.sign(y_pred) == np.sign(y_true))
+                        
+                        print(f"DEBUG: Regression metrics - MAE={mae:.6f}, RMSE={rmse:.6f}, R2={r2:.6f}, DirectionAcc={dir_acc:.6f}")
+                    except Exception as e:
+                        print(f"DEBUG: Error calculating regression metrics: {e}")
                 else:
-                    print(f"DEBUG: Empty after dropping NA, metrics will be NaN")
+                    print(f"DEBUG: No valid samples after dropping NaN from y_true/y_pred")
             else:
-                print(f"DEBUG: y_true/y_pred not found, checking signals for direction accuracy")
+                print(f"DEBUG: y_true/y_pred columns not found")
+                
+                # Try to calculate direction accuracy from signals if available
                 if "Signal" in df.columns and "y_true" in df.columns:
-                    y_true_dir = np.sign(df["y_true"].values)
-                    signal_dir = np.array([1 if s == "BUY" else -1 if s == "SELL" else 0 for s in df["Signal"].values])
-                    dir_acc = np.mean(signal_dir == y_true_dir)
-                    print(f"DEBUG: DirectionAcc from signals: {dir_acc}")
-                else:
-                    print(f"DEBUG: No Signal column or y_true, DirectionAcc=NaN")
+                    clean_df = df.dropna(subset=["Signal", "y_true"]).copy()
+                    if not clean_df.empty:
+                        y_true_dir = np.sign(clean_df["y_true"].values)
+                        # Convert signals to numerical values
+                        signal_map = {"BUY": 1, "SELL": -1, "HOLD": 0}
+                        signal_dir = np.array([signal_map.get(s, 0) for s in clean_df["Signal"].values])
+                        dir_acc = np.mean(signal_dir == y_true_dir)
+                        print(f"DEBUG: DirectionAcc from signals: {dir_acc:.6f}")
+                    else:
+                        print(f"DEBUG: No valid samples for signal-based direction accuracy")
 
             # --- Portfolio metrics ---
             final_port = sharpe = vol = np.nan
             if "PortfolioValue" in df.columns:
-                final_port = df["PortfolioValue"].iloc[-1]
-                returns = df["PortfolioValue"].pct_change().dropna()
-                if not returns.empty:
-                    mean_ret = returns.mean()
-                    vol = returns.std()
-                    sharpe = mean_ret / vol * np.sqrt(252) if vol > 0 else np.nan
-                print(f"DEBUG: FinalPortfolio={final_port}, Sharpe={sharpe}, Volatility={vol}")
+                portfolio_series = df["PortfolioValue"].dropna()
+                if not portfolio_series.empty:
+                    final_port = portfolio_series.iloc[-1]
+                    
+                    # Calculate portfolio returns and Sharpe ratio
+                    portfolio_returns = portfolio_series.pct_change().dropna()
+                    if len(portfolio_returns) > 1:
+                        mean_ret = portfolio_returns.mean()
+                        vol = portfolio_returns.std()
+                        sharpe = mean_ret / vol * np.sqrt(252) if vol > 0 and not np.isnan(vol) else np.nan
+                        print(f"DEBUG: Portfolio - Final: {final_port:.2f}, Sharpe: {sharpe:.6f}, Vol: {vol:.6f}")
+                    else:
+                        print(f"DEBUG: Not enough portfolio returns to calculate Sharpe")
+                else:
+                    print(f"DEBUG: PortfolioValue column exists but all values are NaN")
             else:
-                print(f"DEBUG: PortfolioValue not found, portfolio metrics NaN")
+                print(f"DEBUG: PortfolioValue column not found")
 
-            if model_name == "Random Forest":
-                #RF classifier only direction accuracy matters
-                mae = rmse = r2 = final_port = sharpe = vol = np.nan
-                model_name = "Random Forest Direction Classifier"
+            # Special handling for classifier models
+            if model_name == "Random Forest" and "classifier" in str(type(result)).lower():
+                print(f"DEBUG: Random Forest classifier detected - focusing on direction accuracy")
+                # Keep direction accuracy but mark regression metrics as NaN
+                mae = rmse = r2 = np.nan
 
             metrics.append({
                 "Model": model_name,
-                "MAE": mae,
-                "RMSE": rmse,
-                "R2": r2,
-                "DirectionAcc": dir_acc,
-                "FinalPortfolio": final_port,
-                "Sharpe": sharpe,
-                "Volatility": vol
+                "MAE": float(mae) if not np.isnan(mae) else np.nan,
+                "RMSE": float(rmse) if not np.isnan(rmse) else np.nan,
+                "R2": float(r2) if not np.isnan(r2) else np.nan,
+                "DirectionAcc": float(dir_acc) if not np.isnan(dir_acc) else np.nan,
+                "FinalPortfolio": float(final_port) if not np.isnan(final_port) else np.nan,
+                "Sharpe": float(sharpe) if not np.isnan(sharpe) else np.nan,
+                "Volatility": float(vol) if not np.isnan(vol) else np.nan
             })
 
+        # Create and sort metrics DataFrame
         metrics_df = pd.DataFrame(metrics)
-        metrics_df = metrics_df.sort_values(by="DirectionAcc", ascending=False)
-        print("\nDEBUG: Final metrics DataFrame:\n", metrics_df)
+        if not metrics_df.empty and "DirectionAcc" in metrics_df.columns:
+            metrics_df = metrics_df.sort_values(by="DirectionAcc", ascending=False)
+        
+        print(f"\nDEBUG: Final metrics DataFrame shape: {metrics_df.shape}")
+        print(f"DEBUG: Final metrics DataFrame:\n{metrics_df}")
+        
         return metrics_df
 
 
@@ -975,122 +1222,147 @@ class TradingModelSystem:
         last_price = float(df["adj_close"].iloc[-1])
         threshold = self.config["prediction_threshold_pct"]
         model_types = ["LSTM", "Dense NN", "Random Forest", "XGBoost"]
-        #print(df.tail())
-
 
         for model_type in model_types:
             try:
                 model = self.load_model(model_type, ticker)
-                input_data = last_window if model_type in ["LSTM", "Dense NN"] else last_window.reshape(1, -1)
-
-                # Predict scaled returns
+                
+                # Prepare input data based on model type
                 if model_type == "LSTM":
-                    pred_scaled = model.predict(input_data, verbose=0).flatten()[0]
+                    input_data = last_window
                 elif model_type == "Dense NN":
-                    # Flatten sequence window for Dense model
-                    flat_input = input_data.reshape(1, -1)
-                    pred_scaled = model.predict(flat_input, verbose=0).flatten()[0]
+                    input_data = last_window.reshape(1, -1)
+                else:  # Tree-based models
+                    input_data = last_window.reshape(1, -1)
+
+                # Predict
+                if model_type in ["LSTM", "Dense NN"]:
+                    pred_scaled = model.predict(input_data, verbose=0).flatten()[0]
                 else:
                     pred_scaled = model.predict(input_data).flatten()[0]
+                
+                # VALIDATE: Check if prediction is reasonable
+                if abs(pred_scaled) > 10:  # Unusually large prediction
+                    print(f"DEBUG: {model_type} prediction suspicious: {pred_scaled}")
+                    pred_scaled = 0  # Fallback to no prediction
 
                 # Inverse scale to returns
                 pred_return = target_scaler.inverse_transform(np.array([[pred_scaled]]))[0, 0]
                 pred_price = last_price * (1 + pred_return)
                 pct_diff = (pred_price - last_price) / last_price * 100
-                # float all preds
+                
+                # Convert to float
                 pred_price = float(pred_price)
                 pred_return = float(pred_return)
                 pct_diff = float(pct_diff)
+                
+                # Determine signal
                 signal = "BUY" if pct_diff > threshold else ("SELL" if pct_diff < -threshold else "HOLD")
                 
-                if model_type == "Random Forest":  # classifier
-                    cls_preds = model.predict(input_data)
-                    proba = model.predict_proba(input_data)
-                    confidence = np.max(proba)
-                    
-                    # map class to signal (example)
-                    signal = "BUY" if cls_preds[0] == 1 else "SELL"
-                    
-                    pred_return = None
-                    pred_price = None
-                    pct_diff = None
-
+                # REMOVED classifier logic since all your models are regressors
+                
                 predictions[model_type] = {
                     "predicted_price": pred_price,
                     "predicted_return": pred_return,
                     "pct_diff": pct_diff,
                     "signal": signal
                 }
+                
             except Exception as e:
                 predictions[model_type] = {"error": str(e)}
 
         # Generate ensemble prediction automatically
         ensemble_pred = self._generate_ensemble_predictions(predictions)
         print("Ensemble raw:", ensemble_pred)
-        ensemble_pred["pct_diff"] = ensemble_pred["predicted_price"] - last_price
+        
+        # FIX: Calculate proper pct_diff for ensemble
+        if ensemble_pred and "predicted_price" in ensemble_pred:
+            ensemble_price = ensemble_pred["predicted_price"]
+            ensemble_pred["pct_diff"] = (ensemble_price - last_price) / last_price * 100  # PERCENTAGE difference
+        
         if ensemble_pred:
             predictions["Ensemble"] = ensemble_pred
-            
 
         return predictions
 
 
 
     def _generate_ensemble_predictions(self, model_preds: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        Combine model predictions into a single ensemble signal and predicted price.
-        Regressors contribute via predicted return; classifiers contribute via BUY/SELL.
-        """
+        """Improved ensemble prediction with better logic"""
         signals = []
         prices = []
+        pct_diffs = []
+        
+        # Collect valid predictions
         for model, pred in model_preds.items():
             if "error" in pred:
                 continue
-            # Collect signals
-            
+                
             signal = pred.get("signal")
-            if signal:
-                signals.append(signal)
-
-            # Collect predicted prices (only regressors really matter)
             pred_price = pred.get("predicted_price")
-            if pred_price:
+            pct_diff = pred.get("pct_diff")
+            
+            # Skip if missing critical data
+            if pred_price is None or pct_diff is None:
+                continue
+                
+            # Only consider models that made a decisive prediction
+            if signal and signal != "HOLD":
+                signals.append(signal)
                 prices.append(pred_price)
-
+                pct_diffs.append(pct_diff)
+        
+        # If no decisive signals, return HOLD with average price
         if not signals:
-            return {"error": "No valid model predictions for ensemble"}
-
-        # --- Directional vote ---
-        buy_votes = signals.count("BUY")
-        sell_votes = signals.count("SELL")
-        hold_votes = signals.count("HOLD")
-
-        # Choose signal with most votes
-        if buy_votes > sell_votes and buy_votes > hold_votes:
+            valid_prices = [p.get("predicted_price") for p in model_preds.values() 
+                        if "error" not in p and p.get("predicted_price") is not None]
+            if valid_prices:
+                avg_price = float(np.mean(valid_prices))
+                return {
+                    "signal": "HOLD", 
+                    "predicted_price": avg_price,
+                    "confidence": 0,
+                    "pct_diff": 0
+                }
+            else:
+                return {"signal": "HOLD", "predicted_price": None, "confidence": 0, "pct_diff": 0}
+        
+        # Count signals
+        buy_count = signals.count("BUY")
+        sell_count = signals.count("SELL")
+        total_votes = len(signals)
+        
+        # Calculate confidence based on agreement and magnitude
+        avg_pct_diff = np.mean(pct_diffs)
+        agreement_ratio = max(buy_count, sell_count) / total_votes
+        
+        # Determine signal based on majority vote
+        if buy_count > sell_count:
             ensemble_signal = "BUY"
-        elif sell_votes > buy_votes and sell_votes > hold_votes:
-            ensemble_signal = "SELL"
+            confidence = min(agreement_ratio * (1 + abs(avg_pct_diff)/10), 1.0)
+        elif sell_count > buy_count:
+            ensemble_signal = "SELL" 
+            confidence = min(agreement_ratio * (1 + abs(avg_pct_diff)/10), 1.0)
         else:
             ensemble_signal = "HOLD"
-
-        # Ensemble predicted price = mean of regressor prices (ignore classifiers)
-        ensemble_price = np.mean(prices) if prices else None
-
+            confidence = 0
+        
+        # Use weighted average price (weighted by confidence)
+        ensemble_price = float(np.mean(prices))
+        
         return {
             "signal": ensemble_signal,
-            "predicted_price": float(ensemble_price) if ensemble_price is not None else None
-            
-            
+            "predicted_price": ensemble_price,
+            "confidence": confidence,
+            "pct_diff": avg_pct_diff  # Use average percentage difference
         }
-
 
     # ---------- backtesting ----------
     def walk_forward_backtest(self, df: pd.DataFrame, model: Any, model_type: str,
-                          feature_scaler: Any, target_scaler: Any,
-                          feature_cols: List[str], ticker: str) -> pd.DataFrame:
+                      feature_scaler: Any, target_scaler: Any,
+                      feature_cols: List[str], ticker: str) -> pd.DataFrame:
         """
-        Walk-forward backtest producing fully structured DataFrame compatible with metrics calculation.
-        Handles different model types (LSTM, Dense NN, RF, XGB, classifiers) correctly.
+        Fixed version with proper prev_prices definition
         """
         try:
             # --- Determine features ---
@@ -1103,7 +1375,7 @@ class TradingModelSystem:
                 training_features = [f for f in training_features if f in df.columns]
 
             window = self.config.get("window_size", 30)
-            threshold_pct = self.config.get("prediction_threshold_pct", 0.01)
+            threshold_pct = self.config.get("prediction_threshold_pct", 0.001)
 
             if len(df) < window + 10:
                 logger.warning("Not enough data for backtest")
@@ -1121,7 +1393,7 @@ class TradingModelSystem:
             scaled_features = feature_scaler.transform(features)
             scaled_returns = target_scaler.transform(true_returns)
 
-            # --- Build sequences for LSTM / sequential models ---
+            # --- Build sequences ---
             X_seq = np.array([scaled_features[i-window:i] for i in range(window, len(scaled_returns))])
             y_seq = np.array([scaled_returns[i] for i in range(window, len(scaled_returns))]).reshape(-1,1)
             n = X_seq.shape[0]
@@ -1133,9 +1405,14 @@ class TradingModelSystem:
                     "PredictedReturn","y_true","y_pred"
                 ])
 
+            # --- FIX: Define prev_prices properly ---
+            prev_prices = prices[window-1:-1]  # Prices at the start of each prediction period
+            true_prices = prices[window:]      # Actual prices at prediction time
+            
+            print(f"DEBUG: prev_prices shape: {prev_prices.shape}, true_prices shape: {true_prices.shape}")
+
             # --- Safe prediction function ---
             def _safe_predict(m, X):
-
                 try:
                     # Classifier
                     if hasattr(m, "predict_proba"):
@@ -1158,7 +1435,6 @@ class TradingModelSystem:
                         preds = m.predict(X_for, verbose=0)
                         return {"kind": "regressor", "preds": np.array(preds).ravel(), "proba": None}
 
-
                     # Standard scikit-learn regressors (RF, XGB)
                     else:
                         X_for = X.reshape(X.shape[0], -1) if X.ndim==3 else X
@@ -1169,13 +1445,10 @@ class TradingModelSystem:
                     logger.error(f"Prediction failed: {e}")
                     return {"kind": "error", "error": str(e)}
 
-
             pred_info = _safe_predict(model, X_seq)
 
             # --- Initialize containers ---
             y_true = target_scaler.inverse_transform(y_seq).ravel()
-            prev_prices = prices[window-1:-1]
-            true_prices = prices[window:]
             signals = np.array(["HOLD"] * n)
             pred_returns = np.full(n, np.nan, dtype=float)
             pred_prices = np.full(n, np.nan, dtype=float)
@@ -1187,45 +1460,67 @@ class TradingModelSystem:
                     preds_scaled = np.resize(preds_scaled, n)
                 pred_returns = target_scaler.inverse_transform(preds_scaled.reshape(-1,1)).ravel()
                 pred_prices = prev_prices * (1.0 + pred_returns)
-                pct_diffs = (pred_prices - true_prices) / true_prices
-                signals = np.where(pct_diffs > threshold_pct, "BUY",
-                                np.where(pct_diffs < -threshold_pct, "SELL", "HOLD"))
+                
+                # ULTRA-SENSITIVE: Trade on ANY prediction
+                signals = np.where(pred_returns > 0.0001, "BUY", 
+                                np.where(pred_returns < -0.0001, "SELL", "HOLD"))
+                
+                print(f"DEBUG: {model_type} Signal distribution - BUY: {(signals == 'BUY').sum()}, "
+                    f"SELL: {(signals == 'SELL').sum()}, HOLD: {(signals == 'HOLD').sum()}")
 
             elif pred_info["kind"] == "classifier":
                 cls_preds = pred_info["preds"]
                 if len(cls_preds) != n:
                     cls_preds = np.resize(cls_preds, n)
                 proba = pred_info.get("proba")
-                hold_mask = (proba is not None) and (np.max(proba, axis=1) < 0.6)
+                
+                # More sensitive classifier
+                hold_mask = (proba is not None) and (np.max(proba, axis=1) < 0.55)
                 signals = np.where(cls_preds == 1, "BUY", "SELL")
                 if proba is not None:
                     signals[hold_mask] = "HOLD"
                 pred_prices = prev_prices
-                # Use numeric encoding for metrics
-                pred_returns = np.where(signals=="BUY", 1, np.where(signals=="SELL",-1,0))
 
             else:
                 logger.warning("Prediction kind unknown")
                 pred_returns = np.full(n, np.nan)
 
-            # --- Portfolio simulation ---
+            # --- EXTREMELY AGGRESSIVE portfolio simulation ---
             cash = self.config.get("initial_capital", 10000)
             positions = 0
             portfolio = []
+            
+            trade_count = 0
             for i, sig in enumerate(signals):
                 price = true_prices[i]
+                
+                # Trade on EVERY signal (except HOLD)
                 if sig == "BUY" and positions == 0:
-                    qty = int((cash*0.95)//price)
-                    if qty>0:
+                    # Buy with 90% of cash
+                    qty = int((cash * 0.9) // price)
+                    if qty > 0:
                         positions = qty
-                        cash -= qty*price
-                elif sig == "SELL" and positions>0:
-                    cash += positions*price
+                        cash -= qty * price
+                        trade_count += 1
+                        if trade_count <= 5:
+                            print(f"DEBUG: {model_type} BUY {qty} shares at {price:.2f}, cash: {cash:.2f}")
+                        
+                elif sig == "SELL" and positions > 0:
+                    # Sell all positions
+                    cash += positions * price
+                    trade_count += 1
+                    if trade_count <= 5:
+                        print(f"DEBUG: {model_type} SELL {positions} shares at {price:.2f}, cash: {cash:.2f}")
                     positions = 0
-                portfolio.append(cash + positions*price)
-            if positions>0:
-                cash += positions*prices[-1]
+                    
+                portfolio.append(cash + positions * price)
+            
+            # Close any remaining positions
+            if positions > 0:
+                cash += positions * prices[-1]
                 portfolio[-1] = cash
+            
+            print(f"DEBUG: {model_type} Total trades: {trade_count}, Final portfolio: ${portfolio[-1]:.2f}")
 
             # --- Build result DataFrame ---
             df_result = pd.DataFrame({
@@ -1236,18 +1531,19 @@ class TradingModelSystem:
                 "PortfolioValue": portfolio,
                 "PredictedReturn": pred_returns,
                 "y_true": y_true,
-                "y_pred": pred_returns  # numeric predicted returns for metrics
+                "y_pred": pred_returns
             })
 
             return df_result
 
         except Exception as e:
             logger.error(f"Backtest failed: {e}")
+            import traceback
+            traceback.print_exc()
             return pd.DataFrame(columns=[
                 "Date","TruePrice","PredictedPrice","Signal","PortfolioValue",
                 "PredictedReturn","y_true","y_pred"
             ])
-
 
 
 

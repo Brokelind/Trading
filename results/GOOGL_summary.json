@@ -1,0 +1,148 @@
+{
+  "ticker": "GOOGL",
+  "timestamp": "2025-10-10T13:06:22.127626",
+  "last_price": 241.53,
+  "predictions": {
+    "LSTM": {
+      "predicted_price": 241.27687530742028,
+      "predicted_return": -0.001048005186021328,
+      "pct_diff": -0.10480051860212714,
+      "signal": "HOLD"
+    },
+    "Dense NN": {
+      "predicted_price": 242.15930881683715,
+      "predicted_return": 0.0026055099442601204,
+      "pct_diff": 0.26055099442601437,
+      "signal": "BUY"
+    },
+    "Random Forest": {
+      "predicted_price": 241.49781948201527,
+      "predicted_return": -0.00013323611139298426,
+      "pct_diff": -0.01332361113929012,
+      "signal": "HOLD"
+    },
+    "XGBoost": {
+      "predicted_price": 241.92517614673474,
+      "predicted_return": 0.0016361369052901864,
+      "pct_diff": 0.16361369052901958,
+      "signal": "HOLD"
+    },
+    "Ensemble": {
+      "signal": "BUY",
+      "predicted_price": 241.71479493825188,
+      "confidence": 1.0,
+      "pct_diff": 0.18479493825188342
+    }
+  },
+  "chosen_model": "Ensemble",
+  "signal": "BUY",
+  "pct_diff": 0.18479493825188342,
+  "qty": 0,
+  "sentiment": {
+    "ticker": "GOOGL",
+    "signal": "HOLD",
+    "score": 0.018,
+    "confidence": 0.34
+  },
+  "position_size_factor": 0.1,
+  "metrics_path": null,
+  "training_metrics": [
+    {
+      "Model": "LSTM",
+      "MAE": 0.012267641170629097,
+      "RMSE": 0.016428160799265235,
+      "R2": -0.005742259517463433,
+      "DirectionAccuracy": 0.5084745762711864,
+      "Samples": 177,
+      "Error": null
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.013024555681659646,
+      "RMSE": 0.017024052312356472,
+      "R2": -0.08002721433832782,
+      "DirectionAccuracy": 0.4858757062146893,
+      "Samples": 177,
+      "Error": null
+    },
+    {
+      "Model": "Random Forest",
+      "MAE": 0.011901200991540685,
+      "RMSE": 0.0162234154131652,
+      "R2": 0.01917080103184199,
+      "DirectionAccuracy": 0.5423728813559322,
+      "Samples": 177,
+      "Error": null
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.012579174300639935,
+      "RMSE": 0.01747749568699861,
+      "R2": -0.13832746883355784,
+      "DirectionAccuracy": 0.5649717514124294,
+      "Samples": 177,
+      "Error": null
+    },
+    {
+      "Model": "Ensemble",
+      "MAE": 0.012097712275718491,
+      "RMSE": 0.01665192204237349,
+      "R2": -0.03332645127179035,
+      "DirectionAccuracy": 0.5819209039548022,
+      "Samples": 177,
+      "Error": null
+    }
+  ],
+  "backtest_metrics": [
+    {
+      "Model": "LSTM",
+      "MAE": 0.015192109881588055,
+      "RMSE": 0.020842460584105476,
+      "R2": -0.06375414043439465,
+      "DirectionAcc": 0.47752808988764045,
+      "FinalPortfolio": 9733.13,
+      "Sharpe": -0.05425816129270974,
+      "Volatility": 0.014427820829502374
+    },
+    {
+      "Model": "Ensemble",
+      "MAE": 0.015479696102154283,
+      "RMSE": 0.021054102686768928,
+      "R2": -0.08546733645627125,
+      "DirectionAcc": 0.47752808988764045,
+      "FinalPortfolio": 10354.489999999993,
+      "Sharpe": 0.3359657415379755,
+      "Volatility": 0.013755900674304211
+    },
+    {
+      "Model": "Random Forest",
+      "MAE": 0.01491676991613265,
+      "RMSE": 0.020517848094767983,
+      "R2": -0.03087713282239557,
+      "DirectionAcc": 0.47191011235955055,
+      "FinalPortfolio": 10059.639999999998,
+      "Sharpe": 0.1546403476614779,
+      "Volatility": 0.015057355730209969
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.0163925015053418,
+      "RMSE": 0.0220181656410258,
+      "R2": -0.187149885346922,
+      "DirectionAcc": 0.47191011235955055,
+      "FinalPortfolio": 10916.169999999996,
+      "Sharpe": 0.7192229093278523,
+      "Volatility": 0.01269223444279535
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.015499767472818492,
+      "RMSE": 0.021208811604040957,
+      "R2": -0.10147832230086395,
+      "DirectionAcc": 0.4606741573033708,
+      "FinalPortfolio": 9743.759999999998,
+      "Sharpe": -0.16591326481291024,
+      "Volatility": 0.009615069220065305
+    }
+  ]
+}

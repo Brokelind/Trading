@@ -1,53 +1,118 @@
 {
-  "last_trained": "2025-10-07T18:03:48.180527",
+  "last_trained": "2025-10-10T11:30:14.623317",
   "model_paths": {
     "LSTM": "saved_models\\DD_LSTM.keras",
     "Dense NN": "saved_models\\DD_Dense_NN.keras",
     "Random Forest": "saved_models\\DD_Random_Forest.joblib",
-    "XGBoost": "saved_models\\DD_XGBoost.joblib"
+    "XGBoost": "saved_models\\DD_XGBoost.joblib",
+    "Ensemble": "saved_models\\DD_Ensemble.joblib"
   },
-  "metrics_file": "saved_models\\DD_metrics.csv",
-  "metrics": [
+  "training_metrics_file": "saved_models\\DD_training_metrics.csv",
+  "backtest_metrics_file": "saved_models\\DD_backtest_metrics.csv",
+  "training_metrics": [
     {
-      "Model": "Random Forest",
-      "MAE": 0.9428566717811941,
-      "RMSE": 0.9643382129658963,
-      "R2": -2455.4859983318997,
-      "DirectionAcc": 0.935868754660701,
-      "FinalPortfolio": 41375620.389999956,
-      "Sharpe": 8.995821272252881,
-      "Volatility": 0.011107048212270782
+      "Model": "LSTM",
+      "MAE": 0.009269037946576483,
+      "RMSE": 0.013151311531092155,
+      "R2": 0.0021267484035794038,
+      "DirectionAccuracy": 0.5085714285714286,
+      "Samples": 175,
+      "Error": null
     },
     {
       "Model": "Dense NN",
-      "MAE": 0.008789714137694984,
-      "RMSE": 0.011969902552035653,
-      "R2": 0.6215253730009092,
-      "DirectionAcc": 0.750186428038777,
-      "FinalPortfolio": 10000.0,
-      "Sharpe": NaN,
-      "Volatility": 0.0
+      "MAE": 0.010856868499745579,
+      "RMSE": 0.014474909629468267,
+      "R2": -0.20884041765143357,
+      "DirectionAccuracy": 0.5142857142857142,
+      "Samples": 175,
+      "Error": null
     },
     {
-      "Model": "LSTM",
-      "MAE": 0.01311331062097401,
-      "RMSE": 0.019183778930822612,
-      "R2": 0.027871082234006583,
-      "DirectionAcc": 0.5451155853840418,
-      "FinalPortfolio": 13496.0,
-      "Sharpe": 0.7400089371820502,
-      "Volatility": 0.005072522146229392
+      "Model": "Random Forest",
+      "MAE": 0.009637419230146622,
+      "RMSE": 0.013751569185353982,
+      "R2": -0.09104274691429048,
+      "DirectionAccuracy": 0.5314285714285715,
+      "Samples": 175,
+      "Error": null
     },
     {
       "Model": "XGBoost",
-      "MAE": 0.013182716786488463,
-      "RMSE": 0.01821915439514092,
-      "R2": 0.12317692089395937,
-      "DirectionAcc": 0.5026099925428784,
-      "FinalPortfolio": 13496.0,
-      "Sharpe": 0.7400089371820502,
-      "Volatility": 0.005072522146229392
+      "MAE": 0.011395223504192387,
+      "RMSE": 0.015108494245482305,
+      "R2": -0.3169813268212991,
+      "DirectionAccuracy": 0.4742857142857143,
+      "Samples": 175,
+      "Error": null
+    },
+    {
+      "Model": "Ensemble",
+      "MAE": 0.010255282307165159,
+      "RMSE": 0.014069062423849761,
+      "R2": -0.14200383785576487,
+      "DirectionAccuracy": 0.4857142857142857,
+      "Samples": 175,
+      "Error": null
     }
   ],
-  "best_model": "Dense NN"
+  "backtest_metrics": [
+    {
+      "Model": "Random Forest",
+      "MAE": 0.014233404566188018,
+      "RMSE": 0.02355417386536666,
+      "R2": -0.0006322478478433258,
+      "DirectionAcc": 0.5480225988700564,
+      "FinalPortfolio": 11272.880000000006,
+      "Sharpe": 0.7426299144543148,
+      "Volatility": 0.01846855262370202
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.014265245796763325,
+      "RMSE": 0.023537110016482843,
+      "R2": 0.0008170454020531848,
+      "DirectionAcc": 0.519774011299435,
+      "FinalPortfolio": 9683.86,
+      "Sharpe": -0.01623181697196789,
+      "Volatility": 0.017396863645282947
+    },
+    {
+      "Model": "XGBoost",
+      "MAE": 0.014694917326646911,
+      "RMSE": 0.024319104516574225,
+      "R2": -0.0666793815412885,
+      "DirectionAcc": 0.519774011299435,
+      "FinalPortfolio": 9093.009999999997,
+      "Sharpe": -0.3507984941236833,
+      "Volatility": 0.017161146228309315
+    },
+    {
+      "Model": "Ensemble",
+      "MAE": 0.014267353299894273,
+      "RMSE": 0.023779417446378435,
+      "R2": -0.01986142152606707,
+      "DirectionAcc": 0.5141242937853108,
+      "FinalPortfolio": 9686.13999999999,
+      "Sharpe": -0.010119848074406423,
+      "Volatility": 0.017708813735474192
+    },
+    {
+      "Model": "Dense NN",
+      "MAE": 0.017704216966474506,
+      "RMSE": 0.027329801811652434,
+      "R2": -0.3471368206532348,
+      "DirectionAcc": 0.4915254237288136,
+      "FinalPortfolio": 10281.720000000001,
+      "Sharpe": 0.29346053922458004,
+      "Volatility": 0.018771431502186072
+    }
+  ],
+  "best_model": "LSTM",
+  "data_split_info": {
+    "train_size": 960,
+    "val_size": 205,
+    "backtest_size": 207,
+    "split_date_backtest": "2024-11-27 00:00:00"
+  }
 }

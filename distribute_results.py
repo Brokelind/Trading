@@ -27,30 +27,60 @@ def save_result_json(ticker, payload):
     return path
 
 def load_results():
+    """Load and filter trading results with improved criteria"""
     summaries = []
 
     for file in os.listdir(RESULTS_DIR):
         if file.endswith("_summary.json"):
-            with open(os.path.join(RESULTS_DIR, file), "r") as f:
-                data = json.load(f)
+            try:
+                with open(os.path.join(RESULTS_DIR, file), "r") as f:
+                    data = json.load(f)
 
+                ticker = data.get("ticker")
                 chosen_model = data.get("chosen_model")
                 preds = data.get("predictions", {})
+                signal = data.get("signal", "HOLD")
+                
+                # Calculate percentage difference
                 pct_diff = 0
-
                 if chosen_model and chosen_model in preds:
                     if chosen_model == "Ensemble":
                         last_price = data.get("last_price", 0)
                         ensemble_price = preds[chosen_model].get("predicted_price", 0)
-                        pct_diff = (ensemble_price - last_price) / last_price if last_price else 0
+                        pct_diff = (ensemble_price - last_price) / last_price * 100 if last_price else 0
                     else:
                         pct_diff = preds[chosen_model].get("pct_diff", 0)
 
+                # Get confidence from ensemble or use default
+                confidence = preds.get("Ensemble", {}).get("confidence", 0.5)
+                
+                # Get sentiment confidence
                 sentiment_conf = data.get("sentiment", {}).get("confidence", 0)
+                
+                # Enhanced filtering criteria
+                meets_criteria = (
+                    signal != "HOLD" and  # Only show BUY/SELL signals
+                    abs(pct_diff) >= 0.5 and  # Minimum 0.5% predicted change
+                    confidence >= 0.4 and  # Minimum 40% model confidence
+                    sentiment_conf >= 0.3  # Minimum 30% sentiment confidence
+                )
 
-                #if abs(pct_diff) >= 0.01 and sentiment_conf >= 0.4:
-                summaries.append(data)
+                #meets_criteria = True
 
+                
+                # Add confidence and pct_diff to data for sorting
+                data['confidence'] = confidence
+                data['pct_diff'] = pct_diff
+                
+                if meets_criteria:
+                    summaries.append(data)
+                else:
+                    print(f"Filtered out {ticker}: signal={signal}, pct_diff={pct_diff:.2f}%, conf={confidence:.2f}")
+                    
+            except Exception as e:
+                print(f"Error loading {file}: {e}")
+
+    print(f"Loaded {len(summaries)} strong signals after filtering")
     return summaries
 
 
@@ -184,6 +214,3 @@ def send_daily_summary():
     else:
         print("📭 No strong signals to report today.")
         return True  # No error, just nothing to send
-
-if __name__ == "__main__":
-    send_daily_summary()
