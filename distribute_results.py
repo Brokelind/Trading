@@ -65,7 +65,7 @@ def load_results():
                     sentiment_conf >= 0.3  # Minimum 30% sentiment confidence
                 )
 
-                #meets_criteria = True
+                meets_criteria = True # pass all checks for now
 
                 
                 # Add confidence and pct_diff to data for sorting

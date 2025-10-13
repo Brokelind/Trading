@@ -26,7 +26,10 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam, Nadam
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.metrics import RootMeanSquaredError
-
+from feature_selector import FeatureSelector
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
+import matplotlib.pyplot as plt
 # ---- CONFIG ----
 MODEL_DIR_DEFAULT = "saved_models"
 DATA_DIR_DEFAULT = "data"
@@ -52,7 +55,7 @@ class TradingModelSystem:
         cfg = {
             "data_dir": DATA_DIR_DEFAULT,
             "model_dir": MODEL_DIR_DEFAULT,
-            "window_size": 30,  
+            "window_size": 60,  
             "prediction_threshold_pct": 0.0001,
             "min_trade_confidence": 0.40,
             "initial_capital": 10000,
@@ -109,7 +112,54 @@ class TradingModelSystem:
             logger.error(f"Error loading data for {ticker}: {e}")
             return None
 
+    def analyze_features(self, ticker: str, save_plot: bool = True):
+        """
+        Analyze and visualize feature importance
+        """
+        df = self.prepare_features(ticker)
+        if df is None:
+            print("Could not prepare features")
+            return
+        
+        feature_cols = [c for c in df.columns 
+                    if c not in ['target_price', 'target_return', 'target_direction']]
+        
+        X = df[feature_cols].values
+        y = df['target_return'].values
+        
+        print(f"\n{'='*60}")
+        print(f"FEATURE ANALYSIS: {ticker}")
+        print(f"{'='*60}\n")
+        
+        # Test multiple selection methods
+        methods = ['mutual_info', 'f_test', 'importance', 'correlation']
+        
+        for method in methods:
+            print(f"\n--- Method: {method.upper()} ---")
+            selector = FeatureSelector(method=method, n_features=20)
+            selector.fit(X, y, feature_names=feature_cols)
+            
+            print(f"Top 10 features:")
+            print(selector.feature_scores_.head(10).to_string(index=False))
+            
+            if save_plot:
+                selector.plot_feature_scores(top_n=20)
+                plt.savefig(f"{ticker}_{method}_features.png", dpi=150, bbox_inches='tight')
+                plt.close()
+        
+        # Combined method
+        print(f"\n--- Method: COMBINED (Ensemble) ---")
+        selector = FeatureSelector(method='combined', n_features=30)
+        selector.fit(X, y, feature_names=feature_cols)
+        print(f"Top 15 features:")
+        print(selector.feature_scores_.head(15).to_string(index=False))
+        
+        if save_plot:
+            selector.plot_feature_scores(top_n=30)
+            plt.savefig(f"{ticker}_combined_features.png", dpi=150, bbox_inches='tight')
+            plt.close()
 
+            
     def _add_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """Using TA-Lib instead of pandas-ta"""
         if df.empty:
@@ -158,16 +208,43 @@ class TradingModelSystem:
                 df[f'ret_lag_{lag}'] = df['log_ret'].shift(lag)
                 df[f'vol_lag_{lag}'] = df['volatility'].shift(lag)
             
-            # Target variables
+            """# Target variables
             df['target_price'] = df['adj_close'].shift(-1)
             df['target_return'] = df['target_price'] / df['adj_close'] - 1.0
-            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
+            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)"""
             
-            # Drop any remaining NA values
-            df = df.dropna()
+            # Market regime
+            df['trend_strength'] = talib.ADX(df['high'], df['low'], df['adj_close'], timeperiod=14)
+            df['market_regime'] = np.where(df['trend_strength'] > 25, 1, 0)
             
-            return df
+            # Volatility regime
+            df['volatility_regime'] = (df['volatility'] > df['volatility'].rolling(60).mean()).astype(int)
             
+            # Price momentum
+            df['momentum_5'] = df['adj_close'].pct_change(5)
+            df['momentum_10'] = df['adj_close'].pct_change(10)
+            df['momentum_20'] = df['adj_close'].pct_change(20)
+            
+            # Volume patterns
+            if 'volume' in df.columns:
+                df['volume_trend'] = df['volume'] / df['volume'].rolling(20).mean()
+                df['price_volume_corr'] = df['log_ret'].rolling(20).corr(df['volume'].pct_change())
+            
+            # Intraday range
+            df['high_low_ratio'] = (df['high'] - df['low']) / df['adj_close']
+            
+            # Rolling statistics
+            for window in [5, 10, 20]:
+                df[f'return_mean_{window}'] = df['log_ret'].rolling(window).mean()
+                df[f'return_std_{window}'] = df['log_ret'].rolling(window).std()
+                df[f'return_skew_{window}'] = df['log_ret'].rolling(window).skew()
+            
+            """# Targets LAST (avoid leakage)
+            df['target_price'] = df['adj_close'].shift(-1)
+            df['target_return'] = df['target_price'] / df['adj_close'] - 1.0
+            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)"""
+            
+            return df.dropna()
         except Exception as e:
             logger.error(f"Error in _add_technical_indicators: {e}")
             raise
@@ -178,7 +255,6 @@ class TradingModelSystem:
             
             # Load raw data
             df = self.load_raw(ticker)
-            print(f"DEBUG: Raw data loaded, shape: {df.shape if df is not None else 'None'}")
             
             if df is None or len(df) < self.config["min_data_points"]:
                 logger.warning(f"{ticker}: Not enough raw data or failed to load")
@@ -187,7 +263,7 @@ class TradingModelSystem:
             # Drop initial NA values
             df = df.dropna()
 
-            # Add technical indicators
+            # Add technical indicators (NO TARGETS CREATED HERE)
             df = self._add_technical_indicators(df)
             
             # Drop NA values created by technical indicators
@@ -195,16 +271,22 @@ class TradingModelSystem:
 
             # Check if we still have enough data
             if len(df) < self.config["min_data_points"]:
-                logger.warning(f"{ticker}: Only {len(df)} rows after feature engineering (min: {self.config['min_data_points']})")
+                logger.warning(f"{ticker}: Only {len(df)} rows after feature engineering")
                 return None
 
-            # Create target variables
-            df['target_return'] = df['adj_close'].pct_change().shift(-1)
+            # ✅ CREATE TARGETS HERE WITH PROPER CLIPPING
+            df['target_price'] = df['adj_close'].shift(-1)
+            df['target_return'] = (df['target_price'] / df['adj_close']) - 1.0
+            
+            # 🔥 CRITICAL: Clip BEFORE any other operations
+            df['target_return'] = df['target_return'].clip(-0.15, 0.15)
+            
+            df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
             
             # Remove any rows with NaN targets
             df = df.dropna(subset=['target_return'])
             
-            # Remove extreme outliers
+            # Additional outlier removal (now working on already-clipped data)
             returns = df['target_return']
             median = returns.median()
             mad = (returns - median).abs().median()
@@ -221,7 +303,7 @@ class TradingModelSystem:
         except Exception as e:
             logger.error(f"Error preparing features for {ticker}: {e}")
             import traceback
-            traceback.print_exc()  # This will show the exact line where it fails
+            traceback.print_exc()
             return None
 
     # ---------- model path & metadata ----------
@@ -262,25 +344,21 @@ class TradingModelSystem:
         return np.array(X), np.array(y)
 
     def _create_lstm_model(self, input_shape: Tuple[int, int]) -> Sequential:
-        """LSTM with custom loss to encourage larger predictions"""
         model = Sequential([
             Input(shape=input_shape),
-            LSTM(64, return_sequences=True, dropout=0.3),
-            LSTM(32, dropout=0.3),
+            LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.2),
+            LSTM(64, return_sequences=True, dropout=0.2),
+            LSTM(32, dropout=0.2),
+            Dense(32, activation='relu'),
+            Dropout(0.3),
             Dense(16, activation='relu'),
             Dense(1)
         ])
         
-        # Custom loss that penalizes predictions that are too small
-        def amplified_mse(y_true, y_pred):
-            mse = tf.keras.losses.mse(y_true, y_pred)
-            # Penalize predictions that are too close to zero
-            small_pred_penalty = tf.reduce_mean(tf.square(y_pred)) * 0.1
-            return mse + small_pred_penalty
-        
         model.compile(
-            optimizer=Adam(learning_rate=0.001),
-            loss=amplified_mse
+            optimizer=Adam(learning_rate=0.0001),  # Lower learning rate
+            loss='huber',  # More robust to outliers than MSE
+            metrics=['mae']
         )
         return model
 
@@ -327,7 +405,7 @@ class TradingModelSystem:
                 
             # Create targets if missing
             df['target_price'] = df['adj_close'].shift(-1)
-            df['target_return'] = (df['target_price'] / df['adj_close']) - 1.0
+            #df['target_return'] = (df['target_price'] / df['adj_close']) - 1.0
             df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
             
             # Critical: Remove any NaN/inf values
@@ -357,6 +435,8 @@ class TradingModelSystem:
                 constant_cols.append(col)
         if constant_cols:
             print(f"DEBUG: Warning - Constant/near-constant columns: {constant_cols}")
+            # Remove constant columns
+            feature_cols = [c for c in feature_cols if c not in constant_cols]
 
         # Save feature information
         meta = self.load_meta(ticker)
@@ -384,7 +464,64 @@ class TradingModelSystem:
         }
         self.save_meta(ticker, meta)
         
-        # 5. Scale features and targets using TRAINING data only
+        # ============================================================================
+        # 🔥 ADD FEATURE SELECTION HERE - BEFORE SCALING 🔥
+        # ============================================================================
+        
+        print(f"\n{'='*60}")
+        print(f"FEATURE SELECTION")
+        print(f"{'='*60}")
+        print(f"Original features: {len(feature_cols)}")
+        
+        # Extract training data for feature selection
+        X_train_raw = train_df[feature_cols].values
+        y_train_raw = train_df['target_return'].values
+        
+        # Initialize feature selector with combined method
+        n_features_to_select = min(50, len(feature_cols) // 2)  # Select top 50 or half
+        
+        try:
+            selector = FeatureSelector(
+                method='combined',  # Use ensemble of methods
+                n_features=n_features_to_select
+            )
+            
+            # Fit selector on training data only (no data leakage!)
+            selector.fit(X_train_raw, y_train_raw, feature_names=feature_cols)
+            
+            # Update feature_cols to selected features
+            feature_cols = selector.selected_features_
+            
+            print(f"Selected features: {len(feature_cols)}")
+            print(f"\nTop 15 selected features:")
+            for i, feat in enumerate(feature_cols[:15], 1):
+                print(f"  {i:2d}. {feat}")
+            
+            # Save selector for prediction
+            selector_path = os.path.join(self.config["model_dir"], f"{ticker}_feature_selector.joblib")
+            joblib.dump(selector, selector_path)
+            
+            # Update metadata
+            meta['selected_features'] = feature_cols
+            meta['n_selected_features'] = len(feature_cols)
+            meta['feature_selection_method'] = 'combined'
+            meta['original_n_features'] = len(train_df.columns) - 3  # Exclude targets
+            self.save_meta(ticker, meta)
+            
+            print(f"Feature selector saved to: {selector_path}")
+            
+        except Exception as e:
+            logger.warning(f"Feature selection failed: {e}. Using all features.")
+            # Keep original feature_cols if selection fails
+            pass
+        
+        print(f"{'='*60}\n")
+        
+        # ============================================================================
+        # END FEATURE SELECTION
+        # ============================================================================
+        
+        # 5. Scale features and targets using TRAINING data only (with selected features)
         feature_scaler = StandardScaler()
         target_scaler = StandardScaler()
 
@@ -402,18 +539,17 @@ class TradingModelSystem:
         print(f"DEBUG: Returns before clipping - Min: {train_returns.min():.6f}, Max: {train_returns.max():.6f}")
         print(f"DEBUG: Returns after clipping - Min: {train_returns_clipped.min():.6f}, Max: {train_returns_clipped.max():.6f}")
         
-        # Fit scalers
+        # 👉 NOW USE SELECTED FEATURES (feature_cols has been updated above)
         X_train_scaled = feature_scaler.fit_transform(train_df[feature_cols].values)
         y_train_scaled = target_scaler.fit_transform(train_returns_clipped.reshape(-1, 1))
         
-        print(f"DEBUG: Scaled target range: [{y_train_scaled.min():.4f}, {y_train_scaled.max():.4f}]")
-        
-        # Transform validation and backtest data using training scalers
         X_val_scaled = feature_scaler.transform(val_df[feature_cols].values)
         y_val_scaled = target_scaler.transform(val_df[['target_return']].values)
         
         X_backtest_scaled = feature_scaler.transform(backtest_df[feature_cols].values)
         y_backtest_scaled = target_scaler.transform(backtest_df[['target_return']].values)
+        
+        print(f"DEBUG: Scaled target range: [{y_train_scaled.min():.4f}, {y_train_scaled.max():.4f}]")
 
         # Save scalers (trained on training data only)
         joblib.dump(feature_scaler, os.path.join(self.config["model_dir"], f"{ticker}_feature_scaler.joblib"))
@@ -463,6 +599,8 @@ class TradingModelSystem:
                 logger.error(f"Training failed for {name}: {e}")
                 results[name] = {"status": f"error: {str(e)}"}
                 trained_models[name] = None  # Ensure it's set to None on failure
+
+        # ... rest of your code remains the same ...
 
         # 8. Ensemble Training (only if we have at least 2 regressors)
         try:
@@ -1196,15 +1334,46 @@ class TradingModelSystem:
         df = self.prepare_features_for_tomorrow_pred(ticker)
         if df is None:
             return {"error": "Could not prepare data"}
-
-        feature_cols = [c for c in df.columns if c not in ['target_price', 'target_return', 'target_direction']]
+        # ============================================================
+        # FIX: Load selected features from metadata or selector
+        # ============================================================
+        meta = self.load_meta(ticker)
+        selected_features = meta.get('selected_features', None)
+        
+        if selected_features:
+            feature_cols = [f for f in selected_features if f in df.columns]
+            print(f"Using {len(feature_cols)} selected features from metadata")
+        else:
+            # Fallback: try loading selector
+            selector_path = os.path.join(self.config["model_dir"], f"{ticker}_feature_selector.joblib")
+            if os.path.exists(selector_path):
+                selector = joblib.load(selector_path)
+                feature_cols = [f for f in selector.selected_features_ if f in df.columns]
+                print(f"Using {len(feature_cols)} selected features from selector")
+            else:
+                # Last resort: use all features
+                feature_cols = [c for c in df.columns if c not in ['target_price', 'target_return', 'target_direction']]
+                print(f"Using all {len(feature_cols)} features (no selection found)")
+        
+        # ============================================================
+        # END FIX
+        # ============================================================
+        
         features = df[feature_cols].values
 
         # Load scalers
         fs_path = os.path.join(self.config["model_dir"], f"{ticker}_feature_scaler.joblib")
         ts_path = os.path.join(self.config["model_dir"], f"{ticker}_target_scaler.joblib")
-        feature_scaler = joblib.load(fs_path) if os.path.exists(fs_path) else RobustScaler().fit(features)
-        target_scaler = joblib.load(ts_path) if os.path.exists(ts_path) else StandardScaler().fit(df[['target_return']])
+        
+        if not os.path.exists(fs_path) or not os.path.exists(ts_path):
+            return {"error": "Scalers not found. Train models first."}
+        
+        feature_scaler = joblib.load(fs_path)
+        target_scaler = joblib.load(ts_path)
+        
+        # Verify feature count
+        if features.shape[1] != feature_scaler.n_features_in_:
+            return {"error": f"Feature mismatch: have {features.shape[1]}, expected {feature_scaler.n_features_in_}"}
 
         scaled_features = feature_scaler.transform(features)
         window = self.config["window_size"]
@@ -1214,8 +1383,10 @@ class TradingModelSystem:
         for i in range(window, len(scaled_features)+1):
             X_seq.append(scaled_features[i-window:i])
         X_seq = np.array(X_seq)
+        
         if X_seq.size == 0:
             return {"error": "Not enough data for prediction"}
+        
         last_window = X_seq[-1:]
 
         predictions = {}
@@ -1359,21 +1530,45 @@ class TradingModelSystem:
 
     # ---------- backtesting ----------
     def walk_forward_backtest(self, df: pd.DataFrame, model: Any, model_type: str,
-                      feature_scaler: Any, target_scaler: Any,
-                      feature_cols: List[str], ticker: str) -> pd.DataFrame:
+                  feature_scaler: Any, target_scaler: Any,
+                  feature_cols: List[str], ticker: str) -> pd.DataFrame:
         """
-        Fixed version with proper prev_prices definition
+        Fixed version with proper feature selection handling
         """
         try:
-            # --- Determine features ---
-            training_features = feature_cols
-            if hasattr(self, 'feature_list') and self.feature_list is not None:
-                training_features = [c for c in self.feature_list if c in df.columns]
+            # ============================================================
+            # FIX: Load selected features from metadata
+            # ============================================================
+            meta = self.load_meta(ticker)
+            selected_features = meta.get('selected_features', feature_cols)
+            
+            # If selected_features exist, use them; otherwise use provided feature_cols
+            if selected_features:
+                # Ensure all selected features exist in df
+                available_features = [f for f in selected_features if f in df.columns]
+                if len(available_features) < len(selected_features):
+                    missing = set(selected_features) - set(available_features)
+                    logger.warning(f"Missing {len(missing)} features in backtest data: {missing}")
+                training_features = available_features
             else:
-                meta = self.load_meta(ticker)
-                training_features = meta.get('feature_columns', feature_cols)
-                training_features = [f for f in training_features if f in df.columns]
-
+                training_features = [f for f in feature_cols if f in df.columns]
+            
+            print(f"DEBUG: Backtest using {len(training_features)} features (scaler expects {feature_scaler.n_features_in_})")
+            
+            # Verify feature count matches scaler
+            if len(training_features) != feature_scaler.n_features_in_:
+                logger.error(f"Feature mismatch! Training features: {len(training_features)}, Scaler expects: {feature_scaler.n_features_in_}")
+                # Try to load from selector
+                selector_path = os.path.join(self.config["model_dir"], f"{ticker}_feature_selector.joblib")
+                if os.path.exists(selector_path):
+                    selector = joblib.load(selector_path)
+                    training_features = [f for f in selector.selected_features_ if f in df.columns]
+                    print(f"DEBUG: Loaded features from selector: {len(training_features)} features")
+            
+            # ============================================================
+            # END FIX
+            # ============================================================
+            
             window = self.config.get("window_size", 30)
             threshold_pct = self.config.get("prediction_threshold_pct", 0.001)
 
@@ -1384,8 +1579,8 @@ class TradingModelSystem:
                     "PredictedReturn","y_true","y_pred"
                 ])
 
-            # --- Prepare features and targets ---
-            features = df[training_features].values
+            # --- Prepare features and targets (USE SELECTED FEATURES) ---
+            features = df[training_features].values  # 👈 FIX: Use training_features
             true_returns = df['target_return'].values.reshape(-1, 1)
             prices = df['adj_close'].values
             dates = df.index
@@ -1409,7 +1604,7 @@ class TradingModelSystem:
             prev_prices = prices[window-1:-1]  # Prices at the start of each prediction period
             true_prices = prices[window:]      # Actual prices at prediction time
             
-            print(f"DEBUG: prev_prices shape: {prev_prices.shape}, true_prices shape: {true_prices.shape}")
+            print(f"DEBUG: {model_type} backtest - prev_prices shape: {prev_prices.shape}, true_prices shape: {true_prices.shape}, X_seq shape: {X_seq.shape}")
 
             # --- Safe prediction function ---
             def _safe_predict(m, X):
@@ -1461,9 +1656,9 @@ class TradingModelSystem:
                 pred_returns = target_scaler.inverse_transform(preds_scaled.reshape(-1,1)).ravel()
                 pred_prices = prev_prices * (1.0 + pred_returns)
                 
-                # ULTRA-SENSITIVE: Trade on ANY prediction
-                signals = np.where(pred_returns > 0.0001, "BUY", 
-                                np.where(pred_returns < -0.0001, "SELL", "HOLD"))
+
+                signals = np.where(pred_returns > 0.005, "BUY", 
+                                np.where(pred_returns < -0.005, "SELL", "HOLD"))
                 
                 print(f"DEBUG: {model_type} Signal distribution - BUY: {(signals == 'BUY').sum()}, "
                     f"SELL: {(signals == 'SELL').sum()}, HOLD: {(signals == 'HOLD').sum()}")

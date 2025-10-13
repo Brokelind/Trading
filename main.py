@@ -82,6 +82,9 @@ class TradingExecutor:
         # ensure models trained (or load existing). Respect SKIP on CI.
         
         try:
+
+            self.model_system.analyze_features(ticker, save_plot=False)
+
             if SKIP_TRAINING_ON_CI:
                 print("SKIP_TRAINING_ON_CI set - will NOT retrain; attempt to load existing models.")
                 meta = self.model_system.load_meta(ticker)
@@ -98,6 +101,7 @@ class TradingExecutor:
         except Exception as e:
             print("Training/ensure failed for", ticker, e)
             return
+        
 
         # get predictions (from saved models)
         preds = self.model_system.predict_tomorrow(ticker)
