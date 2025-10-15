@@ -173,6 +173,38 @@ class TradingModelSystem:
             df['RSI_14'] = talib.RSI(df['adj_close'], timeperiod=14)
             df['RSI_7'] = talib.RSI(df['adj_close'], timeperiod=7)
             
+            # 1. Rate of change (momentum)
+            df['ROC_5'] = talib.ROC(df['adj_close'], timeperiod=5)
+            df['ROC_10'] = talib.ROC(df['adj_close'], timeperiod=10)
+            
+            # 2. Moving average crossovers (strong signal)
+            df['SMA_10'] = talib.SMA(df['adj_close'], timeperiod=10)
+            df['SMA_50'] = talib.SMA(df['adj_close'], timeperiod=50)
+            df['MA_crossover'] = (df['SMA_10'] - df['SMA_50']) / df['adj_close']
+            
+            # 3. Volatility breakout
+            df['vol_breakout'] = (df['volatility'] / df['volatility'].rolling(60).mean()) - 1
+            
+            # 4. Price distance from moving averages
+            df['price_to_sma20'] = (df['adj_close'] - talib.SMA(df['adj_close'], 20)) / df['adj_close']
+            df['price_to_sma50'] = (df['adj_close'] - talib.SMA(df['adj_close'], 50)) / df['adj_close']
+            
+            # 5. RSI momentum
+            df['RSI_change'] = df['RSI_14'].diff()
+            
+            # 6. Volume momentum (if available)
+            if 'volume' in df.columns:
+                df['volume_momentum'] = df['volume'] / df['volume'].rolling(20).mean()
+                df['price_volume_trend'] = df['log_ret'] * df['volume_momentum']
+            
+            # 7. Intraday volatility
+            df['intraday_vol'] = (df['high'] - df['low']) / df['adj_close']
+            df['gap'] = (df['open'] - df['adj_close'].shift(1)) / df['adj_close'].shift(1)
+            
+            # 8. Multi-timeframe returns
+            for period in [3, 7, 14, 21]:
+                df[f'return_{period}d'] = df['adj_close'].pct_change(period)
+            
             # Stochastic
             stoch_k, stoch_d = talib.STOCH(df['high'], df['low'], df['adj_close'])
             df['stoch_k'] = stoch_k
@@ -1657,8 +1689,8 @@ class TradingModelSystem:
                 pred_prices = prev_prices * (1.0 + pred_returns)
                 
 
-                signals = np.where(pred_returns > 0.005, "BUY", 
-                                np.where(pred_returns < -0.005, "SELL", "HOLD"))
+                signals = np.where(pred_returns > 0.002, "BUY", 
+                                np.where(pred_returns < -0.002, "SELL", "HOLD"))
                 
                 print(f"DEBUG: {model_type} Signal distribution - BUY: {(signals == 'BUY').sum()}, "
                     f"SELL: {(signals == 'SELL').sum()}, HOLD: {(signals == 'HOLD').sum()}")

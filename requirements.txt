@@ -25,6 +25,8 @@ matplotlib==3.7.1
 tqdm==4.66.1
 plotly
 kaleido
+seaborn
+
 
 # NLP / Transformers / Torch / Sentiment
 #torch==2.2.2

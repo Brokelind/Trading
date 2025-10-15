@@ -43,7 +43,7 @@ def get_data(symbol, save_folder="data"):
             request = StockBarsRequest(
                 symbol_or_symbols=symbol,
                 timeframe=TimeFrame.Day,
-                start="2020-01-01"  # limited depth
+                start="2000-01-01"  # limited depth
             )
             bars = client.get_stock_bars(request).df
             if isinstance(bars.index, pd.MultiIndex):
