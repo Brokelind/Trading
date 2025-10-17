@@ -106,11 +106,291 @@ class TradingModelSystem:
                 except Exception as e:
                     logger.error(f"Could not parse index as datetime: {e}")
                     return None
-            
-            return df
+                
+            df_adjusted = self._auto_detect_and_adjust_splits(df, ticker)
+            df_final = self._get_sensible_data_range(df_adjusted, ticker)
+            return df_final
         except Exception as e:
             logger.error(f"Error loading data for {ticker}: {e}")
             return None
+
+    def _get_sensible_data_range(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+        """
+        Ensure the price range is sensible after adjustment.
+        If prices are still unreasonable, use only post-split data.
+        """
+        max_reasonable_price = 5000  # No stock should be above $5000 after adjustment
+        min_reasonable_price = 1     # No stock should be below $1
+        
+        if (df['adj_close'] > max_reasonable_price).any() or (df['adj_close'] < min_reasonable_price).any():
+            print(f"⚠️  Price range still unreasonable after adjustment")
+            print(f"   Using only data after last detected split...")
+            
+            # Find the most recent split
+            splits = self._detect_splits_from_price_patterns(df)
+            if splits:
+                last_split = max(splits, key=lambda x: x['date'])
+                last_split_date = last_split['date']
+                
+                # Use data starting 30 days after last split to avoid adjustment artifacts
+                start_date = last_split_date + pd.Timedelta(days=30)
+                sensible_data = df[df.index >= start_date].copy()
+                
+                print(f"   Using data from {start_date.date()} onwards")
+                print(f"   Records: {len(sensible_data)}")
+                print(f"   New price range: ${sensible_data['adj_close'].min():.2f} - ${sensible_data['adj_close'].max():.2f}")
+                
+                return sensible_data
+        
+        return df
+    def _check_data_quality(self, X: np.ndarray, y: np.ndarray, name: str = "Data"):
+        """Check for data quality issues that cause model collapse"""
+        print(f"\n{'='*60}")
+        print(f"DATA QUALITY CHECK: {name}")
+        print(f"{'='*60}")
+        
+        # Check for NaN/Inf
+        nan_count = np.isnan(X).sum()
+        inf_count = np.isinf(X).sum()
+        
+        if nan_count > 0 or inf_count > 0:
+            logger.error(f"❌ Found {nan_count} NaN and {inf_count} Inf values in features!")
+            return False
+        
+        # Check feature variance
+        feature_std = X.reshape(X.shape[0], -1).std(axis=0)
+        zero_var_features = (feature_std < 1e-10).sum()
+        
+        if zero_var_features > 0:
+            logger.warning(f"⚠️  Found {zero_var_features} zero-variance features")
+        
+        # Check target variance
+        target_std = y.std()
+        target_mean = y.mean()
+        
+        print(f"📊 Target statistics:")
+        print(f"   Mean: {target_mean:.6f}")
+        print(f"   Std:  {target_std:.6f}")
+        print(f"   Min:  {y.min():.6f}")
+        print(f"   Max:  {y.max():.6f}")
+        
+        if target_std < 0.001:
+            logger.error(f"❌ Target variance too low: {target_std:.6f}")
+            logger.error("   This will cause model collapse to mean prediction!")
+            return False
+        
+        # Check for outliers
+        z_scores = np.abs((y - target_mean) / (target_std + 1e-10))
+        outliers = (z_scores > 5).sum()
+        
+        if outliers > len(y) * 0.1:  # More than 10% outliers
+            logger.warning(f"⚠️  Found {outliers} extreme outliers ({outliers/len(y)*100:.1f}%)")
+        
+        print(f"✅ Data quality check passed")
+        print(f"{'='*60}\n")
+        return True
+
+    def _auto_detect_and_adjust_splits(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+        """
+        Automatically detect and adjust for stock splits using price pattern analysis.
+        """
+        print(f"🔄 Auto-detecting splits for {ticker}...")
+        
+        # Detect potential splits
+        splits = self._detect_splits_from_price_patterns(df)
+        
+        if not splits:
+            print(f"✅ No splits detected for {ticker}")
+            return df
+        
+        print(f"🔧 Adjusting for {len(splits)} detected splits...")
+        
+        # Adjust prices for splits
+        df_adjusted = self._apply_split_adjustments(df, splits)
+        
+        # Verify adjustment worked
+        self._verify_split_adjustment(df_adjusted, splits, ticker)
+        
+        return df_adjusted
+
+    def _detect_splits_from_price_patterns(self, df: pd.DataFrame) -> List[dict]:
+        """
+        Detect splits by analyzing price patterns and volume spikes.
+        """
+        splits = []
+        
+        if len(df) < 10:
+            return splits
+        
+        # Calculate daily returns and volume changes
+        returns = df['adj_close'].pct_change()
+        
+        # Look for patterns that indicate splits
+        for i in range(1, len(returns) - 1):
+            current_return = returns.iloc[i]
+            prev_return = returns.iloc[i-1]
+            next_return = returns.iloc[i+1]
+            
+            # Split pattern: Large negative return followed by normal trading
+            is_large_drop = current_return < -0.3  # More than 30% drop
+            is_normal_after = abs(next_return) < 0.1  # Normal trading after
+            is_not_crash = prev_return > -0.1  # Not part of a crash
+            
+            if is_large_drop and is_normal_after and is_not_crash:
+                date = returns.index[i]
+                prev_price = df['adj_close'].iloc[i-1]
+                current_price = df['adj_close'].iloc[i]
+                
+                # Calculate actual ratio
+                actual_ratio = prev_price / current_price
+                
+                # Check if ratio is close to common split ratios
+                common_ratios = [2.0, 3.0, 4.0, 5.0, 10.0, 20.0]
+                closest_ratio = min(common_ratios, key=lambda x: abs(x - actual_ratio))
+                
+                # Only accept if reasonably close to common ratio
+                if abs(actual_ratio - closest_ratio) / closest_ratio < 0.2:  # Within 20%
+                    splits.append({
+                        'date': date,
+                        'detected_ratio': actual_ratio,
+                        'applied_ratio': closest_ratio,
+                        'prev_price': prev_price,
+                        'split_price': current_price,
+                        'return_pct': current_return * 100
+                    })
+                    
+                    print(f"   📈 Detected {closest_ratio:.1f}:1 split on {date.date()}")
+                    print(f"      Price: ${prev_price:.2f} → ${current_price:.2f}")
+                    print(f"      Return: {current_return:.1%}")
+        
+        return splits
+
+    def _apply_split_adjustments(self, df: pd.DataFrame, splits: List[dict]) -> pd.DataFrame:
+        """
+        CORRECTED: Apply split adjustments to historical prices.
+        """
+        if not splits:
+            return df
+        
+        df_adjusted = df.copy()
+        
+        # Sort splits chronologically and apply in reverse order
+        splits_sorted = sorted(splits, key=lambda x: x['date'])
+        
+        cumulative_ratio = 1.0
+        adjustment_log = []
+        
+        for split in reversed(splits_sorted):
+            split_date = split['date']
+            ratio = split['applied_ratio']
+            
+            # 🔥 CRITICAL FIX: We need to DIVIDE pre-split prices by the ratio
+            # For a 20:1 split, pre-split prices should be divided by 20
+            # This brings them down to post-split levels
+            
+            # Adjust all prices BEFORE the split date
+            mask = df_adjusted.index < split_date
+            
+            # Adjust price columns - DIVIDE by ratio to scale down pre-split prices
+            price_cols = ['adj_close', 'open', 'high', 'low']
+            for col in price_cols:
+                if col in df_adjusted.columns:
+                    df_adjusted.loc[mask, col] = df_adjusted.loc[mask, col] / ratio
+            
+            cumulative_ratio /= ratio  # Track the cumulative division
+            adjustment_log.append({
+                'date': split_date,
+                'ratio': ratio,
+                'cumulative_ratio': cumulative_ratio
+            })
+            
+            print(f"   🔧 Adjusted prices before {split_date.date()} by 1:{ratio:.1f}")
+        
+        print(f"   📊 Total cumulative adjustment: 1:{1/cumulative_ratio:.1f}")
+        
+        return df_adjusted
+
+    def _verify_split_adjustment(self, df_adjusted: pd.DataFrame, splits: List[dict], ticker: str):
+        """
+        Enhanced verification with better diagnostics.
+        """
+        print(f"🔍 Verifying split adjustment for {ticker}...")
+        
+        # Check price range makes sense
+        min_price = df_adjusted['adj_close'].min()
+        max_price = df_adjusted['adj_close'].max()
+        
+        print(f"   📊 Price range: ${min_price:.2f} - ${max_price:.2f}")
+        
+        # Check each split location
+        for split in splits:
+            split_date = split['date']
+            
+            if split_date in df_adjusted.index:
+                split_idx = df_adjusted.index.get_loc(split_date)
+                if split_idx > 0 and split_idx < len(df_adjusted) - 1:
+                    day_before = df_adjusted['adj_close'].iloc[split_idx - 1]
+                    day_of = df_adjusted['adj_close'].iloc[split_idx]
+                    day_after = df_adjusted['adj_close'].iloc[split_idx + 1]
+                    
+                    return_day_of = (day_of / day_before - 1) * 100
+                    return_day_after = (day_after / day_of - 1) * 100
+                    
+                    print(f"   📅 {split_date.date()}:")
+                    print(f"      Day before: ${day_before:.2f}")
+                    print(f"      Day of: ${day_of:.2f} ({return_day_of:+.1f}%)")
+                    print(f"      Day after: ${day_after:.2f} ({return_day_after:+.1f}%)")
+                    
+                    # After adjustment, split day should show normal trading
+                    if abs(return_day_of) < 10 and abs(return_day_after) < 10:
+                        print(f"      ✅ Normal trading pattern - adjustment successful")
+                    else:
+                        print(f"      ⚠️  Unusual pattern - may need manual review")
+        
+        # Check overall data quality
+        returns = df_adjusted['adj_close'].pct_change().dropna()
+        extreme_moves = returns[abs(returns) > 0.2]  # Moves > 20%
+        
+        print(f"   📈 Data quality:")
+        print(f"      Records: {len(df_adjusted)}")
+        print(f"      Average daily return: {returns.mean() * 100:.3f}%")
+        print(f"      Daily return std: {returns.std() * 100:.3f}%")
+        print(f"      Extreme moves (>20%): {len(extreme_moves)}")
+        
+        if len(extreme_moves) > 0:
+            print(f"      ⚠️  Found {len(extreme_moves)} extreme price moves")
+            for date, move in extreme_moves.head(3).items():
+                print(f"         {date.date()}: {move * 100:+.1f}%")
+
+    def _get_sensible_data_range(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+        """
+        Ensure the price range is sensible after adjustment.
+        If prices are still unreasonable, use only post-split data.
+        """
+        max_reasonable_price = 5000  # No stock should be above $5000 after adjustment
+        min_reasonable_price = 1     # No stock should be below $1
+        
+        if (df['adj_close'] > max_reasonable_price).any() or (df['adj_close'] < min_reasonable_price).any():
+            print(f"⚠️  Price range still unreasonable after adjustment")
+            print(f"   Using only data after last detected split...")
+            
+            # Find the most recent split
+            splits = self._detect_splits_from_price_patterns(df)
+            if splits:
+                last_split = max(splits, key=lambda x: x['date'])
+                last_split_date = last_split['date']
+                
+                # Use data starting 30 days after last split to avoid adjustment artifacts
+                start_date = last_split_date + pd.Timedelta(days=30)
+                sensible_data = df[df.index >= start_date].copy()
+                
+                print(f"   Using data from {start_date.date()} onwards")
+                print(f"   Records: {len(sensible_data)}")
+                print(f"   New price range: ${sensible_data['adj_close'].min():.2f} - ${sensible_data['adj_close'].max():.2f}")
+                
+                return sensible_data
+        
+        return df
 
     def analyze_features(self, ticker: str, save_plot: bool = True):
         """
