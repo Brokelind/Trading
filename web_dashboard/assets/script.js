@@ -3,7 +3,6 @@
 setTimeout(() => {
     window.location.reload();
 }, 300000);
-
 // Add smooth animations
 document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.card');

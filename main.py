@@ -21,6 +21,7 @@ except ImportError:
     env = None
 
 SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI") or getattr(env, "SKIP_TRAINING_ON_CI", False)
+MODELLING_TYPE = os.environ.get("MODELLING_TYPE") or getattr(env, "MODELLING_TYPE", "regression")  # "regression" or "classification"
 
 # config
 data_path = "data"
@@ -283,14 +284,15 @@ class TradingExecutor:
         print(f"🌐 Generated web dashboard with {signal_count} signals")
         
         # Generate enhanced charts as HTML
-        try:
-            print("📊 Generating backtest charts...")
-            backtest_paths = visualize_backtest_chart([s["ticker"] for s in summaries])
-            print(f"✅ Generated {len(backtest_paths)} backtest charts")
+        if MODELLING_TYPE == "regression":
+            try:
+                print("📊 Generating backtest charts...")
+                backtest_paths = visualize_backtest_chart([s["ticker"] for s in summaries])
+                print(f"✅ Generated {len(backtest_paths)} backtest charts")
+                
             
-            
-        except Exception as e:
-            print(f"Chart generation failed (non-critical): {e}")
+            except Exception as e:
+                print(f"Chart generation failed (non-critical): {e}")
         
         # Send minimal email notification with link to dashboard
         html_body = f"""

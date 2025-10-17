@@ -59,4 +59,3 @@ def get_data(symbol, save_folder="data"):
     path = os.path.join(save_folder, f"{symbol}_data.csv")
     df.to_csv(path, index=True, date_format="%Y-%m-%d")
     return path
-

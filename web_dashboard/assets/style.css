@@ -1,4 +1,20 @@
 
+:root {
+    --primary-bg: #0f0f23;
+    --card-bg: #1a1a2e;
+    --card-border: #2d2d4d;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0c0;
+    --text-muted: #666687;
+    --buy-color: #00d092;
+    --sell-color: #ff4757;
+    --hold-color: #ffa502;
+    --positive: #00d092;
+    --negative: #ff4757;
+    --border-radius: 12px;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,10 +22,10 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-    color: #ffffff;
-    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    line-height: 1.6;
 }
 
 .container {
@@ -18,364 +34,442 @@ body {
     padding: 20px;
 }
 
-header {
+/* Header */
+.header {
     text-align: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
+    margin-bottom: 40px;
+    padding: 40px 20px;
 }
 
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    background: linear-gradient(45deg, #00ff99, #00ccff);
+.header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--buy-color), #00c6ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 12px;
 }
 
 .last-updated {
-    color: #888;
-    font-size: 0.9em;
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
-.summary-stats {
+.back-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+}
+
+/* Stats Grid */
+.stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.stat-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stat-card.buy {
-    border-left: 4px solid #00ff99;
-}
-
-.stat-card.sell {
-    border-left: 4px solid #ff4444;
-}
-
-.stat-value {
-    font-size: 2.5em;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    color: #ccc;
-    font-size: 0.9em;
-}
-
-.signals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     margin-bottom: 40px;
 }
 
-.card {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.card.signal-buy {
-    border-left: 4px solid #00ff99;
-}
-
-.card.signal-sell {
-    border-left: 4px solid #ff4444;
-}
-
-.card.signal-hold {
-    border-left: 4px solid #ffaa00;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.card-header h3 {
-    font-size: 1.4em;
-    color: #fff;
-}
-
-.signal-badge {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8em;
-    font-weight: bold;
-}
-
-.signal-badge.signal-buy {
-    background: rgba(0, 255, 153, 0.2);
-    color: #00ff99;
-}
-
-.signal-badge.signal-sell {
-    background: rgba(255, 68, 68, 0.2);
-    color: #ff4444;
-}
-
-.signal-badge.signal-hold {
-    background: rgba(255, 170, 0, 0.2);
-    color: #ffaa00;
-}
-
-.metric {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.metric label {
-    color: #ccc;
-}
-
-.metric .value {
-    font-weight: bold;
-}
-/* Add to existing CSS */
-.metrics-section {
-    margin-top: 30px;
-}
-
-.metrics-section h3 {
-    margin-bottom: 20px;
-    color: #00ccff;
-    font-size: 1.2em;
-}
-
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 15px;
-}
-
-.metric-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.stat-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 1px solid var(--card-border);
     transition: transform 0.2s ease;
 }
 
-.metric-card:hover {
+.stat-card:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.08);
 }
 
-.metric-header {
+.stat-card.buy {
+    border-left: 4px solid var(--buy-color);
+}
+
+.stat-card.sell {
+    border-left: 4px solid var(--sell-color);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Signals Grid */
+.signals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.stock-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stock-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.stock-card.buy {
+    border-left: 4px solid var(--buy-color);
+}
+
+.stock-card.sell {
+    border-left: 4px solid var(--sell-color);
+}
+
+.stock-card.hold {
+    border-left: 4px solid var(--hold-color);
+}
+
+.card-header {
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--card-border);
 }
 
-.metric-header h4 {
-    color: #fff;
-    font-size: 1.1em;
-    margin: 0;
+.ticker {
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-.model-badge {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    color: #000;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.7em;
-    font-weight: bold;
+.signal {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
-.metric-values {
+.signal.buy {
+    background: rgba(0, 208, 146, 0.2);
+    color: var(--buy-color);
+}
+
+.signal.sell {
+    background: rgba(255, 71, 87, 0.2);
+    color: var(--sell-color);
+}
+
+.signal.hold {
+    background: rgba(255, 165, 2, 0.2);
+    color: var(--hold-color);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.metric-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.metric-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.confidence-high { color: var(--buy-color); }
+.confidence-medium { color: var(--hold-color); }
+.confidence-low { color: var(--sell-color); }
+
+.positive { color: var(--buy-color); }
+.negative { color: var(--sell-color); }
+
+.model, .sentiment {
+    color: var(--text-primary);
+}
+
+.details-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-top: 12px;
+}
+
+.details-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--text-secondary);
+}
+
+/* Ticker Page */
+.ticker-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.summary-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.signal-header {
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.signal-header.buy {
+    background: linear-gradient(135deg, rgba(0, 208, 146, 0.1), transparent);
+}
+
+.signal-header.sell {
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), transparent);
+}
+
+.signal-header.hold {
+    background: linear-gradient(135deg, rgba(255, 165, 2, 0.1), transparent);
+}
+
+.signal-info h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.confidence {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.current-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.predicted-change {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Predictions */
+.predictions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.model-prediction {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
+}
+
+.model-name {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.prediction-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Sentiment */
+.sentiment-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sentiment-score {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.sentiment-info {
+    color: var(--text-secondary);
+}
+
+/* Metrics */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.performance-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
+}
+
+.model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.model-header h4 {
+    font-size: 1.1rem;
+}
+
+.accuracy {
+    font-weight: 600;
+    color: var(--buy-color);
+}
+
+.performance-metrics {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.metric-item {
+.performance-metrics .metric {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 5px 0;
-}
-
-.metric-label {
-    color: #ccc;
-    font-size: 0.9em;
-}
-
-.metric-value {
-    font-weight: bold;
-    font-size: 0.95em;
-}
-
-.metric-high {
-    color: #00ff99;
-}
-
-.metric-medium {
-    color: #ffaa00;
-}
-
-.metric-low {
-    color: #ff4444;
-}
-
-.no-data, .no-predictions {
-    text-align: center;
-    padding: 40px;
-    color: #888;
-    font-style: italic;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-}
-
-/* Enhanced table styles */
-.metrics-table {
-    margin-top: 20px;
-    overflow-x: auto;
-}
-
-.metrics-table table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.metrics-table th {
-    background: rgba(0, 204, 255, 0.2);
-    padding: 12px 15px;
     text-align: left;
-    font-weight: 600;
-    color: #00ccff;
 }
 
-.metrics-table td {
-    padding: 10px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.metrics-table tr:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.positive {
-    color: #00ff99;
-}
-
-.negative {
-    color: #ff4444;
-}
-
-.details-link {
-    display: inline-block;
-    margin-top: 15px;
-    color: #00ccff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.details-link:hover {
-    text-decoration: underline;
-}
-
-.ticker-details {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.detail-card {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 25px;
-    backdrop-filter: blur(10px);
-}
-
-.detail-card h2 {
-    margin-bottom: 20px;
-    color: #00ccff;
-}
-
-.detail-grid {
+/* Links */
+.links-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
 }
 
-.detail-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.no-signals, .no-chart {
-    text-align: center;
-    padding: 40px;
-    color: #888;
-    font-style: italic;
-}
-
-footer {
-    text-align: center;
-    margin-top: 40px;
+.link-card {
+    background: var(--card-bg);
     padding: 20px;
-    color: #666;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-a {
-    color: #00ccff;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--card-border);
     text-decoration: none;
+    color: var(--text-primary);
+    text-align: center;
+    transition: all 0.2s ease;
 }
 
-a:hover {
-    text-decoration: underline;
+.link-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
 }
 
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--card-border);
+    margin-top: 40px;
+}
+
+/* No Data States */
+.no-signals, .no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-style: italic;
+    grid-column: 1 / -1;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .container {
-        padding: 10px;
+        padding: 16px;
     }
     
-    h1 {
-        font-size: 2em;
+    .header h1 {
+        font-size: 2rem;
     }
     
-    .summary-stats {
-        grid-template-columns: 1fr 1fr;
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .signals-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .signal-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .predictions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sentiment-card {
+        flex-direction: column;
+        text-align: center;
     }
 }
