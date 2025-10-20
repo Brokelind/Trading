@@ -1,48 +1,48 @@
 {
   "ticker": "BA",
-  "timestamp": "2025-10-17T13:22:56.659227",
-  "last_price": 211.89,
+  "timestamp": "2025-10-20T11:50:51.010293",
+  "last_price": 212.94,
   "predictions": {
     "LSTM": {
-      "predicted_price": 212.0448744046589,
-      "predicted_return": 0.0007309188949875534,
-      "pct_diff": 0.07309188949876178,
+      "predicted_price": 213.0916726277594,
+      "predicted_return": 0.0007122787064872682,
+      "pct_diff": 0.07122787064873215,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 209.9476515930891,
-      "predicted_return": -0.00916677713394165,
-      "pct_diff": -0.9166777133941645,
+      "predicted_price": 211.8820830200985,
+      "predicted_return": -0.004968145862221718,
+      "pct_diff": -0.4968145862221782,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 211.73856821482806,
-      "predicted_return": -0.0007146716936709502,
-      "pct_diff": -0.07146716936708797,
+      "predicted_price": 213.06593608491377,
+      "predicted_return": 0.000591415820953183,
+      "pct_diff": 0.05914158209532025,
       "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 212.42745333391707,
-      "predicted_return": 0.0025364733301103115,
-      "pct_diff": 0.25364733301103654,
-      "signal": "BUY"
+      "predicted_price": 212.18884790982585,
+      "predicted_return": -0.0035275293048471212,
+      "pct_diff": -0.3527529304847116,
+      "signal": "SELL"
     },
     "Ensemble": {
-      "signal": "HOLD",
-      "predicted_price": 211.1875524635031,
-      "confidence": 0,
-      "pct_diff": -0.33151519019155734
+      "signal": "SELL",
+      "predicted_price": 212.03546546496216,
+      "confidence": 1.0,
+      "pct_diff": -0.42478375835345156
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "HOLD",
-  "pct_diff": -0.33151519019155734,
+  "signal": "SELL",
+  "pct_diff": -0.42478375835345156,
   "qty": 0,
   "sentiment": {
     "ticker": "BA",
-    "signal": "HOLD",
-    "score": 0.117,
-    "confidence": 0.34
+    "signal": "SELL",
+    "score": -0.483,
+    "confidence": 0.31
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

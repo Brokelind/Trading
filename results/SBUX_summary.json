@@ -1,48 +1,48 @@
 {
   "ticker": "SBUX",
-  "timestamp": "2025-10-17T13:12:34.218629",
-  "last_price": 84.34,
+  "timestamp": "2025-10-20T11:49:26.400819",
+  "last_price": 85.36,
   "predictions": {
     "LSTM": {
-      "predicted_price": 84.40380092702108,
-      "predicted_return": 0.0007564729312434793,
-      "pct_diff": 0.07564729312435062,
+      "predicted_price": 85.41745657645632,
+      "predicted_return": 0.0006731089088134468,
+      "pct_diff": 0.06731089088134667,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 83.93419858376495,
-      "predicted_return": -0.004811494145542383,
-      "pct_diff": -0.481149414554245,
-      "signal": "SELL"
+      "predicted_price": 85.35509598997858,
+      "predicted_return": -5.745091402786784e-05,
+      "pct_diff": -0.005745091402788116,
+      "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 84.66119069216785,
-      "predicted_return": 0.0038082842324857497,
-      "pct_diff": 0.3808284232485727,
-      "signal": "BUY"
+      "predicted_price": 85.3617120637899,
+      "predicted_return": 2.005697973180053e-05,
+      "pct_diff": 0.002005697973167202,
+      "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 84.60198418515735,
-      "predicted_return": 0.003106286283582449,
-      "pct_diff": 0.3106286283582469,
-      "signal": "BUY"
+      "predicted_price": 85.3092776484415,
+      "predicted_return": -0.0005942168645560741,
+      "pct_diff": -0.05942168645560608,
+      "signal": "HOLD"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 84.39912448703005,
-      "confidence": 0.6713401697122794,
-      "pct_diff": 0.07010254568419153
+      "signal": "HOLD",
+      "predicted_price": 85.36088556966658,
+      "confidence": 0,
+      "pct_diff": 0.0010374527490382437
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0.07010254568419153,
+  "signal": "HOLD",
+  "pct_diff": 0.0010374527490382437,
   "qty": 0,
   "sentiment": {
     "ticker": "SBUX",
-    "signal": "HOLD",
-    "score": -0.214,
-    "confidence": 0.32
+    "signal": "BUY",
+    "score": 0.314,
+    "confidence": 0.37
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

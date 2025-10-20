@@ -1,50 +1,50 @@
 {
   "ticker": "AVGO",
-  "timestamp": "2025-10-17T12:11:27.050195",
-  "last_price": 354.15,
+  "timestamp": "2025-10-20T11:41:58.790096",
+  "last_price": 349.33,
   "predictions": {
     "LSTM": {
-      "predicted_price": 354.1450696982388,
-      "predicted_return": -1.3921507161285263e-05,
-      "pct_diff": -0.0013921507161349467,
+      "predicted_price": 349.3217401806138,
+      "predicted_return": -2.364474676141981e-05,
+      "pct_diff": -0.0023644746761465373,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 366.3597152682021,
-      "predicted_return": 0.03447611257433891,
-      "pct_diff": 3.447611257433885,
-      "signal": "BUY"
+      "predicted_price": 343.6646229623072,
+      "predicted_return": -0.01621783711016178,
+      "pct_diff": -1.6217837110161715,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 352.67326516701144,
-      "predicted_return": -0.004169800460224532,
-      "pct_diff": -0.4169800460224597,
+      "predicted_price": 348.02846475078155,
+      "predicted_return": -0.003725804394751278,
+      "pct_diff": -0.37258043947511865,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 355.10178384685423,
-      "predicted_return": 0.0026875161565840244,
-      "pct_diff": 0.2687516156584089,
+      "predicted_price": 352.1150559736416,
+      "predicted_return": 0.007972564548254013,
+      "pct_diff": 0.7972564548254059,
       "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 358.044921427356,
-      "confidence": 0.7399862850459963,
-      "pct_diff": 1.0997942756899608
+      "signal": "SELL",
+      "predicted_price": 347.9360478955768,
+      "confidence": 0.6932690599036864,
+      "pct_diff": -0.39903589855528937
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 1.0997942756899608,
+  "signal": "SELL",
+  "pct_diff": -0.39903589855528937,
   "qty": 0,
   "sentiment": {
     "ticker": "AVGO",
     "signal": "HOLD",
-    "score": -0.102,
-    "confidence": 0.33
+    "score": -0.27,
+    "confidence": 0.34
   },
-  "position_size_factor": 0.20515122501010252,
+  "position_size_factor": 0.1,
   "metrics_path": null,
   "training_metrics": [
     {

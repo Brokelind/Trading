@@ -1,48 +1,48 @@
 {
   "ticker": "CVX",
-  "timestamp": "2025-10-17T12:39:11.736950",
-  "last_price": 151.71,
+  "timestamp": "2025-10-20T11:45:25.984793",
+  "last_price": 153.08,
   "predictions": {
     "LSTM": {
-      "predicted_price": 151.79768300751456,
-      "predicted_return": 0.0005779645871371031,
-      "pct_diff": 0.05779645871370131,
+      "predicted_price": 153.16251555099387,
+      "predicted_return": 0.0005390354781411588,
+      "pct_diff": 0.05390354781412405,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 151.7956393046002,
-      "predicted_return": 0.0005644934717565775,
-      "pct_diff": 0.05644934717565925,
+      "predicted_price": 153.09792386424903,
+      "predicted_return": 0.00011708821693900973,
+      "pct_diff": 0.011708821693894287,
       "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 151.82567875223262,
-      "predicted_return": 0.0007624991907759595,
-      "pct_diff": 0.07624991907758964,
+      "predicted_price": 153.05552146727896,
+      "predicted_return": -0.00015990679854357385,
+      "pct_diff": -0.015990679854355854,
       "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 151.23521215115443,
-      "predicted_return": -0.0031295751687139273,
-      "pct_diff": -0.31295751687138595,
-      "signal": "SELL"
+      "predicted_price": 153.35119207059034,
+      "predicted_return": 0.0017715708818286657,
+      "pct_diff": 0.17715708818286582,
+      "signal": "HOLD"
     },
     "Ensemble": {
-      "signal": "SELL",
-      "predicted_price": 151.23521215115443,
-      "confidence": 1.0,
-      "pct_diff": -0.31295751687138595
+      "signal": "HOLD",
+      "predicted_price": 153.16678823827806,
+      "confidence": 0,
+      "pct_diff": 0.05669469445913672
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "SELL",
-  "pct_diff": -0.31295751687138595,
+  "signal": "HOLD",
+  "pct_diff": 0.05669469445913672,
   "qty": 0,
   "sentiment": {
     "ticker": "CVX",
     "signal": "HOLD",
-    "score": 0.082,
-    "confidence": 0.39
+    "score": -0.16,
+    "confidence": 0.4
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

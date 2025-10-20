@@ -1,50 +1,50 @@
 {
   "ticker": "AAPL",
-  "timestamp": "2025-10-17T11:32:37.952774",
-  "last_price": 247.45,
+  "timestamp": "2025-10-20T11:37:31.144079",
+  "last_price": 252.29,
   "predictions": {
     "LSTM": {
-      "predicted_price": 247.60455585424788,
-      "predicted_return": 0.0006245942786335945,
-      "pct_diff": 0.06245942786336175,
+      "predicted_price": 252.46140444377494,
+      "predicted_return": 0.0006793945212848485,
+      "pct_diff": 0.0679394521284817,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 243.21177871348334,
-      "predicted_return": -0.017127586528658867,
-      "pct_diff": -1.7127586528658911,
+      "predicted_price": 249.9438409148529,
+      "predicted_return": -0.009299453347921371,
+      "pct_diff": -0.9299453347921414,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 246.45537650689948,
-      "predicted_return": -0.004019492798951306,
-      "pct_diff": -0.4019492798951324,
+      "predicted_price": 251.4556622795504,
+      "predicted_return": -0.0033070582284259334,
+      "pct_diff": -0.33070582284259475,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 245.26882485211826,
-      "predicted_return": -0.008814609609544277,
-      "pct_diff": -0.8814609609544277,
-      "signal": "SELL"
+      "predicted_price": 251.67590172721538,
+      "predicted_return": -0.0024340967647731304,
+      "pct_diff": -0.24340967647731437,
+      "signal": "HOLD"
     },
     "Ensemble": {
       "signal": "SELL",
-      "predicted_price": 244.978660024167,
+      "predicted_price": 250.69975159720167,
       "confidence": 1.0,
-      "pct_diff": -0.9987229645718286
+      "pct_diff": -0.6303255788173623
     }
   },
   "chosen_model": "Ensemble",
   "signal": "SELL",
-  "pct_diff": -0.9987229645718286,
+  "pct_diff": -0.6303255788173623,
   "qty": 0,
   "sentiment": {
     "ticker": "AAPL",
     "signal": "HOLD",
-    "score": -0.063,
-    "confidence": 0.37
+    "score": -0.086,
+    "confidence": 0.3
   },
-  "position_size_factor": 0.19043249999269798,
+  "position_size_factor": 0.11956015579007728,
   "metrics_path": null,
   "training_metrics": [
     {
