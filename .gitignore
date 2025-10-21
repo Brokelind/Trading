@@ -5,11 +5,6 @@ trader-venv/
 .venv64/
 venv/
 env.py
-*.sqlite
-*.log
-*.csv
-*.html
 .DS_Store
-cd
 test.py
 dockerfile
