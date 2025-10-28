@@ -280,34 +280,7 @@ def visualize_backtest_chart(tickers):
                         signal_class = "signal-buy" if ensemble_signal == "BUY" else "signal-sell" if ensemble_signal == "SELL" else "signal-hold"
                         pct_class = "signal-buy" if pct_diff > 0 else "signal-sell" if pct_diff < 0 else "signal-hold"
                         
-                        f.write(f"""
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="performance-card">
-                    <h5>Current Price</h5>
-                    <h3>${current_price}</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="performance-card">
-                    <h5>Current Signal</h5>
-                    <h3 class="{signal_class}">{ensemble_signal}</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="performance-card">
-                    <h5>Selected Model</h5>
-                    <h3>{chosen_model}</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="performance-card">
-                    <h5>Predicted Change</h5>
-                    <h3 class="{pct_class}">{pct_diff:.2f}%</h3>
-                </div>
-            </div>
-        </div>
-""")
+                        
 
                 # Add the main chart
                 f.write(fig.to_html(full_html=False, include_plotlyjs='cdn'))
