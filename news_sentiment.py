@@ -18,18 +18,14 @@ REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID") or getattr(env, "REDDIT_CL
 REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET") or getattr(env, "REDDIT_CLIENT_SECRET", None)
 REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT") or getattr(env, "REDDIT_USER_AGENT", None)
 
-# --- Reddit setup ---
-reddit = praw.Reddit(
-    client_id=REDDIT_CLIENT_ID,
-    client_secret=REDDIT_CLIENT_SECRET,
-    user_agent=REDDIT_USER_AGENT
-)
+# --- Reddit setup (lazy loaded) ---
+reddit = None
 
-# --- Load TF DistilBERT sentiment model ---
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-model = TFAutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
+# --- Load TF FinBERT sentiment model ---
+tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+model = TFAutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert", from_pt=True)
 
-sst2_pipe = pipeline(
+finbert_pipe = pipeline(
     "sentiment-analysis",
     model=model,
     tokenizer=tokenizer,
@@ -43,14 +39,30 @@ vader = SentimentIntensityAnalyzer()
 
 # --- Helper functions ---
 def get_reddit_news(ticker, lookback_days=1):
+    global reddit
+    if not (REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT):
+        print("[WARN] Reddit API credentials missing or invalid, skipping Reddit search.")
+        return []
+
+    if reddit is None:
+        try:
+            reddit = praw.Reddit(
+                client_id=REDDIT_CLIENT_ID,
+                client_secret=REDDIT_CLIENT_SECRET,
+                user_agent=REDDIT_USER_AGENT
+            )
+        except Exception as e:
+            print(f"[ERROR] Failed to initialize PRAW: {e}")
+            return []
+
     from_date = datetime.utcnow() - timedelta(days=lookback_days)
     subreddits = ["stocks", "investing", "wallstreetbets"]
     news = []
 
     for subreddit_name in subreddits:
         print(f"[INFO] Searching r/{subreddit_name} for '{ticker}' posts...")
-        subreddit = reddit.subreddit(subreddit_name)
         try:
+            subreddit = reddit.subreddit(subreddit_name)
             for submission in subreddit.search(ticker, sort="new", time_filter="day", limit=100):
                 if datetime.utcfromtimestamp(submission.created_utc) < from_date:
                     continue
@@ -92,9 +104,14 @@ def get_finnhub_news(ticker, lookback_days=1):
         return []
 
 def score_finbert(text):
-    result = sst2_pipe(text)[0]  # returns dict with 'label' and 'score'
-    label, score = result["label"], result["score"]
-    return {"NEGATIVE": -1.0, "NEUTRAL": 0.0, "POSITIVE": 1.0}.get(label, 0.0) * score
+    try:
+        result = finbert_pipe(text)[0]  # returns dict with 'label' and 'score'
+        label, score = result["label"], result["score"]
+        lbl_lower = label.lower()
+        return {"negative": -1.0, "neutral": 0.0, "positive": 1.0}.get(lbl_lower, 0.0) * score
+    except Exception as e:
+        print(f"[ERROR] FinBERT sentiment scoring failed: {e}")
+        return 0.0
 
 def aggregate_scores(scores):
     try:
