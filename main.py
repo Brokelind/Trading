@@ -349,4 +349,4 @@ if __name__ == "__main__":
     trader = TradingExecutor(tickers=tickers)
     print("Running script...")
     trader.run_daily_trading()
-    trader.post_results(skip_email=args.skip_email)
+    trader.post_results(skip_email=args.skip_email)```
