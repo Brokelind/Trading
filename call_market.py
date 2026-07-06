@@ -31,25 +31,36 @@ client = StockHistoricalDataClient(ALPACA_API_KEY, ALPACA_SECRET_KEY)
 
 
 def get_data(symbol, save_folder="data"):
-    try:
-        ticker = yf.Tickers(symbol)
-        df = ticker.history(period="1y", auto_adjust=True)
-        if df.empty:
-            raise ValueError("Empty DataFrame from Yahoo")
-        log.info("Fetched from Yahoo Finance")
-    except Exception as e:
-        log.warning(f"Yahoo Finance failed: {e}, falling back to Alpaca.")
+    # Retry Yahoo Finance a few times in case of rate limiting/temporary failures.
+    df = None
+    last_err = None
+    for attempt in range(3):
+        try:
+            df = yf.download(symbol, period="1y", interval="1d", auto_adjust=True, progress=False)
+            if df is None or df.empty:
+                raise ValueError("Empty DataFrame from Yahoo")
+            log.info("Fetched from Yahoo Finance")
+            break
+        except Exception as e:
+            last_err = e
+            log.warning(f"Yahoo Finance failed (attempt {attempt+1}): {e}")
+            time.sleep(2 ** attempt)
+    else:
+        log.warning(f"Yahoo Finance failed after retries: {last_err}, falling back to Alpaca.")
         try:
             request = StockBarsRequest(
                 symbol_or_symbols=symbol,
                 timeframe=TimeFrame.Day,
-                start="2000-01-01"  # limited depth
+                start="2000-01-01"
             )
             bars = client.get_stock_bars(request).df
             if isinstance(bars.index, pd.MultiIndex):
                 bars = bars.loc[symbol]
-            df = bars[['open', 'high', 'low', 'close']].copy()
-            df.rename(columns={"close": "adj_close"}, inplace=True)
+            candidate = bars[['open', 'high', 'low', 'close']].copy()
+            candidate.rename(columns={"close": "adj_close"}, inplace=True)
+            if candidate is None or candidate.empty:
+                raise ValueError("Empty DataFrame from Alpaca")
+            df = candidate
         except Exception as e2:
             log.error(f"Alpaca also failed: {e2}")
             return

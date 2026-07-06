@@ -12,6 +12,7 @@ from distribute_results import *  # This will import the fixed email functions
 from alpaca.trading.enums import TimeInForce
 from visualize_results import visualize_backtest_chart
 from web_dev.web_dashboard import generate_dashboard
+import crypto_correlation
 
 
 # only for local use
@@ -97,7 +98,8 @@ class TradingExecutor:
                 if "error" in res:
                     print("Training failed or insufficient data:", res["error"])
                     return
-                metrics = res.get("metrics", {})
+                # Get best_model directly from the result
+                best_model = res.get("best_model", None)
         except Exception as e:
             print("Training/ensure failed for", ticker, e)
             return
@@ -114,29 +116,9 @@ class TradingExecutor:
         sentiment_score = sentiment.get("score", 0)
         sentiment_conf = sentiment.get("confidence", 0)
 
-        # Enhanced model selection logic
-        best_model = None
-        best_score = None
-        
-        if metrics:
-            # Use the best model identified by the system if metrics are available
-            best_model = metrics.get('best_model', None)
-            
-            # Fallback to our own selection if not available
-            if not best_model:
-                for model in metrics["MAE (%)"].keys():
-                    mae = metrics["MAE (%)"][model]
-                    accuracy = metrics["Direction Accuracy (%)"][model]
-                    sharpe = metrics.get("Sharpe Ratio", {}).get(model, 0)
-                    
-                    # More sophisticated scoring incorporating multiple metrics
-                    score = (accuracy * 0.4) - (mae * 0.3) + (sharpe * 0.3)
-                    
-                    if best_score is None or score > best_score:
-                        best_score = score
-                        best_model = model
-        else:
-            # If no metrics available (CI mode), use the ensemble prediction
+        # Enhanced model selection logic - use best_model from training or fallback
+        if not best_model:
+            # If no best_model from training, use the ensemble prediction
             best_model = "Ensemble" if "Ensemble" in preds else next(iter(preds.keys()), None)
 
         print(f"Selected model: {best_model}")
@@ -255,6 +237,14 @@ class TradingExecutor:
 
     def run_daily_trading(self):
         print("Starting daily trading run")
+        
+        # Run crypto lead-lag correlation strategy
+        try:
+            crypto_signals = crypto_correlation.generate_signals()
+            print(f"[CRYPTO] Correlation analysis complete: {len(crypto_signals)} signals")
+        except Exception as e:
+            print(f"[CRYPTO] Correlation analysis failed (non-critical): {e}")
+        
         for t in tqdm(self.ticker_list, desc="Processing Tickers"):
             try:
                 self.execute_strategy(t)
@@ -265,12 +255,22 @@ class TradingExecutor:
                 print("Error executing", t, e)
         
 
-    # Update the post_results method in TradingExecutor class:
     def post_results(self, skip_email=False):
         # Load strong signals summaries
         summaries = load_results()
+        
+        # Load crypto signals from saved file
+        crypto_signals = []
+        crypto_path = os.path.join(RESULTS_DIR, "crypto_signals.json")
+        if os.path.exists(crypto_path):
+            try:
+                with open(crypto_path) as f:
+                    crypto_signals = json.load(f)
+                print(f"[CRYPTO] Loaded {len(crypto_signals)} signals from saved file")
+            except Exception as e:
+                print(f"[CRYPTO] Could not load crypto signals: {e}")
 
-        if not summaries:
+        if not summaries and not crypto_signals:
             print("No strong signals meeting criteria today.")
             # Still generate dashboard with no signals message
             generate_dashboard()
@@ -292,32 +292,13 @@ class TradingExecutor:
         except Exception as e:
             print(f"Chart generation failed (non-critical): {e}")
         
-        # Send minimal email notification with link to dashboard
-        html_body = f"""
-        <html>
-        <body style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5;">
-            <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
-                <h2 style="color: #333;">📊 Trading Signals Ready</h2>
-                <p>Your daily trading analysis is complete with <strong>{len(summaries)}</strong> strong signals.</p>
-                <p>View the complete dashboard at:</p>
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="file://{os.path.abspath('web_dashboard/index.html')}" 
-                    style="background: #007bff; color: white; padding: 15px 30px; 
-                            text-decoration: none; border-radius: 5px; font-weight: bold;">
-                    Open Dashboard
-                    </a>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        
+        # Compose premium email with both equity and crypto signals
+        html_body = compose_html_email(summaries, crypto_signals)
         
         if html_body and not skip_email:
-            success = send_email(
-                f"Daily Trading Summary - {len(summaries)} Strong Signals", 
-                html_body
-            )
+            crypto_count = len(crypto_signals) if crypto_signals else 0
+            subject = f"Trading Report: {len(summaries)} Equity + {crypto_count} Crypto Signal(s)"
+            success = send_email(subject, html_body)
             if success:
                 print("✅ Email sent successfully")
             else:
@@ -349,4 +330,4 @@ if __name__ == "__main__":
     trader = TradingExecutor(tickers=tickers)
     print("Running script...")
     trader.run_daily_trading()
-    trader.post_results(skip_email=args.skip_email)```
+    trader.post_results(skip_email=args.skip_email)

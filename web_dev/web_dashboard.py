@@ -5,19 +5,12 @@ import pandas as pd
 from datetime import datetime
 from distribute_results import load_results
 import plotly.graph_objects as go
+
 RESULTS_DIR = "results"
 WEB_DIR = "web_dashboard"
-os.makedirs(WEB_DIR, exist_ok=True)
-# web_dashboard.py
-import os
-import json
-import pandas as pd
-from datetime import datetime
-from distribute_results import load_results
-
-# GitHub Pages output directory
 OUTPUT_DIR = "web_dashboard"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 
 def generate_dashboard():
     """Generate dashboard optimized for GitHub Pages with enhanced features"""
@@ -41,6 +34,17 @@ def generate_dashboard():
     
     print(f"✅ GitHub Pages dashboard generated: {OUTPUT_DIR}/index.html")
     return len(summaries)
+
+def load_crypto_signals():
+    """Load crypto lead-lag signals from the results directory."""
+    path = os.path.join(RESULTS_DIR, "crypto_signals.json")
+    try:
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
 
 def generate_github_pages_html(summaries):
     """Generate HTML optimized for GitHub Pages with enhanced metrics"""
@@ -119,6 +123,47 @@ def generate_github_pages_html(summaries):
     
     top_model = max(model_counts.items(), key=lambda x: x[1]) if model_counts else ('None', 0)
 
+    # ── Crypto signals section ──────────────────────────────────────────────
+    crypto_signals = load_crypto_signals()
+    crypto_cards_html = ""
+    leader_avg_move = None
+    for sig in crypto_signals:
+        sym = sig.get('ticker', '').replace('-USD', '')
+        csig = sig.get('signal', 'HOLD')
+        conf = sig.get('confidence', 0)
+        sub_ret = sig.get('sub_return', 0)
+        leader_avg_move = sig.get('leader_avg_move', leader_avg_move)
+        sig_class = 'signal-buy' if csig == 'BUY' else 'signal-sell' if csig == 'SELL' else 'signal-hold'
+        bar_w = int(conf * 100)
+        crypto_cards_html += f"""
+        <div class="card crypto-card">
+            <div class="card-header">
+                <h3>{sym} <span class="card-tag">CRYPTO</span></h3>
+                <span class="signal-badge {sig_class}">{csig}</span>
+            </div>
+            <div class="metric"><label>3h Return:</label><span class="value {'positive' if sub_ret > 0 else 'negative'}">{sub_ret:+.2f}%</span></div>
+            <div class="metric"><label>Signal:</label><span class="value">{csig} (Leader correlation)</span></div>
+            <div class="confidence-bar-wrap">
+                <div class="confidence-bar-label"><span>Confidence</span><span>{conf:.0%}</span></div>
+                <div class="confidence-bar-track"><div class="confidence-bar-fill" style="width:{bar_w}%"></div></div>
+            </div>
+        </div>
+        """
+
+    crypto_section_html = ""
+    if crypto_cards_html:
+        leader_text = f"BTC/ETH avg 3h move: {leader_avg_move:+.2f}%" if leader_avg_move is not None else ""
+        crypto_section_html = f"""
+        <div class="crypto-section-header">
+            <h2>Crypto Lead-Lag Signals</h2>
+            <span class="crypto-pill">LIVE</span>
+        </div>
+        {f'<div class="leader-info">{leader_text}</div>' if leader_text else ''}
+        <div class="signals-grid">
+            {crypto_cards_html}
+        </div>
+        """
+
     return f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -171,6 +216,8 @@ def generate_github_pages_html(summaries):
         <div class="signals-grid">
             {cards_html if cards_html else '<div class="no-signals">No strong signals meeting criteria today</div>'}
         </div>
+        
+        {crypto_section_html}
         
         <div class="info-section">
             <h3>📊 About This Dashboard</h3>

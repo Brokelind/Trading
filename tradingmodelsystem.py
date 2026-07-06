@@ -19,7 +19,7 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.base import clone
 from xgboost import XGBRegressor, XGBClassifier
 from lightgbm import LGBMRegressor
-from tensorflow.keras.models import Sequential, load_model, save_model
+from tensorflow.keras.models import Sequential, load_model, save_model, Model
 from tensorflow.keras.layers import (LSTM, Dense, Input, Dropout, 
                                     BatchNormalization, Attention)
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
@@ -55,17 +55,24 @@ class TradingModelSystem:
         cfg = {
             "data_dir": DATA_DIR_DEFAULT,
             "model_dir": MODEL_DIR_DEFAULT,
-            "window_size": 60,  
+            "window_size": 30,  # Reduced from 60 - less data loss, faster training
             "prediction_threshold_pct": 0.0001,
             "min_trade_confidence": 0.40,
             "initial_capital": 10000,
-            "min_data_points": 200,  # Increased minimum data requirement
+            "min_data_points": 200,
             "retrain_days": RETRAIN_DAYS,
             "verbose": False,
-            "enable_uncertainty": True,  # Enable prediction intervals
-            "n_cv_folds": 5,  # For time series cross-validation
-            "feature_lookback": 10,  # How many past steps to use for lag feature creation
-            "enable_lightgbm": False
+            "enable_uncertainty": True,
+            "n_cv_folds": 5,
+            "feature_lookback": 5,  # Reduced from 10 - fewer noisy lag features
+            "enable_lightgbm": False,
+            "target_days_forward": 3,  # NEW: predict 3-day forward return instead of 1-day
+            "volatility_adjust_target": True,  # NEW: adjust target by ATR for consistency
+            "use_market_relative_features": True,  # NEW: add alpha vs SPY features
+            "ensemble_weight_by_performance": True,  # NEW: weight ensemble by backtest perf
+            "fractional_position_sizing": 0.25,  # NEW: use 25% of capital per trade
+            "max_concurrent_positions": 4,  # NEW: allow multiple concurrent positions
+            "transaction_cost_pct": 0.001  # NEW: 0.1% transaction cost
         }
         if config:
             cfg.update(config)
@@ -586,28 +593,48 @@ class TradingModelSystem:
                 logger.warning(f"{ticker}: Only {len(df)} rows after feature engineering")
                 return None
 
-            # ✅ CREATE TARGETS HERE WITH PROPER CLIPPING
-            df['target_price'] = df['adj_close'].shift(-1)
-            df['target_return'] = (df['target_price'] / df['adj_close']) - 1.0
+            # ✅ IMPROVED TARGETS: Multi-day forward return with volatility adjustment
+            target_days = self.config.get("target_days_forward", 3)
             
-            # 🔥 CRITICAL: Clip BEFORE any other operations
+            # Use N-day forward return instead of 1-day (less noisy)
+            df['target_price'] = df['adj_close'].shift(-target_days)
+            df['target_return_raw'] = (df['target_price'] / df['adj_close']) - 1.0
+            
+            # Volatility-adjust the target: scale by ATR ratio for consistency
+            if self.config.get("volatility_adjust_target", True) and 'ATR' in df.columns:
+                atr_ratio = df['ATR'] / df['adj_close']  # ATR as % of price
+                atr_median = atr_ratio.rolling(63).median()
+                # Adjust target toward consistency: high vol periods get target scaled down
+                vol_scale = atr_median / atr_ratio.replace(0, np.nan)
+                vol_scale = vol_scale.clip(0.3, 3.0)  # Limit adjustment range
+                df['target_return'] = df['target_return_raw'] * vol_scale
+            else:
+                df['target_return'] = df['target_return_raw']
+            
+            # Clip extreme targets
             df['target_return'] = df['target_return'].clip(-0.15, 0.15)
             
             df['target_direction'] = np.where(df['target_return'] > 0, 1, 0)
             
             # Remove any rows with NaN targets
-            df = df.dropna(subset=['target_return'])
+            df = df.dropna(subset=['target_return', 'target_direction'])
             
-            # Additional outlier removal (now working on already-clipped data)
+            # Additional outlier removal using MAD
             returns = df['target_return']
             median = returns.median()
             mad = (returns - median).abs().median()
-            df = df[(returns >= median - 5*mad) & (returns <= median + 5*mad)]
+            if mad > 0:
+                df = df[(returns >= median - 5*mad) & (returns <= median + 5*mad)]
             
             # Final data check
             if len(df) < self.config["min_data_points"]:
                 logger.warning(f"{ticker}: Only {len(df)} rows after outlier removal")
                 return None
+            
+            print(f"DEBUG: Targets created: {target_days}-day forward, shape={df.shape}, "
+                  f"return mean={df['target_return'].mean():.4f}, "
+                  f"std={df['target_return'].std():.4f}, "
+                  f"direction balance={df['target_direction'].mean():.3f}")
 
             print(f"DEBUG: Successfully prepared features for {ticker}, final shape: {df.shape}")
             return df
@@ -655,42 +682,45 @@ class TradingModelSystem:
             y.append(targets[i])
         return np.array(X), np.array(y)
 
-    def _create_lstm_model(self, input_shape: Tuple[int, int]) -> Sequential:
-        model = Sequential([
-            Input(shape=input_shape),
-            LSTM(128, return_sequences=True, dropout=0.2, recurrent_dropout=0.2),
-            LSTM(64, return_sequences=True, dropout=0.2),
-            LSTM(32, dropout=0.2),
-            Dense(32, activation='relu'),
-            Dropout(0.3),
-            Dense(16, activation='relu'),
-            Dense(1)
-        ])
+    def _create_lstm_model(self, input_shape: Tuple[int, int]) -> Model:
+        """Simplified LSTM with Bidirectional layers for better pattern capture"""
+        inputs = Input(shape=input_shape)
+        # Bidirectional LSTM for better pattern capture
+        x = tf.keras.layers.Bidirectional(
+            LSTM(64, return_sequences=True, dropout=0.25, recurrent_dropout=0.1)
+        )(inputs)
+        x = tf.keras.layers.Bidirectional(
+            LSTM(32, dropout=0.2)
+        )(x)
+        x = Dense(16, activation='relu', kernel_regularizer=l2(0.001))(x)
+        x = Dropout(0.2)(x)
+        outputs = Dense(1)(x)
         
+        model = Model(inputs=inputs, outputs=outputs)
         model.compile(
-            optimizer=Adam(learning_rate=0.0001),  # Lower learning rate
-            loss='huber',  # More robust to outliers than MSE
+            optimizer=Adam(learning_rate=0.001),
+            loss='huber',
             metrics=['mae']
         )
         return model
 
     def _create_dense_model(self, input_shape: Tuple[int]) -> Sequential:
-        """Enhanced dense neural network"""
+        """Compact dense neural network with stronger regularization"""
         model = Sequential([
             Input(shape=(input_shape[0],)),
-            Dense(512, activation='relu', kernel_regularizer=l2(0.01)),
-            BatchNormalization(),
-            Dropout(0.4),
-            Dense(256, activation='relu'),
+            Dense(128, activation='relu', kernel_regularizer=l2(0.005)),
             BatchNormalization(),
             Dropout(0.3),
-            Dense(128, activation='relu'),
+            Dense(64, activation='relu', kernel_regularizer=l2(0.005)),
+            BatchNormalization(),
+            Dropout(0.25),
+            Dense(32, activation='relu', kernel_regularizer=l2(0.001)),
             Dense(1)
         ])
         model.compile(
-            optimizer=Adam(learning_rate=0.001),
-            loss='mse',
-            metrics=[RootMeanSquaredError()]
+            optimizer=Adam(learning_rate=0.0005, clipnorm=1.0),
+            loss='huber',
+            metrics=['mae']
         )
         return model
 
@@ -887,6 +917,7 @@ class TradingModelSystem:
             "Dense NN": self._train_dnn,  
             "Random Forest": self._train_rf,
             "XGBoost": self._train_xgb,
+            "LightGBM": self._train_lgbm,
         }
         
         results = {}
@@ -918,7 +949,7 @@ class TradingModelSystem:
         try:
             sk_models = {
                 name: m for name, m in trained_models.items()
-                if name in ("Random Forest", "XGBoost") and "Regressor" in str(type(m))
+                if name in ("Random Forest", "XGBoost", "LightGBM") and m is not None and "Regressor" in str(type(m))
             }
 
             if len(sk_models) >= 2:
@@ -1039,30 +1070,22 @@ class TradingModelSystem:
             raise
 
     def _train_dnn(self, X_train, y_train, X_val, y_val, n_features):
-        from tensorflow.keras import Sequential, layers, callbacks
-
         # Flatten sequences to 2D for Dense network
         X_train_flat = X_train.reshape(X_train.shape[0], -1)
         X_val_flat = X_val.reshape(X_val.shape[0], -1)
 
-        model = Sequential([
-            layers.Input(shape=(X_train_flat.shape[1],)),
-            layers.Dense(256, activation='relu'),
-            layers.Dropout(0.2),
-            layers.Dense(128, activation='relu'),
-            layers.Dense(1)
-        ])
-
-        model.compile(optimizer='adam', loss='mse', metrics=['mae'])
-
-        es = callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+        # Use the compact architecture with strong regularization
+        model = self._create_dense_model((X_train_flat.shape[1],))
+        
+        es = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=15, restore_best_weights=True)
+        rlr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=7, min_lr=1e-6)
         model.fit(
             X_train_flat, y_train,
             validation_data=(X_val_flat, y_val),
-            epochs=100,
+            epochs=150,
             batch_size=32,
             verbose=0,
-            callbacks=[es]
+            callbacks=[es, rlr]
         )
         return model
 
@@ -1189,6 +1212,31 @@ class TradingModelSystem:
         # Check predictions
         sample_pred = model.predict(X_val_flat[:5])
         print(f"DEBUG: XGB Sample predictions: {sample_pred}")
+        
+        return model
+
+    def _train_lgbm(self, X_train, y_train, X_val, y_val, n_features):
+        """Fit a LightGBM regressor"""
+        X_train_flat = X_train.reshape(X_train.shape[0], -1)
+        X_val_flat = X_val.reshape(X_val.shape[0], -1)
+
+        print(f"DEBUG: LightGBM Training - X_train shape: {X_train_flat.shape}, y_train range: [{y_train.min():.6f}, {y_train.max():.6f}]")
+
+        model = LGBMRegressor(
+            n_estimators=100,
+            learning_rate=0.1,
+            max_depth=6,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42,
+            n_jobs=-1,
+            verbose=-1
+        )
+        
+        model.fit(X_train_flat, y_train.ravel())
+        
+        sample_pred = model.predict(X_val_flat[:5])
+        print(f"DEBUG: LGBM Sample predictions: {sample_pred}")
         
         return model
 
@@ -1491,12 +1539,14 @@ class TradingModelSystem:
     def _select_best_model(self, backtest_results: Dict[str, Any]) -> str:
         """
         Choose the best model based on regression R2 or DirectionAcc.
-        Handles cases where backtest_results values may be DataFrames.
+        Handles cases where backtest_results values may be DataFrames or dicts.
         """
         best_model = None
         best_score = -np.inf
 
         for model_name, result in backtest_results.items():
+            score = -np.inf
+            
             # If result is a DataFrame, compute score from metrics
             if isinstance(result, pd.DataFrame):
                 df = result.copy()
@@ -1512,13 +1562,18 @@ class TradingModelSystem:
                     y_true_dir = np.sign(df["y_true"].values)
                     signal_dir = np.array([1 if s=="BUY" else -1 if s=="SELL" else 0 for s in signals])
                     score = np.mean(signal_dir == y_true_dir)
-                else:
-                    score = -np.inf
             elif isinstance(result, dict):
-                # Already a metrics dict
-                score = result.get("R2", result.get("DirectionAcc", -np.inf))
-            else:
-                score = -np.inf
+                # Handle dict with walk_forward key
+                if "walk_forward" in result and isinstance(result["walk_forward"], pd.DataFrame):
+                    df = result["walk_forward"]
+                    if "y_true" in df.columns and "y_pred" in df.columns:
+                        try:
+                            score = r2_score(df["y_true"], df["y_pred"])
+                        except Exception:
+                            score = -np.inf
+                else:
+                    # Already a metrics dict
+                    score = result.get("R2", result.get("DirectionAcc", -np.inf))
 
             if score > best_score:
                 best_score = score
@@ -1704,7 +1759,7 @@ class TradingModelSystem:
         predictions = {}
         last_price = float(df["adj_close"].iloc[-1])
         threshold = self.config["prediction_threshold_pct"]
-        model_types = ["LSTM", "Dense NN", "Random Forest", "XGBoost"]
+        model_types = ["LSTM", "Dense NN", "Random Forest", "XGBoost", "LightGBM"]
 
         for model_type in model_types:
             try:
@@ -1771,73 +1826,73 @@ class TradingModelSystem:
 
 
     def _generate_ensemble_predictions(self, model_preds: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """Improved ensemble prediction with better logic"""
-        signals = []
-        prices = []
-        pct_diffs = []
+        """
+        FIXED ensemble: weighted by magnitude rather than simple majority.
+        Uses all models (including HOLD) with confidence-weighted averaging.
+        """
+        # Collect ALL predictions (including HOLD) with their magnitudes
+        buy_pct = []
+        sell_pct = []
+        hold_pct = []
+        all_prices = []
+        all_pct = []
         
-        # Collect valid predictions
         for model, pred in model_preds.items():
             if "error" in pred:
                 continue
-                
-            signal = pred.get("signal")
+            pct_diff = pred.get("pct_diff", 0)
+            signal = pred.get("signal", "HOLD")
             pred_price = pred.get("predicted_price")
-            pct_diff = pred.get("pct_diff")
             
-            # Skip if missing critical data
             if pred_price is None or pct_diff is None:
                 continue
                 
-            # Only consider models that made a decisive prediction
-            if signal and signal != "HOLD":
-                signals.append(signal)
-                prices.append(pred_price)
-                pct_diffs.append(pct_diff)
-        
-        # If no decisive signals, return HOLD with average price
-        if not signals:
-            valid_prices = [p.get("predicted_price") for p in model_preds.values() 
-                        if "error" not in p and p.get("predicted_price") is not None]
-            if valid_prices:
-                avg_price = float(np.mean(valid_prices))
-                return {
-                    "signal": "HOLD", 
-                    "predicted_price": avg_price,
-                    "confidence": 0,
-                    "pct_diff": 0
-                }
+            all_prices.append(pred_price)
+            all_pct.append(pct_diff)
+            
+            # Collect by signal type with magnitude as weight
+            if signal == "BUY":
+                buy_pct.append(pct_diff)
+            elif signal == "SELL":
+                sell_pct.append(abs(pct_diff))
             else:
-                return {"signal": "HOLD", "predicted_price": None, "confidence": 0, "pct_diff": 0}
+                hold_pct.append(abs(pct_diff))
         
-        # Count signals
-        buy_count = signals.count("BUY")
-        sell_count = signals.count("SELL")
-        total_votes = len(signals)
+        if not all_pct:
+            return {"signal": "HOLD", "predicted_price": None, "confidence": 0, "pct_diff": 0}
         
-        # Calculate confidence based on agreement and magnitude
-        avg_pct_diff = np.mean(pct_diffs)
-        agreement_ratio = max(buy_count, sell_count) / total_votes
+        # Calculate weighted signal strength
+        # Positive = net BUY, Negative = net SELL, Near zero = HOLD
+        buy_strength = sum(buy_pct) if buy_pct else 0
+        sell_strength = -sum(sell_pct) if sell_pct else 0
+        net_strength = buy_strength + sell_strength
         
-        # Determine signal based on majority vote
-        if buy_count > sell_count:
+        # Magnitude of net signal vs noise
+        total_magnitude = sum(abs(p) for p in all_pct) / max(len(all_pct), 1)
+        signal_to_noise = abs(net_strength) / max(total_magnitude, 0.001)
+        
+        # Threshold: require net strength > 15% of total magnitude
+        threshold = total_magnitude * 0.15
+        
+        if net_strength > threshold:
             ensemble_signal = "BUY"
-            confidence = min(agreement_ratio * (1 + abs(avg_pct_diff)/10), 1.0)
-        elif sell_count > buy_count:
-            ensemble_signal = "SELL" 
-            confidence = min(agreement_ratio * (1 + abs(avg_pct_diff)/10), 1.0)
+            confidence = min(abs(net_strength) / max(total_magnitude, 0.001) * 0.5, 1.0)
+        elif net_strength < -threshold:
+            ensemble_signal = "SELL"
+            confidence = min(abs(net_strength) / max(total_magnitude, 0.001) * 0.5, 1.0)
         else:
             ensemble_signal = "HOLD"
-            confidence = 0
+            confidence = 0.0
         
-        # Use weighted average price (weighted by confidence)
-        ensemble_price = float(np.mean(prices))
+        # Mean price and pct_diff
+        ensemble_price = float(np.mean(all_prices))
+        ensemble_pct = float(np.mean(all_pct))
         
         return {
             "signal": ensemble_signal,
             "predicted_price": ensemble_price,
             "confidence": confidence,
-            "pct_diff": avg_pct_diff  # Use average percentage difference
+            "pct_diff": ensemble_pct
         }
 
     # ---------- backtesting ----------
@@ -1992,40 +2047,53 @@ class TradingModelSystem:
                 logger.warning("Prediction kind unknown")
                 pred_returns = np.full(n, np.nan)
 
-            # --- EXTREMELY AGGRESSIVE portfolio simulation ---
-            cash = self.config.get("initial_capital", 10000)
-            positions = 0
+            # --- IMPROVED portfolio simulation: fractional sizing, concurrent positions, transaction costs ---
+            initial_capital = self.config.get("initial_capital", 10000)
+            cash = initial_capital
+            # Track multiple concurrent positions: list of (shares, entry_price)
+            positions_list = []
             portfolio = []
+            
+            frac_size = self.config.get("fractional_position_sizing", 0.25)
+            max_positions = self.config.get("max_concurrent_positions", 4)
+            tx_cost = self.config.get("transaction_cost_pct", 0.001)
             
             trade_count = 0
             for i, sig in enumerate(signals):
                 price = true_prices[i]
                 
-                # Trade on EVERY signal (except HOLD)
-                if sig == "BUY" and positions == 0:
-                    # Buy with 90% of cash
-                    qty = int((cash * 0.9) // price)
+                if sig == "BUY" and len(positions_list) < max_positions:
+                    # Use fractional capital per position
+                    capital_per_trade = cash * frac_size
+                    qty = int(capital_per_trade // price)
                     if qty > 0:
-                        positions = qty
-                        cash -= qty * price
-                        trade_count += 1
-                        if trade_count <= 5:
-                            print(f"DEBUG: {model_type} BUY {qty} shares at {price:.2f}, cash: {cash:.2f}")
+                        cost = qty * price * (1 + tx_cost)  # Include transaction cost
+                        if cost <= cash:
+                            cash -= cost
+                            positions_list.append([qty, price])  # mutable list
+                            trade_count += 1
+                            if trade_count <= 5:
+                                print(f"DEBUG: {model_type} BUY {qty} shares at {price:.2f}, cost: {cost:.2f}, cash: {cash:.2f}")
                         
-                elif sig == "SELL" and positions > 0:
-                    # Sell all positions
-                    cash += positions * price
+                elif sig == "SELL" and positions_list:
+                    # Sell one position at a time (FIFO)
+                    qty, entry_price = positions_list.pop(0)
+                    proceeds = qty * price * (1 - tx_cost)  # Include transaction cost
+                    cash += proceeds
                     trade_count += 1
                     if trade_count <= 5:
-                        print(f"DEBUG: {model_type} SELL {positions} shares at {price:.2f}, cash: {cash:.2f}")
-                    positions = 0
-                    
-                portfolio.append(cash + positions * price)
+                        print(f"DEBUG: {model_type} SELL {qty} shares at {price:.2f}, proceeds: {proceeds:.2f}, cash: {cash:.2f}")
+                
+                # Calculate current portfolio value
+                position_value = sum(qty * price for qty, _ in positions_list)
+                portfolio.append(cash + position_value)
             
-            # Close any remaining positions
-            if positions > 0:
-                cash += positions * prices[-1]
-                portfolio[-1] = cash
+            # Close any remaining positions at final price
+            for qty, entry_price in positions_list:
+                proceeds = qty * prices[-1] * (1 - tx_cost)
+                cash += proceeds
+            positions_list = []
+            portfolio[-1] = cash
             
             print(f"DEBUG: {model_type} Total trades: {trade_count}, Final portfolio: ${portfolio[-1]:.2f}")
 
