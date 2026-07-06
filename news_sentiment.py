@@ -4,7 +4,6 @@ import statistics
 from datetime import datetime, timedelta
 import praw
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, pipeline
 
 # Only for local use
 try:
@@ -21,20 +20,24 @@ REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT") or getattr(env, "REDDIT_
 # --- Reddit setup (lazy loaded) ---
 reddit = None
 
-# --- Load TF FinBERT sentiment model ---
-tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-model = TFAutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert", from_pt=True)
-
-finbert_pipe = pipeline(
-    "sentiment-analysis",
-    model=model,
-    tokenizer=tokenizer,
-    framework="tf",  # force TensorFlow
-    device=-1        # CPU only
-)
+# --- Load TF FinBERT sentiment model (optional, may fail in CI) ---
+finbert_pipe = None
+try:
+    from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, pipeline
+    tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+    model = TFAutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert", from_pt=True)
+    finbert_pipe = pipeline(
+        "sentiment-analysis",
+        model=model,
+        tokenizer=tokenizer,
+        framework="tf",  # force TensorFlow
+        device=-1        # CPU only
+    )
+except Exception as e:
+    print(f"[WARN] Could not load FinBERT model: {e}")
+    print("[INFO] Falling back to VADER-only sentiment analysis")
 
 # --- VADER sentiment ---
-
 vader = SentimentIntensityAnalyzer()
 
 # --- Helper functions ---
@@ -104,6 +107,8 @@ def get_finnhub_news(ticker, lookback_days=1):
         return []
 
 def score_finbert(text):
+    if finbert_pipe is None:
+        return 0.0
     try:
         result = finbert_pipe(text)[0]  # returns dict with 'label' and 'score'
         label, score = result["label"], result["score"]
