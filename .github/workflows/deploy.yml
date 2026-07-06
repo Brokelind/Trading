@@ -27,10 +27,8 @@ jobs:
       GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
 
     steps:
-      - name: Checkout main branch
+      - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v4

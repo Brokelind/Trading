@@ -8,3 +8,5 @@ xgboost
 lightgbm
 requests
 tqdm
+plotly
+matplotlib
