@@ -339,3 +339,5 @@ if __name__ == "__main__":
                 json.dump({"status": "fatal_error", "error": str(e)}, f, indent=2)
         except Exception:
             pass
+    finally:
+        print("CI run finished")
