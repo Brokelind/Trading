@@ -327,6 +327,7 @@ if __name__ == "__main__":
     else:
         tickers = None  # default to full list
 
+    fatal_error = None
     try:
         trader = TradingExecutor(tickers=tickers)
         print("Running script...")
@@ -334,10 +335,17 @@ if __name__ == "__main__":
         trader.post_results(skip_email=args.skip_email)
     except Exception as e:
         print("Fatal error in main:", e)
+        fatal_error = str(e)
+    finally:
         try:
+            status = {"status": "fatal_error" if fatal_error else "success"}
+            if fatal_error:
+                status["error"] = fatal_error
             with open(os.path.join(RESULTS_DIR, "ci_status.json"), "w") as f:
-                json.dump({"status": "fatal_error", "error": str(e)}, f, indent=2)
+                json.dump(status, f, indent=2)
         except Exception:
             pass
-    finally:
         print("CI run finished")
+
+    if fatal_error:
+        raise SystemExit(1)

@@ -2,9 +2,7 @@ import os
 import requests
 import statistics
 from datetime import datetime, timedelta
-import praw
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, pipeline
 
 # Only for local use
 try:
@@ -19,33 +17,42 @@ REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET") or getattr(env, "R
 REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT") or getattr(env, "REDDIT_USER_AGENT", None)
 
 # --- Reddit setup (lazy loaded) ---
+praw = None
 reddit = None
 
-# --- Load TF FinBERT sentiment model ---
-tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-model = TFAutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert", from_pt=True)
-
-finbert_pipe = pipeline(
-    "sentiment-analysis",
-    model=model,
-    tokenizer=tokenizer,
-    framework="tf",  # force TensorFlow
-    device=-1        # CPU only
-)
+# --- Load TF FinBERT sentiment model (optional, may fail in CI) ---
+finbert_pipe = None
+try:
+    from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, pipeline
+    tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+    model = TFAutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert", from_pt=True)
+    finbert_pipe = pipeline(
+        "sentiment-analysis",
+        model=model,
+        tokenizer=tokenizer,
+        framework="tf",  # force TensorFlow
+        device=-1        # CPU only
+    )
+except Exception as e:
+    print(f"[WARN] Could not load FinBERT model: {e}")
+    print("[INFO] Falling back to VADER-only sentiment analysis")
 
 # --- VADER sentiment ---
-
 vader = SentimentIntensityAnalyzer()
 
 # --- Helper functions ---
 def get_reddit_news(ticker, lookback_days=1):
-    global reddit
+    global reddit, praw
     if not (REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT):
         print("[WARN] Reddit API credentials missing or invalid, skipping Reddit search.")
         return []
 
     if reddit is None:
         try:
+            # Lazy import praw only when needed
+            if praw is None:
+                import praw as praw_lib
+                praw = praw_lib
             reddit = praw.Reddit(
                 client_id=REDDIT_CLIENT_ID,
                 client_secret=REDDIT_CLIENT_SECRET,
@@ -104,6 +111,8 @@ def get_finnhub_news(ticker, lookback_days=1):
         return []
 
 def score_finbert(text):
+    if finbert_pipe is None:
+        return 0.0
     try:
         result = finbert_pipe(text)[0]  # returns dict with 'label' and 'score'
         label, score = result["label"], result["score"]

@@ -16,6 +16,12 @@ STRONG_SIGNAL_THRESHOLD = 0.65
 RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
+# Table style for email - defined before use
+_TABLE_STYLE = (
+    "border-collapse:collapse;width:100%;background:rgba(255,255,255,0.03);"
+    "border-radius:10px;overflow:hidden;font-size:0.88em"
+)
+
 EMAIL_SENDER = os.environ.get("EMAIL_SENDER") or getattr(env, "EMAIL_SENDER", None)
 EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER") or getattr(env, "EMAIL_RECEIVER", None)
 GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD") or getattr(env, "GMAIL_APP_PASSWORD", None)
@@ -65,9 +71,6 @@ def load_results():
                     sentiment_conf >= 0.3  # Minimum 30% sentiment confidence
                 )
 
-                meets_criteria = True # pass all checks for now
-
-                
                 # Add confidence and pct_diff to data for sorting
                 data['confidence'] = confidence
                 data['pct_diff'] = pct_diff
@@ -210,13 +213,6 @@ def compose_html_email(results, crypto_signals=None):
 </body>
 </html>"""
     return html
-
-_TABLE_STYLE = (
-    "border-collapse:collapse;width:100%;background:rgba(255,255,255,0.03);"
-    "border-radius:10px;overflow:hidden;font-size:0.88em"
-)
-# Inject th/td styles via inline CSS in the HTML (email clients need inline styles)
-_TABLE_STYLE = _TABLE_STYLE  # kept for f-string reference above
 
 
 def compose_text_email(results, crypto_signals=None):

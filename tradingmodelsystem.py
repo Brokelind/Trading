@@ -9,7 +9,10 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 import joblib
-import talib
+try:
+    import talib
+except Exception:
+    talib = None
 import tensorflow as tf
 from scipy.stats import norm
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor, RandomForestClassifier
@@ -449,7 +452,7 @@ class TradingModelSystem:
             
     def _add_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """Using TA-Lib instead of pandas-ta"""
-        if df.empty:
+        if df.empty or talib is None:
             return df
         try:
             # Price-based indicators
