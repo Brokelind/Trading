@@ -131,8 +131,8 @@ def generate_github_pages_html(summaries):
         sym = sig.get('ticker', '').replace('-USD', '')
         csig = sig.get('signal', 'HOLD')
         conf = sig.get('confidence', 0)
-        sub_ret = sig.get('sub_return', 0)
-        leader_avg_move = sig.get('leader_avg_move', leader_avg_move)
+        sub_ret = sig.get('sub_move', 0)
+        leader_avg_move = sig.get('leader_move', leader_avg_move)
         sig_class = 'signal-buy' if csig == 'BUY' else 'signal-sell' if csig == 'SELL' else 'signal-hold'
         bar_w = int(conf * 100)
         crypto_cards_html += f"""

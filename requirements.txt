@@ -10,3 +10,11 @@ requests
 tqdm
 plotly
 matplotlib
+tensorflow
+
+# Additional dependencies required by the codebase
+yfinance
+praw
+vaderSentiment
+transformers
+alpaca
