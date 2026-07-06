@@ -2,7 +2,6 @@ import os
 import requests
 import statistics
 from datetime import datetime, timedelta
-import praw
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # Only for local use
@@ -18,6 +17,7 @@ REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET") or getattr(env, "R
 REDDIT_USER_AGENT = os.environ.get("REDDIT_USER_AGENT") or getattr(env, "REDDIT_USER_AGENT", None)
 
 # --- Reddit setup (lazy loaded) ---
+praw = None
 reddit = None
 
 # --- Load TF FinBERT sentiment model (optional, may fail in CI) ---
@@ -42,13 +42,17 @@ vader = SentimentIntensityAnalyzer()
 
 # --- Helper functions ---
 def get_reddit_news(ticker, lookback_days=1):
-    global reddit
+    global reddit, praw
     if not (REDDIT_CLIENT_ID and REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT):
         print("[WARN] Reddit API credentials missing or invalid, skipping Reddit search.")
         return []
 
     if reddit is None:
         try:
+            # Lazy import praw only when needed
+            if praw is None:
+                import praw as praw_lib
+                praw = praw_lib
             reddit = praw.Reddit(
                 client_id=REDDIT_CLIENT_ID,
                 client_secret=REDDIT_CLIENT_SECRET,

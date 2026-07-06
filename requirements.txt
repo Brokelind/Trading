@@ -33,3 +33,4 @@ seaborn
 transformers==4.31.0
 vaderSentiment==3.3.2
 requests==2.31.0
+praw==7.7.1  # Reddit API client for sentiment analysis
