@@ -55,7 +55,7 @@ jobs:
         run: |
           set -e
           if [ -f requirements.txt ]; then
-            python -m pip install --no-cache-dir -r requirements.txt
+            python -m pip install --no-cache-dir --prefer-binary -r requirements.txt
           fi
 
       - name: Run main.py (skip email)
