@@ -1,4 +1,4 @@
-# Core data/modeling
+# Core only for CI debugging
 numpy
 pandas
 joblib
@@ -6,25 +6,5 @@ scipy
 scikit-learn
 xgboost
 lightgbm
-
-# Alpaca stack
-alpaca-py
-websockets
-pydantic
-optree
-
-# Market data
-yfinance
-
-# Optional plotting/logging
-matplotlib
-tqdm
-plotly
-kaleido
-seaborn
-
-# NLP / Transformers / Torch / Sentiment
-transformers
-vaderSentiment
 requests
-praw
+tqdm
