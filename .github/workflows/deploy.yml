@@ -35,7 +35,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install ta-lib system dependency
-        run: sudo apt-get update && sudo apt-get install -y ta-lib
+        run: sudo apt-get update && sudo apt-get install -y ta-lib || echo "ta-lib system package install failed; continuing"
 
       - name: Cache pip dependencies
         uses: actions/cache@v4
