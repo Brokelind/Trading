@@ -18,3 +18,4 @@ praw
 vaderSentiment
 transformers
 alpaca
+seaborn
