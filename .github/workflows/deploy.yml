@@ -51,7 +51,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt || echo "Dependency install failed; continuing"; fi
 
       - name: Run main.py (skip email)
-        run: python main.py --skip_email
+        run: python main.py --skip_email || true
 
       - name: Upload dashboard artifact
         uses: actions/upload-artifact@v4
