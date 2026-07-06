@@ -1,48 +1,48 @@
 {
   "ticker": "PLTR",
-  "timestamp": "2025-10-17T12:04:08.172491",
-  "last_price": 178.12,
+  "timestamp": "2025-10-20T11:41:05.554353",
+  "last_price": 178.15,
   "predictions": {
     "LSTM": {
-      "predicted_price": 179.2085272699967,
-      "predicted_return": 0.0061112018302083015,
-      "pct_diff": 0.6111201830208225,
+      "predicted_price": 179.2222026326461,
+      "predicted_return": 0.006018538493663073,
+      "pct_diff": 0.6018538493663105,
       "signal": "BUY"
     },
     "Dense NN": {
-      "predicted_price": 181.173705233261,
-      "predicted_return": 0.017144089564681053,
-      "pct_diff": 1.7144089564681029,
+      "predicted_price": 182.58173644868657,
+      "predicted_return": 0.024876432493329048,
+      "pct_diff": 2.4876432493329017,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 177.23497068525535,
-      "predicted_return": -0.004968725099621849,
-      "pct_diff": -0.496872509962192,
+      "predicted_price": 177.6382755319115,
+      "predicted_return": -0.0028724359701852733,
+      "pct_diff": -0.28724359701853297,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 174.30590079307558,
-      "predicted_return": -0.021413087844848633,
-      "pct_diff": -2.1413087844848557,
+      "predicted_price": 175.8385288307909,
+      "predicted_return": -0.012974859215319157,
+      "pct_diff": -1.2974859215319188,
       "signal": "SELL"
     },
     "Ensemble": {
       "signal": "HOLD",
-      "predicted_price": 177.98077599539715,
+      "predicted_price": 178.82018586100875,
       "confidence": 0,
-      "pct_diff": -0.0781630387395306
+      "pct_diff": 0.3761918950371861
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": -0.0781630387395306,
+  "pct_diff": 0.3761918950371861,
   "qty": 0,
   "sentiment": {
     "ticker": "PLTR",
     "signal": "HOLD",
-    "score": 0.159,
-    "confidence": 0.4
+    "score": 0.088,
+    "confidence": 0.29
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

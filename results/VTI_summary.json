@@ -1,42 +1,42 @@
 {
   "ticker": "VTI",
-  "timestamp": "2025-10-17T11:27:15.747544",
-  "last_price": 325.77,
+  "timestamp": "2025-10-20T11:36:50.746008",
+  "last_price": 327.3,
   "predictions": {
     "LSTM": {
-      "predicted_price": 326.07804820111545,
-      "predicted_return": 0.000945600273553282,
-      "pct_diff": 0.09456002735533309,
+      "predicted_price": 327.6234163180925,
+      "predicted_return": 0.0009881341829895973,
+      "pct_diff": 0.09881341829895626,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 325.06274566919774,
-      "predicted_return": -0.002171023515984416,
-      "pct_diff": -0.2171023515984416,
+      "predicted_price": 326.81175403251547,
+      "predicted_return": -0.001491738366894424,
+      "pct_diff": -0.1491738366894424,
       "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 324.2634050963408,
-      "predicted_return": -0.004624719598671396,
-      "pct_diff": -0.4624719598671343,
+      "predicted_price": 325.49019158729175,
+      "predicted_return": -0.005529509357495388,
+      "pct_diff": -0.552950935749546,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 326.242591462835,
-      "predicted_return": 0.0014506905572488904,
-      "pct_diff": 0.14506905572489742,
-      "signal": "HOLD"
+      "predicted_price": 328.82889829748314,
+      "predicted_return": 0.004671244416385889,
+      "pct_diff": 0.46712444163859584,
+      "signal": "BUY"
     },
     "Ensemble": {
-      "signal": "SELL",
-      "predicted_price": 324.2634050963408,
-      "confidence": 1.0,
-      "pct_diff": -0.4624719598671343
+      "signal": "HOLD",
+      "predicted_price": 327.15954494238747,
+      "confidence": 0,
+      "pct_diff": -0.042913247055466425
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "SELL",
-  "pct_diff": -0.4624719598671343,
+  "signal": "HOLD",
+  "pct_diff": -0.042913247055466425,
   "qty": 0,
   "sentiment": {},
   "position_size_factor": 0.1,

@@ -1,50 +1,45 @@
 {
   "ticker": "UBER",
-  "timestamp": "2025-10-17T12:05:54.588260",
-  "last_price": 92.52,
+  "timestamp": "2025-10-20T11:41:18.682722",
+  "last_price": 92.3,
   "predictions": {
     "LSTM": {
-      "predicted_price": 92.40135942968074,
-      "predicted_return": -0.001282323501072824,
-      "pct_diff": -0.1282323501072824,
+      "predicted_price": 92.1875602186541,
+      "predicted_return": -0.0012181991478428245,
+      "pct_diff": -0.12181991478428861,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 91.20053911920637,
-      "predicted_return": -0.014261358417570591,
-      "pct_diff": -1.4261358417570555,
+      "predicted_price": 91.89152948260308,
+      "predicted_return": -0.004425466060638428,
+      "pct_diff": -0.4425466060638366,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 92.88407704892418,
-      "predicted_return": 0.003935117260313163,
-      "pct_diff": 0.39351172603133094,
+      "predicted_price": 92.70503039686086,
+      "predicted_return": 0.004388194982241394,
+      "pct_diff": 0.4388194982241234,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 93.29361896853894,
-      "predicted_return": 0.008361640386283398,
-      "pct_diff": 0.8361640386283404,
-      "signal": "BUY"
+      "predicted_price": 90.71361898817122,
+      "predicted_return": -0.017187226563692093,
+      "pct_diff": -1.7187226563692062,
+      "signal": "SELL"
     },
     "Ensemble": {
-      "signal": "BUY",
-      "predicted_price": 92.45941171222314,
-      "confidence": 0.6710324461577196,
-      "pct_diff": -0.0654866923658152
+      "signal": "SELL",
+      "predicted_price": 91.77005962254505,
+      "confidence": 0.7049433280935316,
+      "pct_diff": -0.5741499214029783
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": -0.0654866923658152,
+  "signal": "SELL",
+  "pct_diff": -0.5741499214029783,
   "qty": 0,
-  "sentiment": {
-    "ticker": "UBER",
-    "signal": "HOLD",
-    "score": -0.049,
-    "confidence": 0.39
-  },
-  "position_size_factor": 0.1,
+  "sentiment": {},
+  "position_size_factor": 0.11482998428059565,
   "metrics_path": null,
   "training_metrics": [
     {

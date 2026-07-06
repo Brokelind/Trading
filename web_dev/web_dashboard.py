@@ -205,10 +205,12 @@ def generate_ticker_page(summary):
     
     # Check for existing chart files
     chart_html_path = os.path.join(RESULTS_DIR, f"{ticker}_backtest_dashboard.html")
-    chart_html = ""
+    
     if os.path.exists(chart_html_path):
         with open(chart_html_path, 'r', encoding='utf-8') as f:
             chart_html = f.read()
+    else:
+        chart_html = ""
     
     # Get all model predictions
     predictions_html = ""

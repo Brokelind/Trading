@@ -1,50 +1,50 @@
 {
   "ticker": "SO",
-  "timestamp": "2025-10-17T13:44:31.195600",
-  "last_price": 98.13,
+  "timestamp": "2025-10-20T11:53:15.909906",
+  "last_price": 97.8,
   "predictions": {
     "LSTM": {
-      "predicted_price": 98.06471256860007,
-      "predicted_return": -0.0006653157179243863,
-      "pct_diff": -0.06653157179244211,
+      "predicted_price": 97.73468189405976,
+      "predicted_return": -0.0006678742938674986,
+      "pct_diff": -0.06678742938674405,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 96.41260655036196,
-      "predicted_return": -0.017501207068562508,
-      "pct_diff": -1.7501207068562503,
+      "predicted_price": 96.08002669103443,
+      "predicted_return": -0.017586639150977135,
+      "pct_diff": -1.7586639150977135,
       "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 97.50269423301799,
-      "predicted_return": -0.006392599276286586,
-      "pct_diff": -0.6392599276286608,
+      "predicted_price": 97.17480379077918,
+      "predicted_return": -0.006392599276286589,
+      "pct_diff": -0.6392599276286477,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 97.33340123453178,
+      "predicted_price": 97.00608010534197,
       "predicted_return": -0.008117790333926678,
-      "pct_diff": -0.8117790333926609,
+      "pct_diff": -0.8117790333926708,
       "signal": "SELL"
     },
     "Ensemble": {
       "signal": "SELL",
-      "predicted_price": 97.08290067263725,
+      "predicted_price": 96.75363686238518,
       "confidence": 1.0,
-      "pct_diff": -1.0670532226258478
+      "pct_diff": -1.0699009587063584
     }
   },
   "chosen_model": "Ensemble",
   "signal": "SELL",
-  "pct_diff": -1.0670532226258478,
+  "pct_diff": -1.0699009587063584,
   "qty": 0,
   "sentiment": {
     "ticker": "SO",
     "signal": "SELL",
-    "score": -1.485,
-    "confidence": 0.34
+    "score": -8.293,
+    "confidence": 0.0
   },
-  "position_size_factor": 0.10670532226258478,
+  "position_size_factor": 0.21398019174127167,
   "metrics_path": null,
   "training_metrics": [
     {

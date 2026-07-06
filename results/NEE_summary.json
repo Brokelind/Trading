@@ -1,48 +1,48 @@
 {
   "ticker": "NEE",
-  "timestamp": "2025-10-17T13:38:50.264428",
-  "last_price": 85.665,
+  "timestamp": "2025-10-20T11:52:39.153022",
+  "last_price": 84.53,
   "predictions": {
     "LSTM": {
-      "predicted_price": 85.72119449883962,
-      "predicted_return": 0.0006559796747751534,
-      "pct_diff": 0.06559796747751866,
+      "predicted_price": 84.58572321041254,
+      "predicted_return": 0.0006592122372239828,
+      "pct_diff": 0.06592122372239156,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 86.08970932148165,
-      "predicted_return": 0.004957792814821005,
-      "pct_diff": 0.4957792814821025,
+      "predicted_price": 84.9715898537496,
+      "predicted_return": 0.005224060732871294,
+      "pct_diff": 0.5224060732871226,
       "signal": "BUY"
     },
     "Random Forest": {
-      "predicted_price": 86.0542578029119,
+      "predicted_price": 84.91410041534049,
       "predicted_return": 0.0045439538074115065,
-      "pct_diff": 0.45439538074114205,
+      "pct_diff": 0.4543953807411379,
       "signal": "BUY"
     },
     "XGBoost": {
-      "predicted_price": 85.87242309158435,
-      "predicted_return": 0.002421328332275152,
-      "pct_diff": 0.24213283322750923,
+      "predicted_price": 84.72884148226818,
+      "predicted_return": 0.0023523184936493635,
+      "pct_diff": 0.23523184936493433,
       "signal": "HOLD"
     },
     "Ensemble": {
       "signal": "BUY",
-      "predicted_price": 86.07198356219678,
+      "predicted_price": 84.94284513454505,
       "confidence": 1.0,
-      "pct_diff": 0.4750873311116222
+      "pct_diff": 0.48840072701413867
     }
   },
   "chosen_model": "Ensemble",
-  "signal": "BUY",
-  "pct_diff": 0.4750873311116222,
+  "signal": "HOLD",
+  "pct_diff": 0.48840072701413867,
   "qty": 0,
   "sentiment": {
     "ticker": "NEE",
-    "signal": "HOLD",
-    "score": -0.091,
-    "confidence": 0.32
+    "signal": "SELL",
+    "score": -0.636,
+    "confidence": 0.49
   },
   "position_size_factor": 0.1,
   "metrics_path": null,

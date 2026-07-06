@@ -1,49 +1,44 @@
 {
   "ticker": "EXC",
-  "timestamp": "2025-10-17T13:49:39.231802",
-  "last_price": 47.43,
+  "timestamp": "2025-10-20T11:53:51.269410",
+  "last_price": 47.78,
   "predictions": {
     "LSTM": {
-      "predicted_price": 47.4673497998697,
-      "predicted_return": 0.0007874720613472164,
-      "pct_diff": 0.07874720613472883,
+      "predicted_price": 47.81729794160463,
+      "predicted_return": 0.0007806182838976383,
+      "pct_diff": 0.07806182838976086,
       "signal": "HOLD"
     },
     "Dense NN": {
-      "predicted_price": 47.49200176873128,
-      "predicted_return": 0.0013072268338873982,
-      "pct_diff": 0.1307226833887374,
+      "predicted_price": 47.875405572173186,
+      "predicted_return": 0.0019967679399996996,
+      "pct_diff": 0.19967679399996818,
       "signal": "HOLD"
     },
     "Random Forest": {
-      "predicted_price": 47.44817649036143,
-      "predicted_return": 0.00038322771160510295,
-      "pct_diff": 0.038322771160517924,
+      "predicted_price": 47.7983106200605,
+      "predicted_return": 0.00038322771160510284,
+      "pct_diff": 0.038322771160520665,
       "signal": "HOLD"
     },
     "XGBoost": {
-      "predicted_price": 47.46237603354442,
-      "predicted_return": 0.0006826066528446972,
-      "pct_diff": 0.06826066528446852,
+      "predicted_price": 47.83739921853645,
+      "predicted_return": 0.0012013231171295047,
+      "pct_diff": 0.12013231171294689,
       "signal": "HOLD"
     },
     "Ensemble": {
       "signal": "HOLD",
-      "predicted_price": 47.46747602312671,
+      "predicted_price": 47.83210333809369,
       "confidence": 0,
-      "pct_diff": 0.07901333149210943
+      "pct_diff": 0.10904842631579542
     }
   },
   "chosen_model": "Ensemble",
   "signal": "HOLD",
-  "pct_diff": 0.07901333149210943,
+  "pct_diff": 0.10904842631579542,
   "qty": 0,
-  "sentiment": {
-    "ticker": "EXC",
-    "signal": "BUY",
-    "score": 0.625,
-    "confidence": 0.47
-  },
+  "sentiment": {},
   "position_size_factor": 0.1,
   "metrics_path": null,
   "training_metrics": [
