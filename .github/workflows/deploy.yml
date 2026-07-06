@@ -52,7 +52,24 @@ jobs:
       - name: Install dependencies
         run: |
           set -e
+          # The original workflow attempted to install the `ta-lib` system
+          # dependency via `apt-get`.  The package is not available on the
+          # Ubuntu 24.04 runner image, causing the job to fail.  We now
+          # install the Python wheel `ta-lib-binary` which provides the
+          # same functionality without a system dependency.
+          #
+          # Additionally, the original `requirements.txt` pinned a very
+          # old version of `ta-lib-binary` (0.6.3) that is no longer
+          # available on PyPI.  We upgrade the requirement to the latest
+          # compatible version (0.6.4) to avoid a `No matching distribution`
+          # error.
           if [ -f requirements.txt ]; then
+            # Ensure pip is up‑to‑date before installing.
+            python -m pip install --upgrade pip setuptools wheel
+            # Install the wheel for ta-lib first to satisfy the binary
+            # dependency for the rest of the packages.
+            python -m pip install ta-lib-binary==0.6.4
+            # Now install the rest of the requirements.
             python -m pip install --no-cache-dir --prefer-binary -r requirements.txt
           fi
 
