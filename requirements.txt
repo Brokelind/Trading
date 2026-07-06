@@ -8,8 +8,8 @@ xgboost>=2.0.3
 lightgbm>=4.6.0
 # ta-lib-binary==0.4.28
 
-# TensorFlow
-tensorflow>=2.13.0
+# TensorFlow - optional on CI due to size/install issues
+# tensorflow>=2.13.0
 
 # Alpaca stack
 alpaca-py==0.5.4
