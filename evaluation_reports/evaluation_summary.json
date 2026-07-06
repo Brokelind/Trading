@@ -1,0 +1,142 @@
+{
+  "generated_at": "2026-07-05T17:38:34.238789",
+  "total_tickers_analyzed": 64,
+  "models_evaluated": [
+    "LSTM",
+    "Dense NN",
+    "XGBoost",
+    "Ensemble",
+    "Random Forest"
+  ],
+  "model_ranking": [
+    {
+      "Model": "Ensemble",
+      "Sharpe_median": 0.7004428296508034,
+      "DirectionAcc_mean": 0.48681582128345546,
+      "R2_mean": -0.11330926363816932,
+      "FinalPortfolio_median": 10951.129999999997
+    },
+    {
+      "Model": "LSTM",
+      "Sharpe_median": 0.6842133990310899,
+      "DirectionAcc_mean": 0.5161455726005292,
+      "R2_mean": -0.009048318328560283,
+      "FinalPortfolio_median": 10000.0
+    },
+    {
+      "Model": "XGBoost",
+      "Sharpe_median": 0.6088535396219276,
+      "DirectionAcc_mean": 0.4908897438526848,
+      "R2_mean": -0.21761348317895043,
+      "FinalPortfolio_median": 10794.377500000002
+    },
+    {
+      "Model": "Dense NN",
+      "Sharpe_median": 0.5572935448748184,
+      "DirectionAcc_mean": 0.49544870383051237,
+      "R2_mean": -5.22390189613335,
+      "FinalPortfolio_median": 11116.41
+    },
+    {
+      "Model": "Random Forest",
+      "Sharpe_median": 0.2381947621391847,
+      "DirectionAcc_mean": 0.49480392183154703,
+      "R2_mean": -0.07615714727347841,
+      "FinalPortfolio_median": 10214.055
+    }
+  ],
+  "model_win_rates": {
+    "Sharpe": {
+      "Dense NN": 16,
+      "Ensemble": 16,
+      "XGBoost": 15,
+      "Random Forest": 9,
+      "LSTM": 8
+    },
+    "DirectionAcc": {
+      "LSTM": 30,
+      "Dense NN": 12,
+      "Random Forest": 11,
+      "XGBoost": 7,
+      "Ensemble": 4
+    },
+    "R2": {
+      "LSTM": 56,
+      "Random Forest": 8
+    },
+    "FinalPortfolio": {
+      "Dense NN": 22,
+      "LSTM": 13,
+      "XGBoost": 12,
+      "Ensemble": 11,
+      "Random Forest": 6
+    }
+  },
+  "portfolio_simulation": [
+    {
+      "Model": "Dense NN",
+      "TickersWithData": 64,
+      "TickersProfitable": 47,
+      "WinRate": 73.4375,
+      "TotalPortfolio": 753123.96,
+      "AvgFinalPerTicker": 11767.561875,
+      "AvgSharpe": 0.5945903525618093,
+      "AvgDirectionAcc": 0.49544870383051237,
+      "AvgR2": -5.22390189613335,
+      "AvgMAE": 0.016574550159059936
+    },
+    {
+      "Model": "XGBoost",
+      "TickersWithData": 64,
+      "TickersProfitable": 42,
+      "WinRate": 65.625,
+      "TotalPortfolio": 694118.6569999999,
+      "AvgFinalPerTicker": 10845.604015624998,
+      "AvgSharpe": 0.5791983373096342,
+      "AvgDirectionAcc": 0.4908897438526848,
+      "AvgR2": -0.21761348317895043,
+      "AvgMAE": 0.01399827696016415
+    },
+    {
+      "Model": "Ensemble",
+      "TickersWithData": 61,
+      "TickersProfitable": 47,
+      "WinRate": 77.04918032786885,
+      "TotalPortfolio": 679296.7239999999,
+      "AvgFinalPerTicker": 11136.011868852458,
+      "AvgSharpe": 0.6688999984976791,
+      "AvgDirectionAcc": 0.4900827710063164,
+      "AvgR2": -0.09281066668720217,
+      "AvgMAE": 0.013483698578222625
+    },
+    {
+      "Model": "Random Forest",
+      "TickersWithData": 60,
+      "TickersProfitable": 36,
+      "WinRate": 60.0,
+      "TotalPortfolio": 645092.8050000002,
+      "AvgFinalPerTicker": 10751.546750000003,
+      "AvgSharpe": 0.43709205794618616,
+      "AvgDirectionAcc": 0.4992235281326987,
+      "AvgR2": -0.052426587085065944,
+      "AvgMAE": 0.013072673780182212
+    },
+    {
+      "Model": "LSTM",
+      "TickersWithData": 31,
+      "TickersProfitable": 21,
+      "WinRate": 67.74193548387096,
+      "TotalPortfolio": 363558.776,
+      "AvgFinalPerTicker": 11727.702451612904,
+      "AvgSharpe": 0.8039778458862282,
+      "AvgDirectionAcc": 0.5230507347691548,
+      "AvgR2": -0.01045207864719839,
+      "AvgMAE": 0.014423398445415651
+    }
+  ],
+  "signal_distribution": {
+    "SELL": 30,
+    "BUY": 19,
+    "HOLD": 15
+  }
+}
