@@ -1,148 +1,168 @@
 {
   "ticker": "FCX",
-  "timestamp": "2025-10-20T11:54:22.817638",
-  "last_price": 41.18,
+  "timestamp": "2026-09-13T00:14:05.057109+00:00",
+  "data_as_of": "2026-09-11",
+  "last_price": 71.06999969482422,
   "predictions": {
     "LSTM": {
-      "predicted_price": 41.18060218688028,
-      "predicted_return": 1.4623285096604377e-05,
-      "pct_diff": 0.001462328509662508,
-      "signal": "HOLD"
+      "predicted_price": 70.07581519511888,
+      "predicted_return": -0.013988806866109371,
+      "pct_diff": -1.3988806866109271,
+      "signal": "SELL"
     },
     "Dense NN": {
-      "predicted_price": 41.34594594432041,
-      "predicted_return": 0.004029770381748676,
-      "pct_diff": 0.4029770381748732,
-      "signal": "BUY"
+      "predicted_price": 70.11221628510023,
+      "predicted_return": -0.013476620428264141,
+      "pct_diff": -1.3476620428264041,
+      "signal": "SELL"
     },
     "Random Forest": {
-      "predicted_price": 40.90541303503023,
-      "predicted_return": -0.006667969037634024,
-      "pct_diff": -0.666796903763407,
+      "predicted_price": 69.43897008077235,
+      "predicted_return": -0.02294962179619444,
+      "pct_diff": -2.2949621796194424,
       "signal": "SELL"
     },
     "XGBoost": {
-      "predicted_price": 40.39591286964715,
-      "predicted_return": -0.019040483981370926,
-      "pct_diff": -1.904048398137085,
+      "predicted_price": 69.74461972343818,
+      "predicted_return": -0.018648937344551086,
+      "pct_diff": -1.8648937344551086,
+      "signal": "SELL"
+    },
+    "LightGBM": {
+      "predicted_price": 70.77348516078241,
+      "predicted_return": -0.004172147675742914,
+      "pct_diff": -0.41721476757428333,
       "signal": "SELL"
     },
     "Ensemble": {
       "signal": "SELL",
-      "predicted_price": 40.88242394966593,
-      "confidence": 0.7148415169716804,
-      "pct_diff": -0.7226227545752121
+      "predicted_price": 70.0290212890424,
+      "confidence": 1.0,
+      "pct_diff": -1.464722682217241
     }
   },
-  "chosen_model": "Ensemble",
+  "chosen_model": "LSTM",
   "signal": "SELL",
-  "pct_diff": -0.7226227545752121,
+  "pct_diff": -1.3988806866109271,
   "qty": 0,
-  "sentiment": {
-    "ticker": "FCX",
-    "signal": "SELL",
-    "score": -0.437,
-    "confidence": 0.28
-  },
-  "position_size_factor": 0.10915650281511322,
-  "metrics_path": null,
+  "sentiment": {},
+  "run_mode": "retrain_only",
   "training_metrics": [
     {
       "Model": "LSTM",
-      "MAE": 0.01689453136643721,
-      "RMSE": 0.021830999133412205,
-      "R2": 0.00023203683495309768,
-      "DirectionAccuracy": 0.5264797507788161,
-      "Samples": 321,
+      "MAE": 0.031835593868980605,
+      "RMSE": 0.040616593809644504,
+      "R2": -0.015860380084922854,
+      "DirectionAccuracy": 0.5015384615384615,
+      "Samples": 325,
       "Error": null
     },
     {
       "Model": "Dense NN",
-      "MAE": 0.020272899819542,
-      "RMSE": 0.025419845045888616,
-      "R2": -0.3554945909993945,
-      "DirectionAccuracy": 0.45794392523364486,
-      "Samples": 321,
+      "MAE": 0.03507248917807724,
+      "RMSE": 0.045102744876215704,
+      "R2": -0.252659306354422,
+      "DirectionAccuracy": 0.5384615384615384,
+      "Samples": 325,
       "Error": null
     },
     {
       "Model": "Random Forest",
-      "MAE": 0.016967367660907305,
-      "RMSE": 0.021931978150577753,
-      "R2": -0.009038182095947533,
-      "DirectionAccuracy": 0.5202492211838006,
-      "Samples": 321,
+      "MAE": 0.03330862359530951,
+      "RMSE": 0.04263239711066622,
+      "R2": -0.11919697649558914,
+      "DirectionAccuracy": 0.5415384615384615,
+      "Samples": 325,
       "Error": null
     },
     {
       "Model": "XGBoost",
-      "MAE": 0.018431588088835205,
-      "RMSE": 0.02346923367869609,
-      "R2": -0.15544641526897007,
-      "DirectionAccuracy": 0.5295950155763239,
-      "Samples": 321,
+      "MAE": 0.03581075168766657,
+      "RMSE": 0.04516706670012451,
+      "R2": -0.2562347333077186,
+      "DirectionAccuracy": 0.5415384615384615,
+      "Samples": 325,
+      "Error": null
+    },
+    {
+      "Model": "LightGBM",
+      "MAE": 0.03505479791692128,
+      "RMSE": 0.0443998378816417,
+      "R2": -0.2139192314719609,
+      "DirectionAccuracy": 0.5046153846153846,
+      "Samples": 325,
       "Error": null
     },
     {
       "Model": "Ensemble",
-      "MAE": 0.017398090248988567,
-      "RMSE": 0.022365483623358686,
-      "R2": -0.049321517079823574,
-      "DirectionAccuracy": 0.5295950155763239,
-      "Samples": 321,
+      "MAE": 0.03418413694842674,
+      "RMSE": 0.04325803176538133,
+      "R2": -0.1522866583198681,
+      "DirectionAccuracy": 0.52,
+      "Samples": 325,
       "Error": null
     }
   ],
   "backtest_metrics": [
     {
-      "Model": "LSTM",
-      "MAE": 0.017542783051597982,
-      "RMSE": 0.023197958817751285,
-      "R2": -0.00038341363890781466,
-      "DirectionAcc": 0.5109034267912772,
-      "FinalPortfolio": 10000.0,
-      "Sharpe": NaN,
-      "Volatility": 0.0
-    },
-    {
-      "Model": "Random Forest",
-      "MAE": 0.017867759258707153,
-      "RMSE": 0.023462257467975478,
-      "R2": -0.023308375880276344,
-      "DirectionAcc": 0.48598130841121495,
-      "FinalPortfolio": 11441.860000000004,
-      "Sharpe": 0.5298382470032809,
-      "Volatility": 0.017487192798156543
-    },
-    {
       "Model": "XGBoost",
-      "MAE": 0.019213157477910886,
-      "RMSE": 0.025379324280132117,
-      "R2": -0.1973663423689338,
-      "DirectionAcc": 0.48286604361370716,
-      "FinalPortfolio": 8511.810000000001,
-      "Sharpe": -0.3179100404124044,
-      "Volatility": 0.01720338205914701
+      "MAE": 0.04664745347845733,
+      "RMSE": 0.06001476369355508,
+      "R2": -0.2908947624613911,
+      "DirectionAcc": 0.5030674846625767,
+      "FinalPortfolio": 13533.14032157517,
+      "Sharpe": 3.24023086984631,
+      "Volatility": 0.004614506168765277
+    },
+    {
+      "Model": "LightGBM",
+      "MAE": 0.04549794982298016,
+      "RMSE": 0.05975624145171418,
+      "R2": -0.2797972856673723,
+      "DirectionAcc": 0.48773006134969327,
+      "FinalPortfolio": 13550.378481826801,
+      "Sharpe": 2.736999969836026,
+      "Volatility": 0.00551626098724193
     },
     {
       "Model": "Ensemble",
-      "MAE": 0.018319400361582444,
-      "RMSE": 0.024061578875781614,
-      "R2": -0.07625499320368423,
-      "DirectionAcc": 0.48286604361370716,
-      "FinalPortfolio": 9101.760000000002,
-      "Sharpe": -0.13596094061313727,
-      "Volatility": 0.01673575579643038
+      "MAE": 0.045313979300181106,
+      "RMSE": 0.05869354367944499,
+      "R2": -0.23468252213907714,
+      "DirectionAcc": 0.48773006134969327,
+      "FinalPortfolio": 12065.39752051545,
+      "Sharpe": 2.188340897628845,
+      "Volatility": 0.0042622991022308885
     },
     {
       "Model": "Dense NN",
-      "MAE": 0.023666932549190927,
-      "RMSE": 0.029928964434782882,
-      "R2": -0.6651383247751157,
-      "DirectionAcc": 0.4392523364485981,
-      "FinalPortfolio": 5299.21,
-      "Sharpe": -1.130455300265649,
-      "Volatility": 0.023703401330054
+      "MAE": 0.055058900558532804,
+      "RMSE": 0.0681107776580887,
+      "R2": -0.662670975976293,
+      "DirectionAcc": 0.4570552147239264,
+      "FinalPortfolio": 11757.259385063182,
+      "Sharpe": 1.096921228204341,
+      "Volatility": 0.007631325987715008
+    },
+    {
+      "Model": "Random Forest",
+      "MAE": 0.045757970740046706,
+      "RMSE": 0.05905649828189335,
+      "R2": -0.2500000266297966,
+      "DirectionAcc": 0.450920245398773,
+      "FinalPortfolio": 11242.206757205964,
+      "Sharpe": 1.2272299206207455,
+      "Volatility": 0.004808596920499902
+    },
+    {
+      "Model": "LSTM",
+      "MAE": 0.043634583628195424,
+      "RMSE": 0.05644976454744359,
+      "R2": -0.14208626214161768,
+      "DirectionAcc": 0.4110429447852761,
+      "FinalPortfolio": 9804.205688621523,
+      "Sharpe": -0.19580904165947555,
+      "Volatility": 0.004212584854515614
     }
   ]
 }

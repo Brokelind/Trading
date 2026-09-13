@@ -411,8 +411,7 @@ class TradingModelSystem:
             print("Could not prepare features")
             return
         
-        feature_cols = [c for c in df.columns 
-                    if c not in ['target_price', 'target_return', 'target_direction']]
+        feature_cols = [c for c in df.columns if not c.startswith('target_')]
         
         X = df[feature_cols].values
         y = df['target_return'].values
@@ -765,8 +764,8 @@ class TradingModelSystem:
             return {"error": f"Data preparation failed: {str(e)}"}
 
         # 2. Feature Engineering
-        feature_cols = [c for c in df.columns if c not in 
-                    ['target_price', 'target_return', 'target_direction']]
+        # Targets contain future prices and must never enter model inputs.
+        feature_cols = [c for c in df.columns if not c.startswith('target_')]
 
         # 3. Data Validation Debugging - MOVED AFTER feature_cols IS DEFINED
         print(f"DEBUG: Target return stats - Min: {df['target_return'].min():.6f}, "
@@ -1178,7 +1177,7 @@ class TradingModelSystem:
             min_samples_split=10,
             min_samples_leaf=5,
             random_state=42,
-            n_jobs=-1
+            n_jobs=self.config.get('n_jobs', -1)
         )
         
         model.fit(X_train_flat, y_train.ravel())
@@ -1205,7 +1204,8 @@ class TradingModelSystem:
             colsample_bytree=0.8,
             reg_alpha=0.1,
             reg_lambda=0.1,
-            random_state=42
+            random_state=42,
+            n_jobs=self.config.get('n_jobs', -1)
             # Removed early_stopping_rounds for ensemble compatibility
         )
         
@@ -1232,7 +1232,7 @@ class TradingModelSystem:
             subsample=0.8,
             colsample_bytree=0.8,
             random_state=42,
-            n_jobs=-1,
+            n_jobs=self.config.get('n_jobs', -1),
             verbose=-1
         )
         
@@ -1319,11 +1319,12 @@ class TradingModelSystem:
             logger.error(f"[{ticker}] Failed to write backtest metrics CSV: {e}")
 
         # --- Prepare JSON-safe metrics ---
-        training_metrics_clean = training_metrics_df.where(pd.notnull(training_metrics_df), None)
-        backtest_metrics_clean = backtest_metrics_df.where(pd.notnull(backtest_metrics_df), None)
+        training_metrics_clean = training_metrics_df.astype(object).where(pd.notnull(training_metrics_df), None)
+        backtest_metrics_clean = backtest_metrics_df.astype(object).where(pd.notnull(backtest_metrics_df), None)
 
         # --- Save comprehensive metadata ---
         meta = {
+            **self.load_meta(ticker),
             "last_trained": datetime.utcnow().isoformat(),
             "model_paths": {m: self._model_path(ticker, m) for m in training_results.keys()},
             "training_metrics_file": training_metrics_path,
@@ -1722,7 +1723,7 @@ class TradingModelSystem:
                 print(f"Using {len(feature_cols)} selected features from selector")
             else:
                 # Last resort: use all features
-                feature_cols = [c for c in df.columns if c not in ['target_price', 'target_return', 'target_direction']]
+                feature_cols = [c for c in df.columns if not c.startswith('target_')]
                 print(f"Using all {len(feature_cols)} features (no selection found)")
         
         # ============================================================
@@ -1817,7 +1818,7 @@ class TradingModelSystem:
         print("Ensemble raw:", ensemble_pred)
         
         # FIX: Calculate proper pct_diff for ensemble
-        if ensemble_pred and "predicted_price" in ensemble_pred:
+        if ensemble_pred and ensemble_pred.get("predicted_price") is not None:
             ensemble_price = ensemble_pred["predicted_price"]
             ensemble_pred["pct_diff"] = (ensemble_price - last_price) / last_price * 100  # PERCENTAGE difference
         

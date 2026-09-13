@@ -2,7 +2,9 @@
 import os
 import json
 import argparse
+import numpy as np
 from tqdm import tqdm
+from ticker_config import DEFAULT_TICKERS
 from datetime import datetime
 from tradingmodelsystem import TradingModelSystem
 from news_sentiment import analyze_news_sentiment
@@ -21,7 +23,9 @@ try:
 except ImportError:
     env = None
 
-SKIP_TRAINING_ON_CI = os.environ.get("SKIP_TRAINING_ON_CI") or getattr(env, "SKIP_TRAINING_ON_CI", False)
+SKIP_TRAINING_ON_CI = str(os.environ.get(
+    "SKIP_TRAINING_ON_CI", getattr(env, "SKIP_TRAINING_ON_CI", False)
+)).strip().lower() in {"true", "1", "yes"}
 
 # config
 data_path = "data"
@@ -30,40 +34,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 class TradingExecutor:
     def __init__(self, tickers=None):
-        self.ticker_list = tickers or [
-            # ETFs
-            "SPY", "QQQ", "DIA", "VTI", "IWM",
-
-            # Mega-cap Tech
-            "AAPL", "MSFT", "AMZN", "GOOG", "TSLA", "META", "NVDA",
-
-            # Mid/High-growth Tech
-            "CRM", "ADBE", "INTU", "SNOW", "PLTR", "UBER",
-
-            # AI/Chip Stocks
-            "AMD", "AVGO", "TSM", "QCOM", "SMCI", "ARM",
-
-            # Financials
-            "JPM", "BAC", "GS", "MS", "WFC",
-
-            # Energy
-            "XOM", "CVX", "SLB", "COP", "PSX",
-
-            # Healthcare
-            "UNH", "JNJ", "PFE", "LLY", "MRK", "CVS",
-
-            # Consumer Discretionary
-            "HD", "LOW", "NKE", "SBUX", "MCD", "CMG", "COST",
-
-            # Industrials
-            "BA", "GE", "CAT", "DE", "LMT", "HON",
-
-            # Utilities
-            "NEE", "DUK", "SO", "D", "EXC",
-
-            # Materials
-            "LIN", "FCX", "NEM", "APD", "DD"
-        ]
+        self.ticker_list = list(DEFAULT_TICKERS if tickers is None else tickers)
 
         self.max_trades_per_day = 50
         self.current_trades = 0
@@ -76,15 +47,15 @@ class TradingExecutor:
         })
 
     def execute_strategy(self, ticker: str):
+        best_model = None
         print(f"\n=== Processing {ticker} === {datetime.utcnow().isoformat()}")
         # ensure we have data
-        call_market.get_data(ticker)
+        if not call_market.get_data(ticker):
+            raise RuntimeError(f"Could not refresh market data for {ticker}")
 
         # ensure models trained (or load existing). Respect SKIP on CI.
         
         try:
-
-            self.model_system.analyze_features(ticker, save_plot=False)
 
             if SKIP_TRAINING_ON_CI:
                 print("SKIP_TRAINING_ON_CI set - will NOT retrain; attempt to load existing models.")
@@ -92,7 +63,7 @@ class TradingExecutor:
                 if not meta:
                     print("No trained models found; skipping this ticker on CI.")
                     return
-                metrics = None
+                best_model = meta.get("best_model")
             else:
                 res = self.model_system.ensure_trained(ticker, force=True)
                 if "error" in res:
@@ -107,17 +78,24 @@ class TradingExecutor:
 
         # get predictions (from saved models)
         preds = self.model_system.predict_tomorrow(ticker)
-        if not preds:
+        if not preds or "error" in preds:
             print("No predictions available for", ticker)
             return
 
         # get sentiment
-        sentiment = analyze_news_sentiment(ticker) or {}
+        try:
+            sentiment = analyze_news_sentiment(ticker) or {}
+        except Exception as e:
+            print(f"Sentiment unavailable for {ticker}: {e}")
+            sentiment = {}
         sentiment_score = sentiment.get("score", 0)
         sentiment_conf = sentiment.get("confidence", 0)
 
         # Enhanced model selection logic - use best_model from training or fallback
-        if not best_model:
+        preds = {name: pred for name, pred in preds.items()
+                 if isinstance(pred, dict) and pred.get("predicted_price") is not None
+                 and "error" not in pred}
+        if best_model not in preds:
             # If no best_model from training, use the ensemble prediction
             best_model = "Ensemble" if "Ensemble" in preds else next(iter(preds.keys()), None)
 
@@ -134,10 +112,12 @@ class TradingExecutor:
 
 
         last_price = None
+        data_as_of = None
         try:
             import pandas as pd
             df = pd.read_csv(data_path+"/"+ticker+"_data.csv", index_col=0, parse_dates=True)
             last_price = float(df["adj_close"].iloc[-1])
+            data_as_of = df.index[-1].date().isoformat()
             if np.isnan(last_price):
                 last_price = float(df["adj_close"].iloc[-2])
 
@@ -210,6 +190,7 @@ class TradingExecutor:
         out = {
             "ticker": ticker,
             "timestamp": datetime.utcnow().isoformat(),
+            "data_as_of": data_as_of,
             "last_price": last_price,
             "predictions": preds,
             "chosen_model": best_model,
@@ -234,9 +215,11 @@ class TradingExecutor:
         with open(fname, "w") as f:
             json.dump(out, f, indent=2, default=str)
         print("Wrote result:", fname)
+        return out
 
     def run_daily_trading(self):
         print("Starting daily trading run")
+        outcomes = {}
         
         # Run crypto lead-lag correlation strategy
         try:
@@ -247,12 +230,13 @@ class TradingExecutor:
         
         for t in tqdm(self.ticker_list, desc="Processing Tickers"):
             try:
-                self.execute_strategy(t)
-                if self.current_trades >= self.max_trades_per_day:
-                    print(f"Reached maximum trades per day ({self.max_trades_per_day})")
-                    break
+                result = self.execute_strategy(t)
+                outcomes[t] = "success" if result else "failed"
             except Exception as e:
                 print("Error executing", t, e)
+                outcomes[t] = "failed"
+        self.run_outcomes = outcomes
+        return outcomes
         
 
     def post_results(self, skip_email=False):
@@ -333,6 +317,9 @@ if __name__ == "__main__":
         print("Running script...")
         trader.run_daily_trading()
         trader.post_results(skip_email=args.skip_email)
+        failed_tickers = [ticker for ticker, status in trader.run_outcomes.items() if status != "success"]
+        if failed_tickers:
+            raise RuntimeError(f"Predictions failed for: {', '.join(failed_tickers)}")
     except Exception as e:
         print("Fatal error in main:", e)
         fatal_error = str(e)

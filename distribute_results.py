@@ -32,8 +32,8 @@ def save_result_json(ticker, payload):
         json.dump(payload, f, default=str, indent=2)
     return path
 
-def load_results():
-    """Load and filter trading results with improved criteria"""
+def load_results(strong_only=True, tickers=None):
+    """Load predictions, optionally applying the email's strong-signal filter."""
     summaries = []
 
     for file in os.listdir(RESULTS_DIR):
@@ -43,6 +43,8 @@ def load_results():
                     data = json.load(f)
 
                 ticker = data.get("ticker")
+                if tickers is not None and ticker not in tickers:
+                    continue
                 chosen_model = data.get("chosen_model")
                 preds = data.get("predictions", {})
                 signal = data.get("signal", "HOLD")
@@ -75,7 +77,7 @@ def load_results():
                 data['confidence'] = confidence
                 data['pct_diff'] = pct_diff
                 
-                if meets_criteria:
+                if not strong_only or meets_criteria:
                     summaries.append(data)
                 else:
                     print(f"Filtered out {ticker}: signal={signal}, pct_diff={pct_diff:.2f}%, conf={confidence:.2f}")
@@ -83,7 +85,7 @@ def load_results():
             except Exception as e:
                 print(f"Error loading {file}: {e}")
 
-    print(f"Loaded {len(summaries)} strong signals after filtering")
+    print(f"Loaded {len(summaries)} {'strong signals' if strong_only else 'predictions'}")
     return summaries
 
 

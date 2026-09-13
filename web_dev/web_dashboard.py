@@ -2,8 +2,9 @@
 import os
 import json
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from distribute_results import load_results
+from ticker_config import DEFAULT_TICKERS
 import plotly.graph_objects as go
 
 RESULTS_DIR = "results"
@@ -16,14 +17,14 @@ def generate_dashboard():
     """Generate dashboard optimized for GitHub Pages with enhanced features"""
     
     # Load current results
-    summaries = load_results()
+    summaries = load_results(strong_only=False, tickers=DEFAULT_TICKERS)
     
     # Generate main dashboard HTML
     html_content = generate_github_pages_html(summaries)
     
     # Save main dashboard
     with open(os.path.join(OUTPUT_DIR, "index.html"), "w", encoding='utf-8') as f:
-        f.write(html_content)
+        f.write('\n'.join(line.rstrip() for line in html_content.splitlines()) + '\n')
     
     # Generate individual ticker pages
     for summary in summaries:
@@ -60,6 +61,8 @@ def generate_github_pages_html(summaries):
         pct_diff = summary.get('pct_diff', 0)
         chosen_model = summary.get('chosen_model', 'N/A')
         sentiment_score = summary.get('sentiment', {}).get('score', 0)
+        sentiment_display = (f'{sentiment_score:+.2f}'
+                             if 'score' in summary.get('sentiment', {}) else 'N/A')
         sentiment_conf = summary.get('sentiment', {}).get('confidence', 0)
 
         # Add training performance indicator
@@ -93,12 +96,16 @@ def generate_github_pages_html(summaries):
                     <span class="value {'positive' if pct_diff > 0 else 'negative'}">{pct_diff:+.2f}%</span>
                 </div>
                 <div class="metric">
+                    <label>Prediction date:</label>
+                    <span class="value">{summary.get('data_as_of', summary.get('timestamp', '')[:10])}</span>
+                </div>
+                <div class="metric">
                     <label>Model:</label>
                     <span class="value model-name">{chosen_model}</span>
                 </div>
                 <div class="metric">
                     <label>Sentiment:</label>
-                    <span class="value sentiment-{'positive' if sentiment_score > 0 else 'negative'}">{sentiment_score:+.2f}</span>
+                    <span class="value sentiment-{'positive' if sentiment_score > 0 else 'negative'}">{sentiment_display}</span>
                 </div>
                 <div class="action-buttons">
                     <a href="tickers/{ticker}.html" class="details-link">View Details →</a>
@@ -112,6 +119,7 @@ def generate_github_pages_html(summaries):
     total_signals = len(summaries)
     buy_signals = len([s for s in summaries if s['signal'] == 'BUY'])
     sell_signals = len([s for s in summaries if s['signal'] == 'SELL'])
+    hold_signals = len([s for s in summaries if s['signal'] == 'HOLD'])
     avg_confidence = sum(s.get('confidence', 0) for s in summaries) / total_signals if total_signals else 0
     avg_predicted_change = sum(s.get('pct_diff', 0) for s in summaries) / total_signals if total_signals else 0
     
@@ -178,7 +186,7 @@ def generate_github_pages_html(summaries):
     <div class="container">
         <header>
             <h1>🤖 AI Trading Signals Dashboard</h1>
-            <div class="last-updated">Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</div>
+            <div class="last-updated">Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}</div>
             <div class="github-info">
                 <a href="https://github.com/yourusername/your-repo" target="_blank" class="github-link">
                     📁 View Source on GitHub
@@ -189,7 +197,7 @@ def generate_github_pages_html(summaries):
         <div class="summary-stats">
             <div class="stat-card">
                 <div class="stat-value">{total_signals}</div>
-                <div class="stat-label">Total Signals</div>
+                <div class="stat-label">Stocks Predicted</div>
             </div>
             <div class="stat-card buy">
                 <div class="stat-value">{buy_signals}</div>
@@ -198,6 +206,10 @@ def generate_github_pages_html(summaries):
             <div class="stat-card sell">
                 <div class="stat-value">{sell_signals}</div>
                 <div class="stat-label">SELL Signals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{hold_signals}</div>
+                <div class="stat-label">HOLD Signals</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">{avg_confidence:.2f}</div>
@@ -214,7 +226,7 @@ def generate_github_pages_html(summaries):
         </div>
         
         <div class="signals-grid">
-            {cards_html if cards_html else '<div class="no-signals">No strong signals meeting criteria today</div>'}
+            {cards_html if cards_html else '<div class="no-signals">No predictions available</div>'}
         </div>
         
         {crypto_section_html}
@@ -229,9 +241,9 @@ def generate_github_pages_html(summaries):
                 <li><strong>Risk Management</strong> - Confidence-based position sizing and stop-losses</li>
             </ul>
             <div class="filter-info">
-                <strong>Filter Criteria:</strong> BUY/SELL signals only | Min 0.5% predicted change | Min 40% model confidence | Min 30% sentiment confidence
+                <strong>Coverage:</strong> All configured stocks and ETFs, including BUY, SELL, and HOLD predictions. Email alerts use additional signal filters.
             </div>
-            <p><em>Last automated run: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</em></p>
+            <p><em>Last generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}</em></p>
         </div>
         
         <footer>
@@ -294,6 +306,7 @@ def generate_ticker_page(summary):
     # Safely get sentiment data
     sentiment_data = summary.get('sentiment', {})
     sentiment_score = sentiment_data.get('score', 0)
+    sentiment_display = f'{sentiment_score:+.2f}' if 'score' in sentiment_data else 'N/A'
     sentiment_confidence = sentiment_data.get('confidence', 'N/A')
     sentiment_signal = sentiment_data.get('signal', 'N/A')
     
@@ -467,7 +480,7 @@ def generate_ticker_page(summary):
                     <div class="detail-item">
                         <label>Sentiment Score:</label>
                         <span class="sentiment-{sentiment_class}">
-                            {sentiment_score:+.2f}
+                            {sentiment_display}
                         </span>
                     </div>
                     <div class="detail-item">
@@ -511,7 +524,7 @@ def generate_ticker_page(summary):
 """
     
     with open(os.path.join(ticker_dir, f"{ticker}.html"), "w", encoding='utf-8') as f:
-        f.write(html_content)
+        f.write('\n'.join(line.rstrip() for line in html_content.splitlines()) + '\n')
 
 
 def generate_assets():
