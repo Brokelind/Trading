@@ -9,3 +9,5 @@ env.py
 test.py
 dockerfile
 .aider*
+logs/retrain*/
+logs/browser_profile/

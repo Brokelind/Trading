@@ -1,0 +1,917 @@
+{
+  "started_at": "2026-09-12T08:07:25.889250+00:00",
+  "status": "failed",
+  "expected_tickers": [
+    "SPY",
+    "QQQ",
+    "DIA",
+    "VTI",
+    "IWM",
+    "MSFT",
+    "AMZN",
+    "GOOG",
+    "TSLA",
+    "META",
+    "NVDA",
+    "CRM",
+    "ADBE",
+    "INTU",
+    "SNOW",
+    "PLTR",
+    "UBER",
+    "AMD",
+    "AVGO",
+    "TSM",
+    "QCOM",
+    "SMCI",
+    "ARM",
+    "JPM",
+    "BAC",
+    "GS",
+    "MS",
+    "WFC",
+    "XOM",
+    "CVX",
+    "SLB",
+    "COP",
+    "PSX",
+    "UNH",
+    "JNJ",
+    "PFE",
+    "LLY",
+    "MRK",
+    "CVS",
+    "HD",
+    "LOW",
+    "NKE",
+    "SBUX",
+    "MCD",
+    "CMG",
+    "COST",
+    "BA",
+    "GE",
+    "CAT",
+    "DE",
+    "LMT",
+    "HON",
+    "NEE",
+    "DUK",
+    "SO",
+    "D",
+    "EXC",
+    "LIN",
+    "FCX",
+    "NEM",
+    "APD",
+    "DD"
+  ],
+  "results": [
+    {
+      "ticker": "VTI",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 143.54476475715637
+    },
+    {
+      "ticker": "SPY",
+      "status": "failed",
+      "log": "logs\\retrain_full\\SPY.log"
+    },
+    {
+      "ticker": "DIA",
+      "status": "failed",
+      "log": "logs\\retrain_full\\DIA.log"
+    },
+    {
+      "ticker": "QQQ",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 149.70848417282104
+    },
+    {
+      "ticker": "GOOG",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 126.84258008003235
+    },
+    {
+      "ticker": "IWM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 136.1840102672577
+    },
+    {
+      "ticker": "AMZN",
+      "status": "failed",
+      "log": "logs\\retrain_full\\AMZN.log"
+    },
+    {
+      "ticker": "MSFT",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 142.48433089256287
+    },
+    {
+      "ticker": "NVDA",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 125.87216377258301
+    },
+    {
+      "ticker": "META",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 127.08657741546631
+    },
+    {
+      "ticker": "TSLA",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 139.9708251953125
+    },
+    {
+      "ticker": "CRM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 128.14276027679443
+    },
+    {
+      "ticker": "PLTR",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 113.0779812335968
+    },
+    {
+      "ticker": "SNOW",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 128.07274866104126
+    },
+    {
+      "ticker": "INTU",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 151.87443614006042
+    },
+    {
+      "ticker": "ADBE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 194.82016038894653
+    },
+    {
+      "ticker": "UBER",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 130.1538634300232
+    },
+    {
+      "ticker": "AMD",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 188.84450793266296
+    },
+    {
+      "ticker": "AVGO",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 185.9424111843109
+    },
+    {
+      "ticker": "TSM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 178.41307473182678
+    },
+    {
+      "ticker": "ARM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 88.72037982940674
+    },
+    {
+      "ticker": "QCOM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 175.796391248703
+    },
+    {
+      "ticker": "SMCI",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 166.08992290496826
+    },
+    {
+      "ticker": "JPM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 191.06456351280212
+    },
+    {
+      "ticker": "GS",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 190.2291224002838
+    },
+    {
+      "ticker": "BAC",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 204.2776165008545
+    },
+    {
+      "ticker": "MS",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 224.71858954429626
+    },
+    {
+      "ticker": "WFC",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 200.43296933174133
+    },
+    {
+      "ticker": "XOM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 222.83910751342773
+    },
+    {
+      "ticker": "CVX",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 222.6893608570099
+    },
+    {
+      "ticker": "SLB",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 179.51674890518188
+    },
+    {
+      "ticker": "COP",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 194.93683576583862
+    },
+    {
+      "ticker": "PSX",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 163.3180332183838
+    },
+    {
+      "ticker": "UNH",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 160.11938619613647
+    },
+    {
+      "ticker": "JNJ",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 150.84107542037964
+    },
+    {
+      "ticker": "PFE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 140.60853147506714
+    },
+    {
+      "ticker": "LLY",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 137.73358035087585
+    },
+    {
+      "ticker": "MRK",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 137.4052381515503
+    },
+    {
+      "ticker": "CVS",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 134.58417105674744
+    },
+    {
+      "ticker": "HD",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 147.3138620853424
+    },
+    {
+      "ticker": "NKE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 140.04032444953918
+    },
+    {
+      "ticker": "LOW",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 152.74375343322754
+    },
+    {
+      "ticker": "SBUX",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 154.11128211021423
+    },
+    {
+      "ticker": "MCD",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 162.394704580307
+    },
+    {
+      "ticker": "CMG",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 163.5063943862915
+    },
+    {
+      "ticker": "COST",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 154.8637034893036
+    },
+    {
+      "ticker": "BA",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 182.45467519760132
+    },
+    {
+      "ticker": "GE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 174.54352402687073
+    },
+    {
+      "ticker": "CAT",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 166.0052399635315
+    },
+    {
+      "ticker": "DE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 186.72744941711426
+    },
+    {
+      "ticker": "LMT",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 154.02484154701233
+    },
+    {
+      "ticker": "HON",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 148.38531804084778
+    },
+    {
+      "ticker": "NEE",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 137.50418663024902
+    },
+    {
+      "ticker": "DUK",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 139.6436276435852
+    },
+    {
+      "ticker": "SO",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 1439.0955457687378
+    },
+    {
+      "ticker": "D",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 1462.4460971355438
+    },
+    {
+      "ticker": "EXC",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 1444.7082560062408
+    },
+    {
+      "ticker": "LIN",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 1424.5274381637573
+    },
+    {
+      "ticker": "FCX",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 54327.23028111458
+    },
+    {
+      "ticker": "NEM",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 54324.82463264465
+    },
+    {
+      "ticker": "APD",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 54326.66481971741
+    },
+    {
+      "ticker": "DD",
+      "status": "success",
+      "data_as_of": "2026-09-11",
+      "models": {
+        "LSTM": "trained",
+        "Dense NN": "trained",
+        "Random Forest": "trained",
+        "XGBoost": "trained",
+        "LightGBM": "trained",
+        "Ensemble": "trained"
+      },
+      "training_seconds": 54326.76684761047
+    }
+  ],
+  "failed_tickers": [
+    "SPY",
+    "DIA",
+    "AMZN"
+  ],
+  "finished_at": "2026-09-13T00:15:37.942462+00:00"
+}

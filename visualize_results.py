@@ -15,12 +15,13 @@ def visualize_backtest_chart(tickers):
     print("Generating Enhanced Backtest Charts...")
     out_paths = []
     
-    MODEL_NAMES = ["LSTM", "Dense NN", "Random Forest", "XGBoost", "Ensemble"]
+    MODEL_NAMES = ["LSTM", "Dense NN", "Random Forest", "XGBoost", "LightGBM", "Ensemble"]
     MODEL_COLORS = {
         "LSTM": "#FF6B6B",
         "Dense NN": "#4ECDC4", 
         "Random Forest": "#45B7D1",
         "XGBoost": "#96CEB4",
+        "LightGBM": "#A78BFA",
         "Ensemble": "#FFEAA7"
     }
     
