@@ -33,7 +33,7 @@ def generate_dashboard():
     # Copy assets
     generate_assets()
     
-    print(f"✅ GitHub Pages dashboard generated: {OUTPUT_DIR}/index.html")
+    print(f"GitHub Pages dashboard generated: {OUTPUT_DIR}/index.html")
     return len(summaries)
 
 def load_crypto_signals():
