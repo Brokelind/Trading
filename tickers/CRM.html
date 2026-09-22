@@ -12,7 +12,7 @@
         <header>
             <h1><a href="../index.html">← Back to Dashboard</a> | CRM Detailed Analysis</h1>
         </header>
-        
+
         <div class="ticker-details">
             <div class="detail-card signal-summary">
                 <h2>🎯 Signal Summary</h2>
@@ -30,36 +30,36 @@
                     <div class="detail-item">
                         <label>Predicted Change:</label>
                         <span class="positive">
-                            +0.76%
+                            +1.16%
                         </span>
                     </div>
                     <div class="detail-item">
                         <label>Selected Model:</label>
-                        <span class="model-name">Ensemble</span>
+                        <span class="model-name">LSTM</span>
                     </div>
                     <div class="detail-item">
                         <label>Current Price:</label>
-                        <span>$243.08</span>
+                        <span>$232.09</span>
                     </div>
                     <div class="detail-item">
                         <label>Predicted Price:</label>
-                        <span>$244.92</span>
+                        <span>$236.99</span>
                     </div>
                 </div>
             </div>
-            
+
             <div class="detail-card">
                 <h2>📊 Sentiment Analysis</h2>
                 <div class="detail-grid">
                     <div class="detail-item">
                         <label>Sentiment Score:</label>
-                        <span class="sentiment-negative">
-                            -0.16
+                        <span class="sentiment-positive">
+                            +0.08
                         </span>
                     </div>
                     <div class="detail-item">
                         <label>Sentiment Confidence:</label>
-                        <span>0.3</span>
+                        <span>0.86</span>
                     </div>
                     <div class="detail-item">
                         <label>Sentiment Signal:</label>
@@ -67,58 +67,67 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="detail-card">
                 <h2>🤖 Model Predictions</h2>
                 <div class="model-predictions">
-                    
+
             <div class="model-prediction">
                 <div class="model-name">LSTM</div>
                 <div class="prediction-details">
-                    <span>Price: $243.30</span>
-                    <span>Signal: HOLD</span>
-                    <span>Change: 0.09%</span>
+                    <span>Price: $234.78</span>
+                    <span>Signal: BUY</span>
+                    <span>Change: 1.16%</span>
                 </div>
             </div>
-            
+
             <div class="model-prediction">
                 <div class="model-name">Dense NN</div>
                 <div class="prediction-details">
-                    <span>Price: $244.92</span>
+                    <span>Price: $240.55</span>
                     <span>Signal: BUY</span>
-                    <span>Change: 0.76%</span>
+                    <span>Change: 3.65%</span>
                 </div>
             </div>
-            
+
             <div class="model-prediction">
                 <div class="model-name">Random Forest</div>
                 <div class="prediction-details">
-                    <span>Price: $243.09</span>
-                    <span>Signal: HOLD</span>
-                    <span>Change: 0.00%</span>
+                    <span>Price: $232.84</span>
+                    <span>Signal: BUY</span>
+                    <span>Change: 0.32%</span>
                 </div>
             </div>
-            
+
             <div class="model-prediction">
                 <div class="model-name">XGBoost</div>
                 <div class="prediction-details">
-                    <span>Price: $243.05</span>
-                    <span>Signal: HOLD</span>
-                    <span>Change: -0.01%</span>
+                    <span>Price: $238.64</span>
+                    <span>Signal: BUY</span>
+                    <span>Change: 2.82%</span>
                 </div>
             </div>
-            
+
+            <div class="model-prediction">
+                <div class="model-name">LightGBM</div>
+                <div class="prediction-details">
+                    <span>Price: $238.14</span>
+                    <span>Signal: BUY</span>
+                    <span>Change: 2.61%</span>
+                </div>
+            </div>
+
                 </div>
             </div>
 
             <div class="detail-card">
                 <h2>🎯 Model Training Performance</h2>
-                <div style="height:400px; width:100%;">                            <div id="3f185a29-00e5-4d00-a4bb-9d687dbba907" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("3f185a29-00e5-4d00-a4bb-9d687dbba907")) {                    Plotly.newPlot(                        "3f185a29-00e5-4d00-a4bb-9d687dbba907",                        [{"marker":{"color":["#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7"]},"name":"R² Score","text":{"dtype":"f8","bdata":"AAAAAAAAAIBKDAIrhxbRvzvfT42XboK\u002foBov3SQGwb8K16NwPQqnvw=="},"textfont":{"color":"white","size":12},"textposition":"auto","x":["LSTM","Dense NN","Random Forest","XGBoost","Ensemble"],"y":{"dtype":"f8","bdata":"ACBs9uh2Lb8MG+ehMRjRv4ANm7+ZrIK\u002fsCHgLKkMwb9A+4IdZBCnvw=="},"type":"bar"},{"line":{"color":"white","width":3},"marker":{"color":"white","size":8},"mode":"lines+markers","name":"Direction Accuracy","x":["LSTM","Dense NN","Random Forest","XGBoost","Ensemble"],"y":{"dtype":"f8","bdata":"kRd5kRd54T+dzdmczdncP9AADdAADeA\u002fIPuxH\u002fux3z8QBEEQBEHgPw=="},"yaxis":"y2","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis":{"title":{"text":"R² Score"},"range":[-0.5,0.5],"gridcolor":"rgba(255,255,255,0.1)"},"yaxis2":{"title":{"text":"Direction Accuracy"},"overlaying":"y","side":"right","range":[0,1],"gridcolor":"rgba(255,255,255,0.1)"},"font":{"color":"white"},"legend":{"bgcolor":"rgba(0,0,0,0.5)","bordercolor":"rgba(255,255,255,0.2)"},"title":{"text":"Model Training Performance"},"showlegend":true,"height":400,"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)"},                        {"responsive": true}                    )                };            </script>        </div>
-                
+                <div style="height:400px; width:100%;">                            <div id="5e0e23d6-5a3e-47d3-ad05-cc9c2c27e536" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("5e0e23d6-5a3e-47d3-ad05-cc9c2c27e536")) {                    Plotly.newPlot(                        "5e0e23d6-5a3e-47d3-ad05-cc9c2c27e536",                        [{"marker":{"color":["#FF6B6B","#4ECDC4","#45B7D1","#96CEB4","#FFEAA7"]},"name":"R² Score","text":{"dtype":"f8","bdata":"exSuR+F6lL9OYhBYObTYv9NNYhBYObS\u002fN4lBYOXQ0r\u002fD9Shcj8LFvzvfT42XbsK\u002f"},"textfont":{"color":"white","size":12},"textposition":"auto","x":["LSTM","Dense NN","Random Forest","XGBoost","LightGBM","Ensemble"],"y":{"dtype":"f8","bdata":"gL\u002f0gS0clL8cquj24K\u002fYv6BbzqokK7S\u002fcArAGK7U0r\u002fo9K7irbzFv5ivTyh\u002fbsK\u002f"},"type":"bar"},{"line":{"color":"white","width":3},"marker":{"color":"white","size":8},"mode":"lines+markers","name":"Direction Accuracy","x":["LSTM","Dense NN","Random Forest","XGBoost","LightGBM","Ensemble"],"y":{"dtype":"f8","bdata":"VjktaGsX3z9WOS1oaxffPw9xhIy6Dds\u002fkif7fTSr3D90MBTzT+HdP7Ae4ggZdds\u002f"},"yaxis":"y2","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis":{"title":{"text":"R² Score"},"range":[-0.5,0.5],"gridcolor":"rgba(255,255,255,0.1)"},"yaxis2":{"title":{"text":"Direction Accuracy"},"overlaying":"y","side":"right","range":[0,1],"gridcolor":"rgba(255,255,255,0.1)"},"font":{"color":"white"},"legend":{"bgcolor":"rgba(0,0,0,0.5)","bordercolor":"rgba(255,255,255,0.2)"},"title":{"text":"Model Training Performance"},"showlegend":true,"height":400,"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)"},                        {"responsive": true}                    )                };            </script>        </div>
+
         <div class="metrics-section">
             <h3>📊 Detailed Training Metrics</h3>
             <div class="metrics-grid">
-        
+
                 <div class="metric-card">
                     <div class="metric-header">
                         <h4>LSTM</h4>
@@ -127,11 +136,11 @@
                     <div class="metric-values">
                         <div class="metric-item">
                             <span class="metric-label">R² Score:</span>
-                            <span class="metric-value metric-low">-0.000</span>
+                            <span class="metric-value metric-low">-0.020</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">Direction Accuracy:</span>
-                            <span class="metric-value metric-low">54.6%</span>
+                            <span class="metric-value metric-low">48.6%</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MSE:</span>
@@ -139,11 +148,11 @@
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MAE:</span>
-                            <span class="metric-value">0.0115</span>
+                            <span class="metric-value">0.0250</span>
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="metric-card">
                     <div class="metric-header">
                         <h4>Dense NN</h4>
@@ -152,11 +161,11 @@
                     <div class="metric-values">
                         <div class="metric-item">
                             <span class="metric-label">R² Score:</span>
-                            <span class="metric-value metric-low">-0.267</span>
+                            <span class="metric-value metric-low">-0.386</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">Direction Accuracy:</span>
-                            <span class="metric-value metric-low">45.1%</span>
+                            <span class="metric-value metric-low">48.6%</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MSE:</span>
@@ -164,11 +173,11 @@
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MAE:</span>
-                            <span class="metric-value">0.0134</span>
+                            <span class="metric-value">0.0292</span>
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="metric-card">
                     <div class="metric-header">
                         <h4>Random Forest</h4>
@@ -177,11 +186,11 @@
                     <div class="metric-values">
                         <div class="metric-item">
                             <span class="metric-label">R² Score:</span>
-                            <span class="metric-value metric-low">-0.009</span>
+                            <span class="metric-value metric-low">-0.079</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">Direction Accuracy:</span>
-                            <span class="metric-value metric-low">50.2%</span>
+                            <span class="metric-value metric-low">42.3%</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MSE:</span>
@@ -189,11 +198,11 @@
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MAE:</span>
-                            <span class="metric-value">0.0116</span>
+                            <span class="metric-value">0.0251</span>
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="metric-card">
                     <div class="metric-header">
                         <h4>XGBoost</h4>
@@ -202,11 +211,11 @@
                     <div class="metric-values">
                         <div class="metric-item">
                             <span class="metric-label">R² Score:</span>
-                            <span class="metric-value metric-low">-0.133</span>
+                            <span class="metric-value metric-low">-0.294</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">Direction Accuracy:</span>
-                            <span class="metric-value metric-low">49.5%</span>
+                            <span class="metric-value metric-low">44.8%</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MSE:</span>
@@ -214,11 +223,36 @@
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MAE:</span>
-                            <span class="metric-value">0.0124</span>
+                            <span class="metric-value">0.0276</span>
                         </div>
                     </div>
                 </div>
-            
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h4>LightGBM</h4>
+                        <span class="model-badge"></span>
+                    </div>
+                    <div class="metric-values">
+                        <div class="metric-item">
+                            <span class="metric-label">R² Score:</span>
+                            <span class="metric-value metric-low">-0.170</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Direction Accuracy:</span>
+                            <span class="metric-value metric-low">46.7%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">MSE:</span>
+                            <span class="metric-value">0.0000</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">MAE:</span>
+                            <span class="metric-value">0.0262</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="metric-card">
                     <div class="metric-header">
                         <h4>Ensemble</h4>
@@ -227,11 +261,11 @@
                     <div class="metric-values">
                         <div class="metric-item">
                             <span class="metric-label">R² Score:</span>
-                            <span class="metric-value metric-low">-0.045</span>
+                            <span class="metric-value metric-low">-0.144</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">Direction Accuracy:</span>
-                            <span class="metric-value metric-low">50.8%</span>
+                            <span class="metric-value metric-low">42.9%</span>
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MSE:</span>
@@ -239,16 +273,16 @@
                         </div>
                         <div class="metric-item">
                             <span class="metric-label">MAE:</span>
-                            <span class="metric-value">0.0118</span>
+                            <span class="metric-value">0.0259</span>
                         </div>
                     </div>
                 </div>
-            
+
             </div>
         </div>
-        
+
             </div>
-            
+
             <!DOCTYPE html>
 <html>
 <head>
@@ -328,7 +362,7 @@
 </body>
 </html>
 
-            
+
             <div class="detail-card">
                 <h2>🔗 Quick Links</h2>
                 <div class="quick-links">
